@@ -1,0 +1,369 @@
+{{ define "base" -}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+{{- template "title" . -}}
+<meta name="subdomain" content="https://{{ .Site.SubdomainKey }}.microco.sm" />
+<meta name="referrer" content="origin">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+{{ `<!--[if lt IE 9]>
+  <script src="/static/3rd/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="/static/3rd/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->` | safeHTML }}
+<link href="/static/themes/{{ .Site.ThemeID | default 1 }}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<link rel="shortcut icon" href="{{ .Site.FaviconURL | default "/static/img/favico.png" }}" />
+<style type="text/css" id="site-style">
+a, a:hover, a:focus, a:active {color: {{ .Site.LinkColor }};}
+.comment-item-body a span.url {font-size: 0;line-height: 0;}
+body {background-color: {{ .Site.BackgroundColor }};
+	{{- if ne .Site.BackgroundURL "" -}}
+		background-image: url('{{ .Site.BackgroundURL }}');
+		{{- if eq .Site.BackgroundPosition "tile" -}}
+			background-repeat: repeat;
+		{{- else -}}
+			{{- if eq .Site.BackgroundPosition "cover" -}}
+				background-size: cover;
+				background-attachment: fixed;
+			{{- else -}}
+				{{- if eq .Site.BackgroundPosition "tall" -}}
+					background-size: 150% 100%;
+					background-attachment: fixed;
+					background-position-x: 50%;
+				{{- else -}}
+					{{- if eq .Site.BackgroundPosition "wide" -}}
+						background-size: 100% 150%;
+						background-attachment: fixed;
+						background-position-y: 50%;
+					{{- else -}}
+						background-repeat: no-repeat;
+						background-position: {{ .Site.BackgroundPosition }} top;
+					{{- end -}}
+				{{- end -}}
+			{{- end -}}
+		{{- end -}}
+	{{- end -}}
+}
+</style>
+{{- template "css" . -}}
+</head>
+<body>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="navbar-header-wrapper tiling-bg" id="headerBackground">
+			<div class="container">
+				<div class="row">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header col-xs-12">
+						<button type="button" class="navbar-toggle-btn navbar-toggle menu-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="sprite sprite-drawer"></span>
+						</button>
+
+						<button type="button" class="navbar-toggle-btn metabar-toggle">
+							<span class="sr-only">Toggle metabar</span>
+							<span class="sprite sprite-menu-2"></span>
+						</button>
+
+						<div class="row">
+							<div class="col-sm-3 col-md-3 col-lg-2 navbar-brand">
+								<a href="/" title="Return to Homepage"><img src="{{ .Site.LogoURL }}" alt="{{ .Site.Title }} - Powered by Microcosm" id="logo" /></a>
+							</div>
+
+							<div class="col-md-3 col-lg-3 navbar-profile">
+								{{ if .User }}
+									<div class="navbar-profile-row-1">
+										<span id="logout" class="navbar-profile-logout" onclick="personaSignout();"><a href="#" title="Sign out" class="sprite sprite-logout"></a></span>
+
+										<div class="navbar-profile-row-1-left">
+											<a href="{{ url `profile` .User.ID }}" title="View your profile" class="navbar-profile-avatar"><img src="
+											{{- if in .User.Avatar `gravatar` -}}
+												{{- .User.Avatar -}}
+											{{- else -}}
+												{{- if in .User.Avatar `files` -}}
+													https://{{ .Site.SubdomainKey}}.microco.sm{{ .User.Avatar -}}
+												{{- else -}}
+													/static/img/avatar.gif
+												{{- end -}}
+											{{- end -}}
+											" alt="Avatar for {{ .User.ProfileName }}" title="Edit your profile" /></a>
+											<a href="{{ url `profile` .User.ID }}" title="View your profile" id="profile" class="navbar-profile-name"><strong>{{ .User.ProfileName }}</strong></a>
+											<a id="edit_profile" class="navbar-profile-edit" href="{{ url `profile-edit` .User.ID }}"><span class="sprite sprite-pencil-small"></span><span class="navbar-profile-edit-text">Edit Profile</span></a>
+											<a class="navbar-profile-row-1-huddles" href="{{ url `huddle-list` }}">
+											{{- if .User and gt .User.Meta.Stats.UnreadHuddles 0 -}}
+												<span class="label label-warning">{{ .User.Meta.Stats.UnreadHuddles }} <span class="sprite sprite-envelope"></span></span>
+											{{- else -}}
+												<span class="sprite sprite-envelope"></span>
+											{{- end -}}
+											</a>
+										</div>
+
+									</div>
+									<div class="navbar-profile-row-2">
+										<a href="{{ url `huddle-list` }}">
+										{{- if .User and gt .User.Meta.Stats.UnreadHuddles 0 -}}
+											<span class="label label-warning">{{ .User.Meta.Stats.UnreadHuddles }} <span class="sprite sprite-envelope-small"></span></span>
+										{{- else -}}
+											<span class="sprite sprite-envelope-small"></span>
+										{{- end -}}
+										<strong>Messages</strong></a>
+									</div>
+								{{ else }}
+									<div class="navbar-profile-row-4">
+									Browsing as <strong>guest</strong>.
+									</div>
+									<div class="navbar-profile-row-5">
+										<button id="login" class="btn btn-primary" onclick="personaSignin();">
+											Sign In or Register
+										</button>
+									</div>
+								{{ end }}
+							</div><!-- /.navbar-profile -->
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div> <!-- / navbar-header-wrapper -->
+		<div class="navbar-nav-wrapper container">
+			<div class="row">
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse">
+					{{ if .User }}
+						<div class="navbar-profile">
+							<div class="navbar-profile-row-1">
+								<div class="navbar-profile-row-1-left">
+									<a href="{{ url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-avatar"><img src="
+									{{- if in .User.Avatar `gravatar` -}}
+										{{- .User.Avatar -}}
+									{{- else -}}
+										{{- if in .User.Avatar `files` -}}
+											https://{{ .Site.SubdomainKey}}.microco.sm{{ .User.Avatar -}}
+										{{- else -}}
+											/static/img/avatar.gif
+										{{- end -}}
+									{{- end -}}
+									" alt="Avatar for {{ .User.ProfileName }}" /></a>
+									<a href="{{ url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-name"><strong>{{ .User.ProfileName }}</strong></a>
+									<a class="navbar-profile-row-1-huddles" href="{{ url `huddle-list` }}">{{ if .User and gt .User.Meta.Stats.UnreadHuddles 0 }}<span class="label label-warning">{{ .User.Meta.Stats.UnreadHuddles }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
+								</div>
+							</div>
+							<div class="navbar-profile-row-2">
+								<a href="{{ url `huddle-list` }}">{{ if .User and gt .User.Meta.Stats.UnreadHuddles 0 }}<span class="label label-warning">{{ .User.Meta.Stats.UnreadHuddles }} <span class="sprite sprite-envelope-small"></span></span>{{ else }}<span class="sprite sprite-envelope-small"></span>{{ end }} <strong>Messages</strong></a>
+							</div>
+						</div>
+					{{ else }}
+						<ul class="nav navbar-nav navbar-nav-unregistered">
+							<li class="lh">Join our community</li>
+							<li>
+								<a href="#" id="loginNavbar" onclick="personaSignin();">
+									<span class="btn btn-primary btn-block">Sign in or Register</span>
+								</a>
+							</li>
+						</ul>
+					{{ end }}
+					<ul class="nav navbar-nav">
+						<li class="col-sm-4 col-md-3 navbar-nav-search">
+							<form class="navbar-form navbar-left" role="search" action="{% url 'single-search' %}">
+								<div class="input-group">
+									<input
+										type="text"
+										id="navbar-search-input"
+										class="form-control"
+										name="q"
+										placeholder="Search"
+										{{ if (.Query) and (ne .Section `today`) }}
+											{{ if ne .Query.Query "" }}
+												value="{{ .Query.Query }}"
+											{{ end }}
+										{{ end }}
+										tabindex="1"
+									/>
+									{{ if (eq .Query nil) or (eq .Section `today`) }}
+									<input type="hidden" name="defaults" value="true" />
+									{{ end }}
+									<span class="input-group-btn">
+										<button class="btn btn-default"><span class="sprite sprite-search-small"></span></button>
+									</span>
+								</div>
+							</form>
+						</li>
+						<li class="lh">Pages</li>
+						<li class="first {{ if (eq .Section `home`) or (eq .Section `microcosm`) }}active{{ end }}">
+							<a href="{{ url `home` }}">Forums</a>
+						</li>
+						<li {{ if eq .Section `today` }}class="active"{{ end }}>
+							<a href="{{ url `today` }}">Today</a>
+						</li>
+						<li {{ if eq .Section `updates` }}class="active"{{ end }}>
+							<a href="{{ url `update-list` }}">Following</a>
+						</li>
+						<li {{ if eq .Section `people` }}class="active"{{ end }}>
+							<a href="{{ url `profile-list` }}?top=true">People</a>
+						</li>
+
+						{{ if ge (len .Site.Menu) 1 }}
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ .Site.Title }} <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+							{{ range .Site.Menu }}
+								<li><a href="{{ .Href }}"{{ if .Title }} title="{{ .Title}}"{{ end }}>{{ .Text }}</a></li>
+							{{ end }}
+							</ul>
+						</li>
+						{{ end }}
+					</ul>
+					{{ if .User }}
+					<ul class="nav navbar-nav navbar-nav-registered">
+						<li class="lh">Your account</li>
+						<li>
+							<a href="{{ url `profile-edit` .User.ID }}">Edit profile</a>
+						</li>
+						<li>
+							<a href="{{ url `update-settings` }}">Notification Settings</a>
+						</li>
+						<li>
+							<a href="#" id="logoutNavbar" onclick="personaSignout();">Sign out</a>
+						</li>
+					</ul>
+					{{ end }}
+				</div><!-- /.navbar-collapse -->
+			</div>
+		</div> <!-- / navbar-nav-wrapper -->
+	</nav> <!-- /nav -->
+	<div class="container main">
+		<div class="row">
+			<div class="col-md-9 content">
+				{{- template "content" . -}}
+			</div> <!-- / content -->
+			<div class="col-md-3 metabar">
+				{{- template "sidebar" . -}}
+			</div> <!-- / metabar -->
+		</div>
+	</div>
+	<div class="footer">
+		<div class="container">
+			<ul class="clearfix footnav">
+				<li><a href="{{ url `home` }}">Forums</a></li>
+				<li><a href="{{ url `today` }}">Today</a></li>
+				<li><a href="{{ url `update-list` }}">Following</a></li>
+				<li><a href="{{ url `profile-list` }}?top=true">People</a></li>
+				<li><a href="#" onClick="$('html, body').animate({ scrollTop: 0 }, 'fast'); return false;">Top</a></li>
+			</ul>
+			<hr />
+			<p>&copy; {{ .Site.Title }}, powered by <a href="http://microco.sm/">microcosm</a>.</p>
+			<p class="links">
+				<a href="{{ url `legal-list` }}">About</a>
+				<a href="{{ url `legal` `terms` }}">Terms of Use</a>
+				<a href="{{ url `legal` `privacy` }}">Privacy Policy</a>
+				<a href="{{ url `legal` `cookies` }}">Cookie Policy</a>
+				<a href="mailto:david@buro9.com">Report a problem</a>
+			</p>
+		</div>
+	</div>
+
+	{{ if ne .User nil }}
+	<div id="modal-signin" class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header navbar-header-wrapper tiling-bg">
+					<img src="{{ .Site.LogoURL }}" alt="{{ .Site.Title }} - Powered by Microcosm" id="logo" />
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<h3>{{ .Site.Title }}</h3>
+					<p>{{ .Site.Description }}</p>
+					<div class="modal-buttons">
+						<button class="btn btn-lg btn-primary" onclick="navigator.id.request({siteLogo: '{{ .Site.LogoURL }}'})">Sign in or Register to continue</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					&copy; {{ .Site.Title }}, powered by <a href="http://microco.sm/">microcosm</a>.<br/>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div>
+	{{ end }}
+
+	<!-- <script src="https://login.persona.org/include.js"></script> -->
+	<script src="/static/js/mozpersona.js"></script>
+	<script src="/static/3rd/jquery/1.10.2/jquery.min.js"></script>
+	<script src="/static/3rd/moment.js/2.10.6/moment.min.js"></script>
+	<script src="/static/3rd/prettify/r298/prettify.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/base.js"></script>
+	<script src="/static/js/metabar.js?v=20160619"></script>
+
+	<!-- Persona signin -->
+	<form id="signin-form" class="hidden" method="POST" action="{{ url `login` }}">
+		<!-- TODO: Add CSRF token here -->
+		<input id="Assertion" type="hidden" name="Assertion" value="" />
+		<input id="target_url" type="hidden" name="target_url" value="{{ .Request.URL }}" />
+	</form>
+
+	<!-- Persona signout -->
+	<form id="signout-form" class="hidden" method="POST" action="{{ url `logout` }}">
+		<!-- TODO: Add CSRF token here -->
+	</form>
+
+
+	<script type="text/javascript">
+	function personaSignin() {
+		navigator.id.request({"siteLogo": "{{ if ne .Site.LogoURL "" }}{{ .Site.LogoURL }}{{ else }}/static/themes/{{ .Site.ThemeID | default 1 }}/logo.png{{ end }}"});
+	}
+	function personaSignout() {
+		navigator.id.logout();
+		document.getElementById("signout-form").submit();
+	}
+	navigator.id.watch({
+		loggedInUser: 
+			{{- if .User -}}
+				{{- if ne .User.Email "" -}}
+					'{{ .User.Email }}'
+				{{- else -}}
+					null
+				{{- end -}}
+			{{- else -}}
+				null
+			{{- end -}},
+		onlogin: function(assertion) {
+			{{ with .User }}{{ if ne .Email "" }}return false;{{ end }}{{ end }}
+			document.getElementById("Assertion").value = assertion;
+			document.getElementById("signin-form").submit();
+		},
+		onlogout: function() {
+			{{ with .User }}{{ if ne .Email "" }}return false;{{ end }}{{ end }}
+			document.getElementById("signout-form").submit();
+		},
+	});
+	</script>
+	{{- template "js" . -}}
+	<script type="text/javascript">
+	{{ if (eq .Site.SubdomainKey `dev1`) or (eq .Site.SubdomainKey `dev2`) }}window['ga-disable-UA-36951023-2'] = true;{{ end }}
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','/static/3rd/isogram/201606011835/isogram.js','ga');
+	ga('create', 'UA-36951023-2', 'auto');
+	{{ if .User }}ga('set', 'userId', {{ .User.ID }});{{ end }}
+	ga(function(tracker) {
+		tracker.set('sendHitTask', function(model) {
+			var payLoad = model.get('hitPayload');
+			var isogramRequest = new XMLHttpRequest();
+			isogramRequest.open('get','/isogram?ua='+encodeURI(window.navigator.userAgent)+'&'+payLoad,true);
+			isogramRequest.send();
+		});
+	});
+	ga('send', 'pageview');
+
+	{{ if .Site.GaWebPropertyID }}
+	{{ if (eq .Site.SubdomainKey `dev1`) or (eq .Site.SubdomainKey `dev2`) }}window['ga-disable-{{ .Site.GaWebPropertyID }}'] = true;{{ end }}
+	ga('create', '{{ .Site.GaWebPropertyID }}', {'name': '{{ .Site.SubdomainKey }}'});
+	ga('{{ .Site.SubdomainKey }}.send', 'pageview', gaData);
+	{{ end }}
+	</script>
+</body>
+</html>
+{{- end }}
+
+// Optional templates are defined as empty
+{{ define "css" }}{{ end }}
+{{ define "sidebar" }}{{ end }}
+{{ define "js" }}{{ end }}

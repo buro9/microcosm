@@ -1,0 +1,63 @@
+#logo {
+	max-height: 72px;
+}
+.headBand {
+	background-position: center center;
+	margin: 24px 0;
+	min-height: 96px;
+}
+.margin-top-half {
+	margin-top: 12px;
+}
+.margin-bottom-half {
+    margin-bottom: 12px;
+}
+.margin-top {
+	margin-top: 24px;
+}
+.buffer-right {
+	margin-right: 10px;
+}
+/*.glyphicon {
+	vertical-align: middle;
+}*/
+.gravatar {
+	height: auto;
+	width: 72px;
+	margin-right: 10px;
+}
+.gravatar-small {
+	height: auto;
+	width: 48px;
+	margin-right: 10px;
+}
+p, a, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	word-wrap: break-word;
+}
+pre {
+    font-size: 0.8em;
+    overflow-x: auto;
+}
+pre code {
+    word-wrap: normal;
+    white-space: pre;
+}
+.recent {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.btn-as-p {
+	margin: 0 0 12px;
+}
+.nowrap {
+	white-space: nowrap;
+}
+
+.unread {
+    font-weight: bold;
+}
+
+.text-danger, .text-danger:link, .text-danger:visited, .text-danger:hover, .text-danger:active, .text-danger:focus {
+  color: #b94a48 !important;
+}

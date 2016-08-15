@@ -1,0 +1,25 @@
+{{ define "listitem_profile" }}
+<li class="list-collection-row" id="{{ .profile.itemType }}{{ .profile.item.id }}">
+	<div class="row block">
+		<div class="col-sm-8">
+			{% if not no_icon%}
+			<div class="cell-icon">
+				<a class="sprite sprite-user" title="profile"></a>
+			</div>
+			{% endif %}
+			<div class="cell-icon-offset">
+				<div class="cell-title">
+					<a href="{% url 'single-profile' .profile.item.id %}"><img src="{% if 'gravatar' in profile.item.avatar %}{{ .profile.item.avatar }}{% elif 'files' in .profile.item.avatar %}https://{{ .site.subdomain_key }}.microco.sm{{ .profile.item.avatar }}{% else %}/static/img/avatar.gif{% endif %}" alt="Avatar for {{ .profile.item.profile_name }}" align="left" /> <strong>@{{ .profile.item.profile_name }}</strong></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			{% if user and send_message %}
+			<div class="cell-profile-message">
+				<a class="pull-right" href="{% url 'create-huddle' %}?to={{ .profile.item.id }}">send message</a>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</li>
+{{ end }}
