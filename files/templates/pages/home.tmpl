@@ -94,7 +94,7 @@
 			<div class="metabar-module-body">
 				<!-- TODO {% include 'forms/mark-read.html' %} -->
 			</div>
-			{{ if .Microcosm.Meta.Permissions.IsSiteOwner or .Microcosm.Meta.Permissions.IsOwner or .Microcosm.Meta.Permissions.IsModerator }}
+			{{ if (.Microcosm.Meta.Permissions.IsSiteOwner) or (.Microcosm.Meta.Permissions.IsOwner) or (.Microcosm.Meta.Permissions.IsModerator) }}
 				<div class="metabar-module-body">
 					<a href="{{ url `memberships-list` .Microcosm.ID }}">Manage site permissions</a>
 				</div>

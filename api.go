@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -120,6 +121,7 @@ func buildAPIURL(ctx context.Context, endpoint string, q *url.Values) *url.URL {
 	// before newContext which already barfs on any failure to set the apiRoot
 	u, _ := url.Parse(apiRootFromContext(ctx) + endpoint)
 
+	// Add any querystring args that were set
 	if q != nil {
 		u.RawQuery = q.Encode()
 	}
@@ -145,15 +147,20 @@ func apiGet(
 	req, err := http.NewRequest("GET", u.String(), nil)
 	req.Header.Add("User-Agent", "microcosm-ui")
 
-	// Add auth if we have it
-	if at := accessTokenFromContext(ctx); at != "" {
-		req.Header.Add("Authorization", "Bearer "+at)
+	// Add auth if we have it, though we never use it for the "site" endpoint as
+	// that is a perma-cache item
+	if endpoint != "site" {
+		if at := accessTokenFromContext(ctx); at != "" {
+			req.Header.Add("Authorization", "Bearer "+at)
+		}
 	}
 
+	start := time.Now()
 	resp, err := c.Do(req)
 	if err != nil {
 		return resp, err
 	}
+	log.Printf("%s %s", u.String(), time.Since(start))
 
 	return resp, errFromResp(resp)
 }

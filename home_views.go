@@ -12,6 +12,7 @@ func homeGet(w http.ResponseWriter, req *http.Request) {
 	data := templateData{
 		Request:   req,
 		Site:      siteFromContext(req.Context()),
+		User:      userFromContext(req.Context()),
 		Section:   `home`,
 		Microcosm: microcosm,
 	}

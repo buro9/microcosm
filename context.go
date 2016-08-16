@@ -10,6 +10,7 @@ const (
 	contextAccessToken
 	contextAPIRoot
 	contextSite
+	contextUser
 )
 
 // ipFromContext returns the IP address of the client from the context
@@ -35,4 +36,10 @@ func accessTokenFromContext(ctx context.Context) string {
 func siteFromContext(ctx context.Context) *Site {
 	site, _ := ctx.Value(contextSite).(*Site)
 	return site
+}
+
+// userFromContext returns the current site from the context
+func userFromContext(ctx context.Context) *Profile {
+	user, _ := ctx.Value(contextUser).(*Profile)
+	return user
 }

@@ -5,6 +5,7 @@ package ui
 import (
 	"fmt"
 	"html/template"
+	"reflect"
 	"strings"
 
 	humanize "github.com/dustin/go-humanize"
@@ -16,6 +17,7 @@ func funcMap() template.FuncMap {
 	funcs := tpl.FuncMap
 
 	// Add our own (or redefine the Hugo ones)
+	funcs["exists"] = exists
 	funcs["intcomma"] = intcomma
 	funcs["lower"] = strings.ToLower
 	funcs["stat"] = stat
@@ -25,14 +27,21 @@ func funcMap() template.FuncMap {
 	return funcs
 }
 
-func stat(stats []Stat, name string) int64 {
-	for _, stat := range stats {
-		if stat.Metric == name {
-			return stat.Value
-		}
+// exists determines whether a value is not nil. exists = true if the value
+// passed in does not result in nil
+func exists(v interface{}) bool {
+	if v == nil {
+		return false
 	}
 
-	return 0
+	g := reflect.ValueOf(v)
+	if !g.IsValid() {
+		return false
+	}
+	if g.IsNil() {
+		return false
+	}
+	return true
 }
 
 func intcomma(value interface{}) string {
@@ -50,7 +59,16 @@ func intcomma(value interface{}) string {
 	default:
 		return ""
 	}
+}
 
+func stat(stats []Stat, name string) int64 {
+	for _, stat := range stats {
+		if stat.Metric == name {
+			return stat.Value
+		}
+	}
+
+	return 0
 }
 
 // TODO: this is dangerous, no checking of args length or types

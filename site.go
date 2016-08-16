@@ -48,8 +48,6 @@ type SiteResponse struct {
 
 // siteFromAPIContext is used to return a Site given the apiRoot that is within
 // the context.
-//
-// TODO: If no access_token is present, cache the Site
 func siteFromAPIContext(ctx context.Context) (*Site, error) {
 	resp, err := apiGet(ctx, "site", nil)
 	if err != nil {
@@ -63,10 +61,5 @@ func siteFromAPIContext(ctx context.Context) (*Site, error) {
 		return nil, err
 	}
 
-	site := &apiResp.Data
-	if site.ThemeID == 0 {
-		site.ThemeID = 1
-	}
-
-	return site, nil
+	return &apiResp.Data, nil
 }

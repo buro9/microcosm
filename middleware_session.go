@@ -61,9 +61,19 @@ func session(h http.Handler) http.Handler {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-
 		req = req.WithContext(
 			context.WithValue(req.Context(), contextSite, site),
+		)
+
+		// Get the User based on our knowledge of the API
+		user, err := userFromAPIContext(req.Context())
+		if err != nil {
+			fmt.Println(err.Error())
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		req = req.WithContext(
+			context.WithValue(req.Context(), contextUser, user),
 		)
 
 		// The IP is stored in the context
