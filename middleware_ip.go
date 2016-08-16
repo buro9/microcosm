@@ -39,36 +39,79 @@ var (
 	cloudflareCIDRv4s    []*net.IPNet
 	cloudflareCIDRv6s    []*net.IPNet
 	parseCloudFlareCIDRs sync.Once
+
+	cfConnectingIP = http.CanonicalHeaderKey("CF-Connecting-IP")
+	xRealIP        = http.CanonicalHeaderKey("X-Real-IP")
 )
 
+// realIP is a middleware that sets a http.Request's RemoteAddr to the results
+// of parsing either the CF-Connecting-IP header or the X-Real-IP header
+// (in that order).
+//
+// This middleware should be inserted early in the middleware stack to ensure
+// that subsequent layers (e.g., request loggers) which examine the RemoteAddr
+// will see the intended value.
+func realIP(h http.Handler) http.Handler {
+	fn := func(w http.ResponseWriter, req *http.Request) {
+		if rip := ipFromRequest(req); rip != "" {
+			req.RemoteAddr = rip
+		}
+
+		// The IP is stored in the context as not all funcs that will be called
+		// later in the life of this request will be passed the full request
+		h.ServeHTTP(w, req)
+	}
+
+	return http.HandlerFunc(fn)
+}
+
 // ipFromRequest returns the IP address for the client that accessed the site
-func ipFromRequest(req *http.Request) (net.IP, error) {
-	ip, _, err := net.SplitHostPort(req.RemoteAddr)
-	if err != nil {
-		return nil, fmt.Errorf("%q is not IP:port", req.RemoteAddr)
+func ipFromRequest(req *http.Request) string {
+	var realIP net.IP
+
+	// X-Real-IP if supplied
+	if xrip := req.Header.Get(xRealIP); xrip != "" {
+		if clientIP := net.ParseIP(xrip); clientIP != nil {
+			realIP = clientIP
+		}
 	}
 
-	clientIP := net.ParseIP(ip)
-	if clientIP == nil {
-		return nil, fmt.Errorf("%q is not IP:port", req.RemoteAddr)
+	if realIP == nil {
+		ip, _, _ := net.SplitHostPort(req.RemoteAddr)
+		raip := net.ParseIP(ip)
+		if raip == nil {
+			// Neither X-Real-IP or req.RemoteAddr were parsable, return nothing
+			// and leave everything unchanged
+			return ""
+		}
+		realIP = raip
 	}
 
-	if isCloudFlareIP(clientIP) {
-		cfip := req.Header.Get("CF-Connecting-IP")
+	if isCloudFlareIP(realIP) {
+		// We only trust this header when we're behind a CloudFlare IP, and we
+		// are... so the CF-Connecting-IP actually holds the realIP
+		cfip := req.Header.Get(cfConnectingIP)
 		if cfip == "" {
-			return nil,
-				fmt.Errorf("CF-Connecting-IP not supplied for a CloudFlare IP")
+			fmt.Printf(
+				"CF-Connecting-IP not supplied for CloudFlare IP %s\n",
+				realIP.String(),
+			)
+			return ""
 		}
 
 		cfIP := net.ParseIP(cfip)
 		if cfIP == nil {
-			return nil, fmt.Errorf("%q is not IP:port", cfip)
+			fmt.Printf(
+				"CF-Connecting-IP supplied an invalid IP %s\n",
+				cfip,
+			)
+			return ""
 		}
 
-		return cfIP, nil
+		return cfIP.String()
 	}
 
-	return clientIP, nil
+	return realIP.String()
 }
 
 // isCloudFlareIP returns true if the given IP address belongs to CloudFlare

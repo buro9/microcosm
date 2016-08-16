@@ -57,9 +57,9 @@ func intcomma(value interface{}) string {
 func urlBuilder(urlKey string, args ...interface{}) string {
 	switch urlKey {
 	case "conversation-create":
-		return fmt.Sprintf("microcosms/%d/create/conversation/", args[0])
+		return fmt.Sprintf("/microcosms/%d/create/conversation/", args[0])
 	case "event-create":
-		return fmt.Sprintf("microcosms/%d/create/event/", args[0])
+		return fmt.Sprintf("/microcosms/%d/create/event/", args[0])
 	case "home":
 		return "/"
 	case "huddle-list":
@@ -73,9 +73,9 @@ func urlBuilder(urlKey string, args ...interface{}) string {
 	case "logout":
 		return "/logout/"
 	case "memberships-list":
-		return fmt.Sprintf("microcosms/%d/memberships/", args[0])
+		return fmt.Sprintf("/microcosms/%d/memberships/", args[0])
 	case "microcosm-create":
-		return fmt.Sprintf("microcosms/%d/create/microcosm/", args[0])
+		return fmt.Sprintf("/microcosms/%d/create/microcosm/", args[0])
 	case "profile":
 		return fmt.Sprintf("/profiles/%d", args[0])
 	case "profile-edit":

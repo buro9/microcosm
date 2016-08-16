@@ -3,19 +3,16 @@ package ui
 import "net/http"
 
 func homeGet(w http.ResponseWriter, req *http.Request) {
-	ctx, err := newContext(req)
-
-	microcosm, err := microcosms(ctx)
+	microcosm, err := microcosms(req.Context())
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	data := templateData{
-		Request: req,
-		Site:    siteFromContext(ctx),
-		Section: `home`,
-
+		Request:   req,
+		Site:      siteFromContext(req.Context()),
+		Section:   `home`,
 		Microcosm: microcosm,
 	}
 
