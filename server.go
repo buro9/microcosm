@@ -36,7 +36,7 @@ func ListenAndServe() chan error {
 		// router.Use(middleware.Recoverer)
 		// router.Use(middleware.RedirectSlashes)
 		// router.Use(apiRoot)
-		// router.Use(forceSSL)
+		router.Use(forceSSL)
 
 		router.Mount("/static", staticFiles())
 		// TODO: clear these stubs
