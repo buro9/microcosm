@@ -1,6 +1,20 @@
 # microcosm-ui
 Front end for Microcosm, a Go web server that serves the static files, templates and performs API calls.
 
+## Features
+
+* Go
+* API responses are cached if possible (notably for guest users)
+* Serves both HTTP and HTTPS (including HTTP/2) and forces SSL when it's safe to
+* It's fast
+* I can read this and make sense of it
+
+## Dependencies
+
+* Go1.7 (yes, really)
+
+NB: I'm currently not vendoring and am using the latest of a few different things. I will add vendoring when things have settled and the list of packages we're using has stabilised. You'll need to `go get` a few things to get things running.
+
 ## Usage
 
 Use Lets Encrypt or buy a cert... you need a cert and key to run the UI as we'll force SSL on subdomain sites and any CNAME'd site that has `*Site.ForceSSL = true`.
