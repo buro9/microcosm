@@ -7,15 +7,15 @@ import (
 )
 
 type MicrocosmCore struct {
-	ID          int64            `json:"id"`
-	ParentID    int64            `json:"parentId,omitempty"`
-	Breadcrumb  *[]MicrocosmLink `json:"breadcrumb,omitempty"`
-	SiteID      int64            `json:"siteId,omitempty"`
-	Visibility  string           `json:"visibility"`
-	Title       string           `json:"title"`
-	Description string           `json:"description"`
-	LogoURL     string           `json:"logoUrl"`
-	ItemTypes   []string         `json:"itemTypes"`
+	ID          int64           `json:"id"`
+	ParentID    int64           `json:"parentId,omitempty"`
+	Breadcrumb  []MicrocosmLink `json:"breadcrumb,omitempty"`
+	SiteID      int64           `json:"siteId,omitempty"`
+	Visibility  string          `json:"visibility"`
+	Title       string          `json:"title"`
+	Description string          `json:"description"`
+	LogoURL     string          `json:"logoUrl"`
+	ItemTypes   []string        `json:"itemTypes"`
 }
 
 type Microcosm struct {
@@ -32,12 +32,12 @@ type Microcosm struct {
 type MicrocosmSummary struct {
 	MicrocosmCore
 
-	Children     interface{} `json:"children,omitempty"`
-	Moderators   []int64     `json:"moderators"`
-	ItemCount    int64       `json:"totalItems"`
-	CommentCount int64       `json:"totalComments"`
+	Children     []MicrocosmLink `json:"children,omitempty"`
+	Moderators   []int64         `json:"moderators"`
+	ItemCount    int64           `json:"totalItems"`
+	CommentCount int64           `json:"totalComments"`
 
-	MRU interface{} `json:"mostRecentUpdate,omitempty"`
+	MostRecentUpdate *SummaryItem `json:"mostRecentUpdate,omitempty"`
 
 	Meta SummaryMeta `json:"meta"`
 }

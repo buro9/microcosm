@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"reflect"
 	"strings"
+	"time"
 
 	reflections "gopkg.in/oleiade/reflections.v1"
 
@@ -25,10 +26,12 @@ func funcMap() template.FuncMap {
 	funcs["intcomma"] = intcomma
 	funcs["link"] = link
 	funcs["lower"] = strings.ToLower
+	funcs["relTime"] = relTime
 	funcs["reverseLinks"] = reverseLinks
 	funcs["stat"] = stat
 	funcs["title"] = strings.Title
 	funcs["url"] = urlBuilder
+	funcs["utcRFC"] = utcRFC
 
 	return funcs
 }
@@ -96,6 +99,10 @@ func link(links []Link, rel string) *Link {
 	return nil
 }
 
+func relTime(d time.Time) string {
+	return humanize.Time(d)
+}
+
 // reverseLinks will reverse a slice of links
 func reverseLinks(links []Link) []Link {
 	var reversed []Link
@@ -116,41 +123,47 @@ func stat(stats []Stat, name string) int64 {
 }
 
 // TODO: this is dangerous, no checking of args length or types
-func urlBuilder(urlKey string, args ...interface{}) string {
+func urlBuilder(urlKey string, args ...interface{}) (string, error) {
 	switch urlKey {
 	case "conversation-create":
-		return fmt.Sprintf("/microcosms/%d/create/conversation/", args[0])
+		return fmt.Sprintf("/microcosms/%d/create/conversation/", args[0]), nil
 	case "event-create":
-		return fmt.Sprintf("/microcosms/%d/create/event/", args[0])
+		return fmt.Sprintf("/microcosms/%d/create/event/", args[0]), nil
 	case "home":
-		return "/"
+		return "/", nil
 	case "huddle-list":
-		return "/huddles/"
+		return "/huddles/", nil
 	case "legal-list":
-		return "/legal/"
+		return "/legal/", nil
 	case "legal":
-		return fmt.Sprintf("/legal/%s", args[0])
+		return fmt.Sprintf("/legal/%s", args[0]), nil
 	case "login":
-		return "/login/"
+		return "/login/", nil
 	case "logout":
-		return "/logout/"
+		return "/logout/", nil
 	case "memberships-list":
-		return fmt.Sprintf("/microcosms/%d/memberships/", args[0])
+		return fmt.Sprintf("/microcosms/%d/memberships/", args[0]), nil
+	case "microcosm":
+		return fmt.Sprintf("/microcosms/%d/", args[0]), nil
 	case "microcosm-create":
-		return fmt.Sprintf("/microcosms/%d/create/microcosm/", args[0])
+		return fmt.Sprintf("/microcosms/%d/create/microcosm/", args[0]), nil
 	case "profile":
-		return fmt.Sprintf("/profiles/%d", args[0])
+		return fmt.Sprintf("/profiles/%d", args[0]), nil
 	case "profile-edit":
-		return fmt.Sprintf("/profiles/%d/edit/", args[0])
+		return fmt.Sprintf("/profiles/%d/edit/", args[0]), nil
 	case "profile-list":
-		return "/profiles/"
+		return "/profiles/", nil
 	case "today":
-		return "/today/"
+		return "/today/", nil
 	case "update-list":
-		return "/updates/"
+		return "/updates/", nil
 	case "update-settings":
-		return "/updates/settings/"
+		return "/updates/settings/", nil
 	}
 
-	return ""
+	return "", fmt.Errorf("no URL found for '%s'", urlKey)
+}
+
+func utcRFC(d time.Time) string {
+	return d.UTC().Format(time.RFC3339)
 }

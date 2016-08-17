@@ -11,22 +11,26 @@
 </div>
 
 <div class="content-body">
-	{# {% include "forms/content-moderation.html" %} #}
+	<!-- TODO {% include "forms/content-moderation.html" %} -->
 	<div class="list-items">
 		<ul class="list-collection bordered padded">
-		{% for item in content.items.items %}
-			{% if item.item_type == "microcosm" %}
-				{% microcosm item %}
-			{% elif item.item_type == "conversation" %}
-				{% conversation item %}
-			{% elif item.item_type == "event" %}
-				{% event item %}
-			{% else %}
-			{% endif %}
-		{% endfor %}
+		{{ $user := .User }}
+		{{- range .Microcosm.Items.Items -}}
+			{{- if eq .ItemType "microcosm" -}}
+				{{- template "block_microcosm" (dict "microcosm" .AsMicrocosmSummary "showForum" false "user" $user) -}}
+			{{- else -}}
+				{{- if eq .ItemType "conversation" -}}
+					<li>{% conversation item %}</li>
+				{{- else -}}
+					{{- if eq .ItemType "event" -}}
+						<li>{% event item %}</li>
+					{{- end -}}
+				{{- end -}}
+			{{- end -}}
+		{{- end -}}
 		</ul>
 	</div>
-	{# {% include "forms/content-moderation.html" %} #}
+	<!-- TODO {% include "forms/content-moderation.html" %} -->
 </div>
 
 <div class="content-footer padded">
