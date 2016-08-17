@@ -30,6 +30,7 @@ func funcMap() template.FuncMap {
 	funcs["reverseLinks"] = reverseLinks
 	funcs["stat"] = stat
 	funcs["title"] = strings.Title
+	funcs["trunc"] = trunc
 	funcs["url"] = urlBuilder
 	funcs["utcRFC"] = utcRFC
 
@@ -71,20 +72,20 @@ func hasField(s interface{}, fieldName string) bool {
 	return has
 }
 
-func intcomma(value interface{}) string {
+func intcomma(value interface{}) (string, error) {
 	switch v := value.(type) {
 	case float32:
-		return humanize.Commaf(float64(v))
+		return humanize.Commaf(float64(v)), nil
 	case float64:
-		return humanize.Commaf(v)
+		return humanize.Commaf(v), nil
 	case int:
-		return humanize.Comma(int64(v))
+		return humanize.Comma(int64(v)), nil
 	case int32:
-		return humanize.Comma(int64(v))
+		return humanize.Comma(int64(v)), nil
 	case int64:
-		return humanize.Comma(v)
+		return humanize.Comma(v), nil
 	default:
-		return ""
+		return "", fmt.Errorf("value was not a number")
 	}
 }
 
@@ -120,6 +121,18 @@ func stat(stats []Stat, name string) int64 {
 	}
 
 	return 0
+}
+
+func trunc(s string, length int) string {
+	if s == "" {
+		return s
+	}
+
+	if len(s) < length {
+		return s
+	}
+
+	return s[0:length] + "..."
 }
 
 // TODO: this is dangerous, no checking of args length or types
