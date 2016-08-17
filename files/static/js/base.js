@@ -22,9 +22,6 @@ function updateTimes() {
 		}
 	});
 }
-if (jQuery && moment) {
-	updateTimes();
-}
 
 $('document').ready(function() {
 	// Updates <time> to use relative times
