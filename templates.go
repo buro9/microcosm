@@ -27,10 +27,11 @@ var (
 // relevant for the current page.
 type templateData struct {
 	// Every request
-	Request *http.Request
-	Site    *Site
-	Section string
-	Query   *SearchQuery
+	Request    *http.Request
+	Site       *Site
+	Section    string
+	Query      *SearchQuery
+	Pagination *Pagination
 
 	// If signed-in
 	User *Profile

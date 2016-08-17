@@ -43,9 +43,8 @@ type MicrocosmSummary struct {
 }
 
 type MicrocosmLink struct {
-	Rel      string `json:"rel,omitempty"`
-	Href     string `json:"href"`
-	Title    string `json:"title,omitempty"`
+	Link
+
 	LogoURL  string `json:"logoUrl,omitempty"`
 	ID       int64  `json:"id"`
 	Level    int64  `json:"level,omitempty"`

@@ -14,6 +14,8 @@ import (
 //   * Callee IP address to context
 //   * Access Token to context (if it is available in the querystring, header or
 //     cookie)
+//   * Site to context
+//   * User to context (if applicable and access token exists and is valid)
 //
 // This middleware should be inserted last in the middleware stack to ensure
 // that information it requires is already available to it (the realIP and the

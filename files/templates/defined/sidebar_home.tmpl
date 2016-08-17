@@ -1,0 +1,95 @@
+{{- define "sidebar_home" -}}
+	{{- if .Microcosm -}}
+		{{- $microcosmID := .Microcosm.ID -}}
+		{{- if .Microcosm.Meta.Flags.Open -}}
+			{{- if (.Microcosm.Meta.Permissions.IsSiteOwner) or (.Microcosm.Meta.Permissions.IsOwner) or (.Microcosm.Meta.Permissions.IsModerator) -}}
+				<div class="metabar-module">
+					<div class="metabar-module-primary-buttons">
+						{{- range .Microcosm.ItemTypes -}}
+							{{- if eq . "conversation" -}}
+								<a id="create_conversation" href="{{- url `conversation-create` $microcosmID -}}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-speech-bubble"></span> Post a conversation</a>
+							{{- end -}}
+						{{- end -}}
+						{{- range .Microcosm.ItemTypes -}}
+							{{- if eq . "event" -}}
+								<a id="create_event" href="{{- url `event-create` $microcosmID -}}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-speech-bubble"></span> Post an event</a>
+							{{- end -}}
+						{{- end -}}
+					</div>
+					<div class="metabar-module-primary-buttons" style="margin-top: 10px;">
+						{{- range .Microcosm.ItemTypes -}}
+							{{- if eq . "event" -}}
+								<a id="create_conversation" href="{{- url `microcosm-create` $microcosmID -}}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-microcosm"></span> Create a forum</a>
+							{{- end -}}
+						{{- end -}}
+					</div>
+				</div>
+			{{- end -}}
+		{{- end -}}
+		<div class="metabar-module">
+			<h5>About</h5>
+			<div class="metabar-module-title">
+				<h3>{{- .Site.Title -}}</h3>
+				<p>{{- .Site.Description -}}</p>
+			</div>
+		</div> <!-- / about -->
+		<div class="metabar-module">
+			<h5>Population</h5>
+			<ul class="list-group">
+				<li class="list-group-item">
+					<span class="badge-alt">{{- stat .Site.Meta.Stats "totalProfiles" | default 0 | intcomma -}}</span>
+					<a href="/profiles/?top=true">People</a>
+				</li>
+				{{- if gt (stat .Site.Meta.Stats "onlineProfiles") 0 -}}
+				<li class="list-group-item">
+					<span class="badge-alt">{{- stat .Site.Meta.Stats "onlineProfiles" | default 0 | intcomma -}}</span>
+					<a href="/profiles/?top=true&amp;online=true">Online now</a>
+				</li>
+				{{- end -}}
+			</ul>
+		</div> <!-- Population -->
+		<div class="metabar-module">
+			{{- if (gt (stat .Site.Meta.Stats "totalConversations") 0) or (gt (stat .Site.Meta.Stats "totalEvents") 0) -}}
+			<h5>Content</h5>
+			<ul class="list-group">
+				{{- if gt (stat .Site.Meta.Stats "totalConversations") 0 -}}
+				<li class="list-group-item">
+					<span class="badge-alt">{{- stat .Site.Meta.Stats "totalConversations" | default 0 | intcomma -}}</span>
+					<a href="/search/?type=conversation" title="Find recently updated conversations">Conversations</a>
+				</li>
+				{{- end -}}
+				{{- if gt (stat .Site.Meta.Stats "totalEvents") 0 -}}
+				<li class="list-group-item">
+					<span class="badge-alt">{{- stat .Site.Meta.Stats "totalEvents" | default 0 | intcomma -}}</span>
+					<a href="/search/?type=event" title="Find recently updated events">Events</a>
+					<ul>
+						<li style="list-style:none;"><a href="/search?type=event&amp;eventAfter=0&amp;sort=oldest">upcoming events</a></li>
+						<li style="list-style:none;"><a href="/search?type=event&amp;eventBefore=0&amp;sort=newest">past events</a></li>
+					</ul>
+				</li>
+				{{- end -}}
+				{{- if gt (stat .Site.Meta.Stats "totalComments") 0 -}}
+				<li class="list-group-item">
+					<span class="badge-alt">{{- stat .Site.Meta.Stats "totalComments" | default 0 | intcomma -}}</span>
+					Comments
+				</li>
+				{{- end -}}
+			</ul>
+			{{- end -}}
+		</div> <!-- Content -->
+
+		{{- if .User -}}
+		<div class="metabar-module">
+			<h5>Actions</h5>
+			<div class="metabar-module-body">
+				<!-- TODO {% include 'forms/mark-read.html' %} -->
+			</div>
+			{{- if (.Microcosm.Meta.Permissions.IsSiteOwner) or (.Microcosm.Meta.Permissions.IsOwner) or (.Microcosm.Meta.Permissions.IsModerator) -}}
+				<div class="metabar-module-body">
+					<a href="{{- url `memberships-list` .Microcosm.ID -}}">Manage site permissions</a>
+				</div>
+			{{- end -}}
+		</div>
+		{{- end -}}
+	{{- end -}}
+{{- end -}}

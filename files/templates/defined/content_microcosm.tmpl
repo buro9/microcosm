@@ -1,0 +1,40 @@
+{{- define "content_microcosm" -}}
+<div class="content-header padded">
+	<div class="row">
+		<div class="col-sm-6">
+			{{- template "breadcrumb" (dict "content" .Microcosm "skipParents" false "skipSelf" true "section" .Section) -}}
+		</div>
+		<div class="col-sm-6">
+			{{- template "pagination" (dict "pagination" .Pagination "query" .Query) -}}
+		</div>
+	</div>
+</div>
+
+<div class="content-body">
+	{# {% include "forms/content-moderation.html" %} #}
+	<div class="list-items">
+		<ul class="list-collection bordered padded">
+		{% for item in content.items.items %}
+			{% if item.item_type == "microcosm" %}
+				{% microcosm item %}
+			{% elif item.item_type == "conversation" %}
+				{% conversation item %}
+			{% elif item.item_type == "event" %}
+				{% event item %}
+			{% else %}
+			{% endif %}
+		{% endfor %}
+		</ul>
+	</div>
+	{# {% include "forms/content-moderation.html" %} #}
+</div>
+
+<div class="content-footer padded">
+	<div class="row">
+		<div class="col-sm-6"></div>
+		<div class="col-sm-6">
+			{{- template "pagination" (dict "pagination" .Pagination "query" .Query) -}}
+		</div>
+	</div>
+</div>
+{{- end -}}

@@ -1,0 +1,100 @@
+{{- define "pagination" -}}
+	{{- if and (isset . "pagination") (gt .pagination.TotalPages 1) -}}
+		<ul class="pagination">
+			{{- with (link .pagination.Links "first") -}}
+				<li>
+					<a href="{{- .Href | guiURL -}}">First</a>
+				</li>
+			{{- end -}}
+			{{- with (link .pagination.Links "prev") -}}
+				<li>
+					<a href="{{- .Href | guiURL -}}">{{- .Title -}}</a>
+				</li>
+			{{- end -}}
+			{{- with (link .pagination.Links "self") -}}
+				<li>
+					<a href="{{- .Href | guiURL -}}">{{- .Title -}}</a>
+				</li>
+			{{- end -}}
+			{{- with (link .pagination.Links "next") -}}
+				<li>
+					<a href="{{- .Href | guiURL -}}">{{- .Title -}}</a>
+				</li>
+			{{- end -}}
+			{{- with (link .pagination.Links "last") -}}
+				<li>
+					<a href="{{- .Href | guiURL -}}">Last</a>
+				</li>
+			{{- end -}}
+		</ul>
+		<div class="pagination-alt">
+			{{- if gt .pagination.TotalPages 1 -}}
+				Page
+				<form
+					name="paginationByOffset"
+					method="GET"
+					data-initial="{{- .pagination.Page -}}"
+					data-limit="{{- .pagination.Limit -}}"
+					data-max="{{- .pagination.TotalPages -}}"
+				>
+					<input
+						type="text"
+						min="1"
+						value="{{- .pagination.Page -}}"
+						max="{{- .pagination.TotalPages -}}"
+						step="1"
+						pattern="\d*"
+						title="Enter the page number to jump to"
+						class="form-control"
+					/>
+					<input name="offset" type="hidden" />
+					{{- if and (isset .Query) (ne .query.Searched "") -}}
+						<input name="q" type="hidden" value="{{- .query.Searched -}}" />
+					{{- end -}}
+				</form>
+				of {{- .pagination.TotalPages | intcomma -}}
+			{{- else -}}
+				Page 1 of 1
+			{{- end -}}
+		</div>
+		<div class="pagination-alt-xs">
+			{{- with (link .pagination.Links "first") -}}
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{- .Href -}}">First</a>
+			{{- end -}}
+			{{- with (link .pagination.Links "prev") -}}
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{- .Href -}}">Prev</a>
+			{{- end -}}
+			{{- if gt .pagination.TotalPages 1 -}}
+				<form
+					name="paginationByOffset"
+					method="GET"
+					data-initial="{{- .pagination.Page -}}"
+					data-limit="{{- .pagination.Limit -}}"
+					data-max="{{- .pagination.TotalPages -}}"
+				>
+					<input
+						type="text"
+						min="1"
+						value="{{- .pagination.Page -}}"
+						max="{{- .pagination.TotalPages -}}"
+						step="1"
+						pattern="\d*"
+						title="Enter the page number to jump to"
+						class="form-control"
+					/>
+					<input name="offset" type="hidden" />
+					{{- if and (isset .Query) (ne .query.Searched "") -}}
+						<input name="q" type="hidden" value="{{- .query.Searched -}}" />
+					{{- end -}}
+					/ {{- .pagination.TotalPages | intcomma -}}
+				</form>
+			{{- end -}}
+			{{- with (link .pagination.Links "last") -}}
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{- .Href -}}">Last</a>
+			{{- end -}}
+			{{- with (link .pagination.Links "next") -}}
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{- .Href -}}">Next</a>
+			{{- end -}}
+		</div>
+	{{- end -}}
+{{- end -}}

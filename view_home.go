@@ -1,6 +1,9 @@
 package ui
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
 func homeGet(w http.ResponseWriter, req *http.Request) {
 	microcosm, err := microcosms(req.Context())
@@ -10,15 +13,18 @@ func homeGet(w http.ResponseWriter, req *http.Request) {
 	}
 
 	data := templateData{
-		Request:   req,
-		Site:      siteFromContext(req.Context()),
-		User:      userFromContext(req.Context()),
-		Section:   `home`,
+		Request:    req,
+		Site:       siteFromContext(req.Context()),
+		User:       userFromContext(req.Context()),
+		Section:    `home`,
+		Pagination: parsePagination(microcosm.Items),
+
 		Microcosm: microcosm,
 	}
 
 	err = renderHTMLTemplate(w, "home.tmpl", data)
 	if err != nil {
+		fmt.Println("could not render home.tmpl")
 		w.Write([]byte(err.Error()))
 	}
 }

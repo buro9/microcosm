@@ -8,6 +8,8 @@ import (
 	"reflect"
 	"strings"
 
+	reflections "gopkg.in/oleiade/reflections.v1"
+
 	humanize "github.com/dustin/go-humanize"
 	"github.com/microcosm-cc/microcosm-ui/tpl"
 )
@@ -18,8 +20,12 @@ func funcMap() template.FuncMap {
 
 	// Add our own (or redefine the Hugo ones)
 	funcs["exists"] = exists
+	funcs["guiURL"] = guiURL
+	funcs["hasField"] = hasField
 	funcs["intcomma"] = intcomma
+	funcs["link"] = link
 	funcs["lower"] = strings.ToLower
+	funcs["reverseLinks"] = reverseLinks
 	funcs["stat"] = stat
 	funcs["title"] = strings.Title
 	funcs["url"] = urlBuilder
@@ -38,10 +44,28 @@ func exists(v interface{}) bool {
 	if !g.IsValid() {
 		return false
 	}
-	if g.IsNil() {
-		return false
+	switch g.Kind() {
+	case reflect.String:
+		// ok
+	default:
+		if g.IsNil() {
+			return false
+		}
 	}
 	return true
+}
+
+func guiURL(u string) string {
+	u = strings.Replace(u, `/api/v1`, ``, 1)
+	if !strings.HasSuffix(u, `/`) {
+		u += `/`
+	}
+	return u
+}
+
+func hasField(s interface{}, fieldName string) bool {
+	has, _ := reflections.HasField(s, fieldName)
+	return has
 }
 
 func intcomma(value interface{}) string {
@@ -59,6 +83,26 @@ func intcomma(value interface{}) string {
 	default:
 		return ""
 	}
+}
+
+// link returns the link of the given rel
+func link(links []Link, rel string) *Link {
+	for _, link := range links {
+		if link.Rel == rel {
+			return &link
+		}
+	}
+
+	return nil
+}
+
+// reverseLinks will reverse a slice of links
+func reverseLinks(links []Link) []Link {
+	var reversed []Link
+	for i := len(links) - 1; i >= 0; i-- {
+		reversed = append(reversed, links[i])
+	}
+	return reversed
 }
 
 func stat(stats []Stat, name string) int64 {
