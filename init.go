@@ -10,4 +10,9 @@ func init() {
 	cnameToAPIRootLock.Lock()
 	cnameToAPIRoot = make(map[string]string)
 	cnameToAPIRootLock.Unlock()
+
+	// Used within middleware_forcessl.go
+	forceSSLHostsLock.Lock()
+	forceSSLHosts = make(map[string]struct{})
+	forceSSLHostsLock.Unlock()
 }

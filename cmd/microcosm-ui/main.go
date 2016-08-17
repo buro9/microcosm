@@ -13,5 +13,11 @@ func main() {
 
 	ui.ParseTemplates()
 
-	log.Fatal(ui.ListenAndServe())
+	// Listen and wait for errors (none should ever be received, so we run
+	// forever)
+	errs := ui.ListenAndServe()
+	select {
+	case err := <-errs:
+		log.Fatal(err)
+	}
 }

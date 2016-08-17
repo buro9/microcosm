@@ -13,8 +13,11 @@ var (
 	// the static file and template directories
 	filesPath *string
 
-	// listenPort is the port that the server will listen on
+	// listenPort is the port that the HTTP server will listen on
 	listenPort *int
+
+	// tlsListenPort is the port that the TLS server will listen on
+	tlsListenPort *int
 
 	// certFile is the path to the certificate that will be used for the TLS
 	// connection
@@ -42,6 +45,12 @@ func RegisterFlags() {
 
 		listenPort = flag.Int(
 			"port",
+			80,
+			"port on which to serve HTTP",
+		)
+
+		tlsListenPort = flag.Int(
+			"tlsPort",
 			443,
 			"port on which to serve HTTPS",
 		)
