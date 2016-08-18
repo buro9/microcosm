@@ -83,7 +83,7 @@
 						class="form-control"
 					/>
 					<input name="offset" type="hidden" />
-					{{ if and (isset .Query) (ne .query.Searched "") }}
+					{{ if and .Query (ne .query.Searched "") }}
 						<input name="q" type="hidden" value="{{ .query.Searched }}" />
 					{{ end }}
 					/ {{ .pagination.TotalPages | intcomma }}

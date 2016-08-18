@@ -1,34 +1,36 @@
 {{ define "block_microcosm" }}
 {{ $microcosm := .microcosm }}
+{{ $showForum := .showForum }}
 {{ $user := .user }}
-<li class="list-collection-row" id="microcosm{{ .microcosm.ID }}">
+<li class="list-collection-row" id="microcosm{{ $microcosm.ID }}">
 	<div class="row">
 		<div class="col-sm-7 col-md-7">
 			<div class="list-collection-row-icon">
-				{{ if .microcosm.LogoURL }}
-				<a href="{{ url `microcosm` .microcosm.ID }}"><img src="{{ .microcosm.LogoURL }}" title="Forum" style="max-width: 28px;" width="28" /></a>
+				{{ if $microcosm.LogoURL }}
+					<a href="{{ url `microcosm` $microcosm.ID }}"><img src="{{ $microcosm.LogoURL }}" title="Forum" style="max-width: 28px;" width="28" /></a>
 				{{ else }}
-				<a href="{{ url `microcosm` .microcosm.ID }}" class="sprite sprite-microcosm" title="Forum"></a>
+					<a href="{{ url `microcosm` $microcosm.ID }}" class="sprite sprite-microcosm" title="Forum"></a>
 				{{ end }}
 			</div>
 			<div class="list-collection-row-offset">
 				<h2 class="row-title">
-					<a href="{{ url `microcosm` .microcosm.ID }}">{{ .microcosm.Title | safeHTML }}</a>
-					{{ if (isset .microcosm.Meta.Flags "Unread") or (isset .microcosm "Unread") }}<span class="label label-warning">NEW</span>{{ end }}
+					<a href="{{ url `microcosm` $microcosm.ID }}">{{ $microcosm.Title | safeHTML }}</a>
+					<!-- TODO: There was a $microcosm.Unread here, maybe from search? -->
+					{{ if $microcosm.Meta.Flags.Unread }}<span class="label label-warning">NEW</span>{{ end }}
 				</h2>
 				<div class="row-meta">
 					<span class="microcosm-item-description">
-						{{ .microcosm.Description | safeHTML }}
-						{{ if .showForum }}
-							{{ with (link .microcosm.Meta.Links "parent") }}
+						{{ $microcosm.Description | safeHTML }}
+						{{ if $showForum }}
+							{{ with (link $microcosm.Meta.Links "parent") }}
 								<br />in <a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
 							{{ end }}
 						{{ end }}
 					</span>
 				</div>
 			</div>
-			{{ if .showForum }}
-				{{ with .microcosm.Breadcrumb }}
+			{{ if $showForum }}
+				{{ with $microcosm.Breadcrumb }}
 					{{ $breadcrumb := . }}
 					<div class="cell-forum">
 						in 
@@ -43,18 +45,18 @@
 			<div class="row-stats">
 				<ul class="list-stats">
 					<li>
-						<span>{{ default .microcosm.ItemCount 0 | intcomma }}</span>
-						conversation{{ if gt .microcosm.ItemCount 1}}s{{ end }}
+						<span>{{ default $microcosm.ItemCount 0 | intcomma }}</span>
+						conversation{{ if gt $microcosm.ItemCount 1}}s{{ end }}
 					</li>
 					<li>
-						<span>{{ default .microcosm.CommentCount 0 | intcomma }}</span>
-						comment{{ if gt .microcosm.CommentCount 1}}s{{ end }}
+						<span>{{ default $microcosm.CommentCount 0 | intcomma }}</span>
+						comment{{ if gt $microcosm.CommentCount 1}}s{{ end }}
 					</li>
 				</ul>
 			</div>
 			<div class="row-context">
 				<!-- {#<input type="checkbox" class="row-admin-checkbox" /> #} -->
-				{{ with .microcosm.MostRecentUpdate }}
+				{{ with $microcosm.MostRecentUpdate }}
 					{{ if eq .ItemType "microcosm" }}
 					
 						{{ $mru := .AsMicrocosmSummary }}
@@ -77,13 +79,13 @@
 			</div>
 		</div>
 	</div>
-	{{ if .microcosm.Children }}
+	{{ if $microcosm.Children }}
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="list-collection-row-icon"> </div>
 			<div class="list-collection-row-offset row-title">
 				<ul style="font-size:0.8em;">
-				{{ range .microcosm.Children }}
+				{{ range $microcosm.Children }}
 					<li style="display:inline; margin-right:1em; white-space:nowrap;">{{ if .LogoURL }}<a href="{{ .Href }}"><img src="{{ .LogoURL }}" style="height:1em; vertical-align: -0.15em;" /></a> {{ end }}<a href="{{ .Href }}">{{ .Title | safeHTML }}</a></li>
 				{{ end }}
 				</ul>

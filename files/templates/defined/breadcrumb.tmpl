@@ -5,12 +5,12 @@
 	{{ if not .skipParents }}
 		{{ if (isset .content "Breadcrumb") and gt (len .content.Breadcrumb) 0 }}
 			{{ range .content.Breadcrumb }}
-				<li><a href="{{ .Href }}">{{ .Title }}</a></li>
+				<li><a href="{{ .Href }}">{{ .Title | safeHTML }}</a></li>
 			{{ end }}
 		{{ else }}
 			{{ range (reverseLinks .content.Meta.Links) }}
 				{{ if and (ne .Text "") (ne .Rel "up") }}
-					<li><a href="{{ .Href | guiURL }}">{{ .Text }}</a></li>
+					<li><a href="{{ .Href | guiURL }}">{{ .Text | safeHTML }}</a></li>
 				{{ end }}
 			{{ end }}
 		{{ end }}
@@ -25,18 +25,14 @@
 	{{ end }}
 
 	{{ if not .skipSelf }}
-		{{ if .content.ProfileName }}
-			<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">{{ .content.ProfileName }}</a></li>
+		{{ if .content.ProfileName | safeHTML }}
+			<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">{{ .content.ProfileName | safeHTML }}</a></li>
 			{{ if in (link .content.Meta.Links "self").Href "huddles" }}
 				<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">Messages</a></li>
-			{{ else }}
-				{{ if eq .section "legal" }}
-					<li><a href="{{ url "legal-list" }}">About</a></li>
-				{{ else }}
-					{{ if exists .content.Title }}
-						<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">{{ .content.Text }}</a></li>
-					{{ end }}
-				{{ end }}
+			{{ else  if eq .section "legal" }}
+				<li><a href="{{ url "legal-list" }}">About</a></li>
+			{{ else if exists .content.Title }}
+				<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">{{ .content.Text }}</a></li>
 			{{ end }}
 		{{ end }}
 	{{ end }}

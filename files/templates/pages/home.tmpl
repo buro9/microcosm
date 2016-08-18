@@ -1,7 +1,7 @@
 
 {{ define "title" }}
-<title>{{ .Site.Title }}</title>
-<meta name="Description" content="{{ .Site.Description }}" />
+<title>{{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="{{ .Site.Description | safeHTML }}" />
 {{ end }}
 
 {{ define "content" }}

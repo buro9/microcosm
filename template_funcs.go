@@ -138,6 +138,8 @@ func trunc(s string, length int) string {
 // TODO: this is dangerous, no checking of args length or types
 func urlBuilder(urlKey string, args ...interface{}) (string, error) {
 	switch urlKey {
+	case "comment-incontext":
+		return fmt.Sprintf("/comments/%d/incontext/", args[0]), nil
 	case "conversation-create":
 		return fmt.Sprintf("/microcosms/%d/create/conversation/", args[0]), nil
 	case "event-create":

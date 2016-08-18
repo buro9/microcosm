@@ -1,15 +1,9 @@
 package ui
 
+import "time"
+
 type ConversationSummary struct {
-	ID    int64  `json:"id"`
-	Title string `json:"title"`
-
-	CommentCount         int64          `json:"totalComments"`
-	ViewCount            int64          `json:"totalViews"`
-	LastCommentID        int64          `json:"lastCommentId,omitempty"`
-	LastCommentCreatedBy ProfileSummary `json:"lastCommentCreatedBy,omitempty"`
-	LastCommentCreated   string         `json:"lastCommentCreated,omitempty"`
-
+	ID          int64 `json:"id"`
 	MicrocosmID int64 `json:"microcosmId"`
 	Breadcrumb  []struct {
 		Rel      string `json:"rel,omitempty"` // REST
@@ -21,11 +15,30 @@ type ConversationSummary struct {
 		Level    int64  `json:"level,omitempty"`
 		ParentID int64  `json:"parentId,omitempty"`
 	} `json:"breadcrumb,omitempty"`
-
-	ItemSummaryMeta
-}
-
-type Conversation struct {
-	ItemDetail
-	ItemDetailCommentsAndMeta
+	Title        string `json:"title"`
+	CommentCount int64  `json:"totalComments"`
+	ViewCount    int64  `json:"totalViews"`
+	LastComment  struct {
+		ID        int64          `json:"id"`
+		Created   time.Time      `json:"created"`
+		CreatedBy ProfileSummary `json:"createdBy"`
+	} `json:"lastComment"`
+	Meta struct {
+		Created   time.Time      `json:"created"`
+		CreatedBy ProfileSummary `json:"createdBy"`
+		Flags     struct {
+			Sticky    bool `json:"sticky,omitempty"`
+			Open      bool `json:"open,omitempty"`
+			Deleted   bool `json:"deleted,omitempty"`
+			Moderated bool `json:"moderated,omitempty"`
+			Visible   bool `json:"visible,omitempty"`
+			Unread    bool `json:"unread,omitempty"`
+			Watched   bool `json:"watched,omitempty"`
+			Ignored   bool `json:"ignored,omitempty"`
+			SendEmail bool `json:"sendEmail,omitempty"`
+			SendSMS   bool `json:"sendSMS,omitempty"`
+		} `json:"flags,omitempty"`
+		Links       []Link      `json:"links,omitempty"`
+		Permissions *Permission `json:"permissions,omitempty"`
+	} `json:"meta"`
 }

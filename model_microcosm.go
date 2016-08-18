@@ -93,16 +93,16 @@ type MicrocosmSummary struct {
 		Created   time.Time      `json:"created"`
 		CreatedBy ProfileSummary `json:"createdBy"`
 		Flags     struct {
-			Sticky    *bool `json:"sticky"`
-			Open      *bool `json:"open"`
-			Deleted   *bool `json:"deleted"`
-			Moderated *bool `json:"moderated"`
-			Visible   *bool `json:"visible"`
-			Unread    *bool `json:"unread"`
-			Watched   *bool `json:"watched"`
-			Ignored   *bool `json:"ignored"`
-			SendEmail *bool `json:"sendEmail"`
-			SendSMS   *bool `json:"sendSMS"`
+			Sticky    bool `json:"sticky"`
+			Open      bool `json:"open"`
+			Deleted   bool `json:"deleted"`
+			Moderated bool `json:"moderated"`
+			Visible   bool `json:"visible"`
+			Unread    bool `json:"unread"`
+			Watched   bool `json:"watched"`
+			Ignored   bool `json:"ignored"`
+			SendEmail bool `json:"sendEmail"`
+			SendSMS   bool `json:"sendSMS"`
 		} `json:"flags,omitempty"`
 		Stats       []Stat      `json:"stats,omitempty"`
 		Links       []Link      `json:"links,omitempty"`

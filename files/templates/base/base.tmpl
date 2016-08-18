@@ -21,26 +21,20 @@ body {background-color: {{ .Site.BackgroundColor }};
 		background-image: url('{{ .Site.BackgroundURL }}');
 		{{ if eq .Site.BackgroundPosition "tile" }}
 			background-repeat: repeat;
+		{{ else if eq .Site.BackgroundPosition "cover" }}
+			background-size: cover;
+			background-attachment: fixed;
+		{{ else if eq .Site.BackgroundPosition "tall" }}
+			background-size: 150% 100%;
+			background-attachment: fixed;
+			background-position-x: 50%;
+		{{ else if eq .Site.BackgroundPosition "wide" }}
+			background-size: 100% 150%;
+			background-attachment: fixed;
+			background-position-y: 50%;
 		{{ else }}
-			{{ if eq .Site.BackgroundPosition "cover" }}
-				background-size: cover;
-				background-attachment: fixed;
-			{{ else }}
-				{{ if eq .Site.BackgroundPosition "tall" }}
-					background-size: 150% 100%;
-					background-attachment: fixed;
-					background-position-x: 50%;
-				{{ else }}
-					{{ if eq .Site.BackgroundPosition "wide" }}
-						background-size: 100% 150%;
-						background-attachment: fixed;
-						background-position-y: 50%;
-					{{ else }}
-						background-repeat: no-repeat;
-						background-position: {{ .Site.BackgroundPosition }} top;
-					{{ end }}
-				{{ end }}
-			{{ end }}
+			background-repeat: no-repeat;
+			background-position: {{ .Site.BackgroundPosition }} top;
 		{{ end }}
 	{{ end }}
 }
@@ -66,7 +60,7 @@ body {background-color: {{ .Site.BackgroundColor }};
 
 						<div class="row">
 							<div class="col-sm-3 col-md-3 col-lg-2 navbar-brand">
-								<a href="/" title="Return to Homepage"><img src="{{ .Site.LogoURL }}" alt="{{ .Site.Title }} - Powered by Microcosm" id="logo" /></a>
+								<a href="/" title="Return to Homepage"><img src="{{ .Site.LogoURL }}" alt="{{ .Site.Title | safeHTML }}" id="logo" /></a>
 							</div>
 
 							<div class="col-md-3 col-lg-3 navbar-profile">
@@ -85,11 +79,11 @@ body {background-color: {{ .Site.BackgroundColor }};
 													/static/img/avatar.gif
 												{{ end }}
 											{{ end }}
-											" alt="Avatar for {{ .User.ProfileName }}" title="Edit your profile" /></a>
-											<a href="{{ url `profile` .User.ID }}" title="View your profile" id="profile" class="navbar-profile-name"><strong>{{ .User.ProfileName }}</strong></a>
+											" alt="Avatar for {{ .User.ProfileName | safeHTML }}" title="Edit your profile" /></a>
+											<a href="{{ url `profile` .User.ID }}" title="View your profile" id="profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
 											<a id="edit_profile" class="navbar-profile-edit" href="{{ url `profile-edit` .User.ID }}"><span class="sprite sprite-pencil-small"></span><span class="navbar-profile-edit-text">Edit Profile</span></a>
 											<a class="navbar-profile-row-1-huddles" href="{{ url `huddle-list` }}">
-											{{ if (exists .User) and (gt (stat .User.Meta.Stats "unreadHuddles") 0) }}
+											{{ if and (exists .User) (gt (stat .User.Meta.Stats "unreadHuddles") 0) }}
 												<span class="label label-warning">{{ stat .User.Meta.Stats "unreadHuddles" | intcomma }} <span class="sprite sprite-envelope"></span></span>
 											{{ else }}
 												<span class="sprite sprite-envelope"></span>
@@ -142,8 +136,8 @@ body {background-color: {{ .Site.BackgroundColor }};
 											/static/img/avatar.gif
 										{{ end }}
 									{{ end }}
-									" alt="Avatar for {{ .User.ProfileName }}" /></a>
-									<a href="{{ url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-name"><strong>{{ .User.ProfileName }}</strong></a>
+									" alt="Avatar for {{ .User.ProfileName | safeHTML }}" /></a>
+									<a href="{{ url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
 									<a class="navbar-profile-row-1-huddles" href="{{ url `huddle-list` }}">{{ if (exists .User) and gt (stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ stat .User.Meta.Stats "unreadHuddles" | intcomma }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
 								</div>
 							</div>
@@ -203,10 +197,10 @@ body {background-color: {{ .Site.BackgroundColor }};
 
 						{{ if ge (len .Site.Menu) 1 }}
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ .Site.Title }} <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ .Site.Title | safeHTML }} <b class="caret"></b></a>
 							<ul class="dropdown-menu">
 							{{ range .Site.Menu }}
-								<li><a href="{{ .Href }}"{{ if .Title }} title="{{ .Title}}"{{ end }}>{{ .Text }}</a></li>
+								<li><a href="{{ .Href }}"{{ if .Title | safeHTML }} title="{{ .Title | safeHTML }}"{{ end }}>{{ .Text | safeHTML }}</a></li>
 							{{ end }}
 							</ul>
 						</li>
@@ -250,7 +244,7 @@ body {background-color: {{ .Site.BackgroundColor }};
 				<li><a href="#" onClick="$('html, body').animate({ scrollTop: 0 }, 'fast'); return false;">Top</a></li>
 			</ul>
 			<hr />
-			<p>&copy; {{ .Site.Title }}, powered by <a href="http://microco.sm/">microcosm</a>.</p>
+			<p>&copy; {{ .Site.Title | safeHTML }}, powered by <a href="http://microco.sm/">microcosm</a>.</p>
 			<p class="links">
 				<a href="{{ url `legal-list` }}">About</a>
 				<a href="{{ url `legal` `terms` }}">Terms of Use</a>
@@ -266,18 +260,18 @@ body {background-color: {{ .Site.BackgroundColor }};
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header navbar-header-wrapper tiling-bg">
-					<img src="{{ .Site.LogoURL }}" alt="{{ .Site.Title }} - Powered by Microcosm" id="logo" />
+					<img src="{{ .Site.LogoURL }}" alt="{{ .Site.Title | safeHTML}}" id="logo" />
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
-					<h3>{{ .Site.Title }}</h3>
-					<p>{{ .Site.Description }}</p>
+					<h3>{{ .Site.Title | safeHTML }}</h3>
+					<p>{{ .Site.Description | safeHTML }}</p>
 					<div class="modal-buttons">
 						<button class="btn btn-lg btn-primary" onclick="navigator.id.request({siteLogo: '{{ .Site.LogoURL }}'})">Sign in or Register to continue</button>
 					</div>
 				</div>
 				<div class="modal-footer">
-					&copy; {{ .Site.Title }}, powered by <a href="http://microco.sm/">microcosm</a>.<br/>
+					&copy; {{ .Site.Title | safeHTML }}, powered by <a href="http://microco.sm/">microcosm</a>.<br/>
 				</div>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
