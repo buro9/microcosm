@@ -11,7 +11,8 @@ Front end for Microcosm, a Go web server that serves the static files, templates
 
 ## Dependencies
 
-* Go1.7 (yes, really)
+* Go1.7 (yes, really - we use the new context and HTTP/2)
+* Memcached running on localhost:11211 (used by httpcache for the API)
 
 NB: I'm currently not vendoring and am using the latest of a few different things. I will add vendoring when things have settled and the list of packages we're using has stabilised. You'll need to `go get` a few things to get things running.
 
