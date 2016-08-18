@@ -1,11 +1,11 @@
-{{- define "content_microcosm" -}}
+{{ define "content_microcosm" }}
 <div class="content-header padded">
 	<div class="row">
 		<div class="col-sm-6">
-			{{- template "breadcrumb" (dict "content" .Microcosm "skipParents" false "skipSelf" true "section" .Section) -}}
+			{{ template "breadcrumb" (dict "content" .Microcosm "skipParents" false "skipSelf" true "section" .Section) }}
 		</div>
 		<div class="col-sm-6">
-			{{- template "pagination" (dict "pagination" .Pagination "query" .Query) -}}
+			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
 		</div>
 	</div>
 </div>
@@ -15,19 +15,27 @@
 	<div class="list-items">
 		<ul class="list-collection bordered padded">
 		{{ $user := .User }}
-		{{- range .Microcosm.Items.Items -}}
-			{{- if eq .ItemType "microcosm" -}}
-				{{- template "block_microcosm" (dict "microcosm" .AsMicrocosmSummary "showForum" false "user" $user) -}}
-			{{- else -}}
-				{{- if eq .ItemType "conversation" -}}
-					{{- template "block_conversation" (dict "conversation" .AsConversationSummary "showForum" false "user" $user) -}}
-				{{- else -}}
-					{{- if eq .ItemType "event" -}}
+		{{ range .Microcosm.Items.Items }}
+			{{ if eq .ItemType "microcosm" }}
+
+				{{ template "block_microcosm" (dict "microcosm" .AsMicrocosmSummary "showForum" false "user" $user) }}
+
+			{{ else }}
+
+				{{ if eq .ItemType "conversation" }}
+
+					{{ template "block_conversation" (dict "conversation" .AsConversationSummary "showForum" false "user" $user) }}
+
+				{{ else }}
+
+					{{ if eq .ItemType "event" }}
 						<li>{% event item %}</li>
-					{{- end -}}
-				{{- end -}}
-			{{- end -}}
-		{{- end -}}
+					{{ end }}
+
+				{{ end }}
+
+			{{ end }}
+		{{ end }}
 		</ul>
 	</div>
 	<!-- TODO {% include "forms/content-moderation.html" %} -->
@@ -37,8 +45,8 @@
 	<div class="row">
 		<div class="col-sm-6"></div>
 		<div class="col-sm-6">
-			{{- template "pagination" (dict "pagination" .Pagination "query" .Query) -}}
+			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
 		</div>
 	</div>
 </div>
-{{- end -}}
+{{ end }}

@@ -57,7 +57,7 @@ func session(h http.Handler) http.Handler {
 		)
 
 		// If this site demands SSL and we are not already forcing it, do so
-		if site != nil && *site.ForceSSL {
+		if site != nil && site.ForceSSL {
 			forceSSLHostsLock.RLock()
 			_, ok := forceSSLHosts[req.Host]
 			forceSSLHostsLock.RUnlock()

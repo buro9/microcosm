@@ -1,13 +1,13 @@
 
-{{ define "title" -}}
+{{ define "title" }}
 <title>{{ .Site.Title }}</title>
 <meta name="Description" content="{{ .Site.Description }}" />
-{{- end }}
+{{ end }}
 
-{{ define "content" -}}
-    {{- template "content_microcosm" . -}}
-{{- end }}
+{{ define "content" }}
+    {{ template "content_microcosm" . }}
+{{ end }}
 
-{{ define "sidebar" -}}
-    {{- template "sidebar_home" . -}}
-{{- end }}
+{{ define "sidebar" }}
+    {{ template "sidebar_home" . }}
+{{ end }}

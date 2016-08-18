@@ -1,48 +1,48 @@
-{{- define "breadcrumb" -}}
+{{ define "breadcrumb" }}
 <ol class="breadcrumb">
 	<li><a href="{{ url `home` }}">Home</a></li>
 
-	{{- if not .skipParents -}}
-		{{- if (isset .content "Breadcrumb") and gt (len .content.Breadcrumb) 0 -}}
-			{{- range .content.Breadcrumb -}}
-				<li><a href="{{- .Href -}}">{{- .Title -}}</a></li>
-			{{- end -}}
-		{{- else -}}
-			{{- range (reverseLinks .content.Meta.Links) -}}
-				{{- if and (ne .Text "") (ne .Rel "up") -}}
-					<li><a href="{{- .Href | guiURL -}}">{{- .Text -}}</a></li>
-				{{- end -}}
-			{{- end -}}
-		{{- end -}}
-	{{- end -}}
+	{{ if not .skipParents }}
+		{{ if (isset .content "Breadcrumb") and gt (len .content.Breadcrumb) 0 }}
+			{{ range .content.Breadcrumb }}
+				<li><a href="{{ .Href }}">{{ .Title }}</a></li>
+			{{ end }}
+		{{ else }}
+			{{ range (reverseLinks .content.Meta.Links) }}
+				{{ if and (ne .Text "") (ne .Rel "up") }}
+					<li><a href="{{ .Href | guiURL }}">{{ .Text }}</a></li>
+				{{ end }}
+			{{ end }}
+		{{ end }}
+	{{ end }}
 
-	{{- if hasField .content "IsConfidential" -}}
-		<li><a href="{{- url `huddle-list` -}}">Messages</a></li>
-	{{- end -}}
+	{{ if hasField .content "IsConfidential" }}
+		<li><a href="{{ url `huddle-list` }}">Messages</a></li>
+	{{ end }}
 
-	{{- if hasField .content "UserID" -}}
-		<li><a href="{{- url `profile-list` -}}">People</a></li>
-	{{- end -}}
+	{{ if hasField .content "UserID" }}
+		<li><a href="{{ url `profile-list` }}">People</a></li>
+	{{ end }}
 
-	{{- if not .skipSelf -}}
-		{{- if .content.ProfileName -}}
-			<li><a href="{{- (link .content.Meta.Links "self").Href | guiURL -}}">{{- .content.ProfileName -}}</a></li>
-			{{- if in (link .content.Meta.Links "self").Href "huddles" -}}
-				<li><a href="{{- (link .content.Meta.Links "self").Href | guiURL -}}">Messages</a></li>
-			{{- else -}}
-				{{- if eq .section "legal" -}}
-					<li><a href="{{- url "legal-list" -}}">About</a></li>
-				{{- else -}}
-					{{- if exists .content.Title -}}
-						<li><a href="{{- (link .content.Meta.Links "self").Href | guiURL -}}">{{- .content.Text -}}</a></li>
-					{{- end -}}
-				{{- end -}}
-			{{- end -}}
-		{{- end -}}
-	{{- end -}}
+	{{ if not .skipSelf }}
+		{{ if .content.ProfileName }}
+			<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">{{ .content.ProfileName }}</a></li>
+			{{ if in (link .content.Meta.Links "self").Href "huddles" }}
+				<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">Messages</a></li>
+			{{ else }}
+				{{ if eq .section "legal" }}
+					<li><a href="{{ url "legal-list" }}">About</a></li>
+				{{ else }}
+					{{ if exists .content.Title }}
+						<li><a href="{{ (link .content.Meta.Links "self").Href | guiURL }}">{{ .content.Text }}</a></li>
+					{{ end }}
+				{{ end }}
+			{{ end }}
+		{{ end }}
+	{{ end }}
 
-	{{- if eq .section "memberships" -}}
-		<li><a id="groupslink" href="{{- url `memberships-list` .content.ID -}}">Membership Groups</a></li>
-	{{- end -}}
+	{{ if eq .section "memberships" }}
+		<li><a id="groupslink" href="{{ url `memberships-list` .content.ID }}">Membership Groups</a></li>
+	{{ end }}
 </ol>
-{{- end -}}
+{{ end }}

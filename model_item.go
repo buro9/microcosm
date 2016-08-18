@@ -3,10 +3,19 @@ package ui
 import "time"
 
 type Item struct {
-	ID          int64           `json:"id"`
-	Title       string          `json:"title"`
-	MicrocosmID int64           `json:"microcosmId"`
-	Breadcrumb  []MicrocosmLink `json:"breadcrumb,omitempty"`
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	MicrocosmID int64  `json:"microcosmId"`
+	Breadcrumb  []struct {
+		Rel      string `json:"rel,omitempty"` // REST
+		Href     string `json:"href"`
+		Title    string `json:"title,omitempty"`
+		Text     string `json:"text,omitempty"` // HTML
+		LogoURL  string `json:"logoUrl,omitempty"`
+		ID       int64  `json:"id"`
+		Level    int64  `json:"level,omitempty"`
+		ParentID int64  `json:"parentId,omitempty"`
+	} `json:"breadcrumb,omitempty"`
 
 	ItemType string `json:"itemType"`
 
@@ -20,10 +29,19 @@ type Item struct {
 }
 
 type ItemDetail struct {
-	ID          int64           `json:"id"`
-	Title       string          `json:"title"`
-	MicrocosmID int64           `json:"microcosmId"`
-	Breadcrumb  []MicrocosmLink `json:"breadcrumb,omitempty"`
+	ID          int64  `json:"id"`
+	Title       string `json:"title"`
+	MicrocosmID int64  `json:"microcosmId"`
+	Breadcrumb  []struct {
+		Rel      string `json:"rel,omitempty"` // REST
+		Href     string `json:"href"`
+		Title    string `json:"title,omitempty"`
+		Text     string `json:"text,omitempty"` // HTML
+		LogoURL  string `json:"logoUrl,omitempty"`
+		ID       int64  `json:"id"`
+		Level    int64  `json:"level,omitempty"`
+		ParentID int64  `json:"parentId,omitempty"`
+	} `json:"breadcrumb,omitempty"`
 }
 
 type ItemDetailCommentsAndMeta struct {
@@ -41,8 +59,17 @@ type ItemSummary struct {
 	LastCommentCreatedBy ProfileSummary `json:"lastCommentCreatedBy,omitempty"`
 	LastCommentCreated   string         `json:"lastCommentCreated,omitempty"`
 
-	MicrocosmID int64           `json:"microcosmId"`
-	Breadcrumb  []MicrocosmLink `json:"breadcrumb,omitempty"`
+	MicrocosmID int64 `json:"microcosmId"`
+	Breadcrumb  []struct {
+		Rel      string `json:"rel,omitempty"` // REST
+		Href     string `json:"href"`
+		Title    string `json:"title,omitempty"`
+		Text     string `json:"text,omitempty"` // HTML
+		LogoURL  string `json:"logoUrl,omitempty"`
+		ID       int64  `json:"id"`
+		Level    int64  `json:"level,omitempty"`
+		ParentID int64  `json:"parentId,omitempty"`
+	} `json:"breadcrumb,omitempty"`
 }
 
 type ItemSummaryMeta struct {

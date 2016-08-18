@@ -1,6 +1,6 @@
-{{- define "block_conversation" -}}
-{{- $conversation := .conversation -}}
-{{- $user := .user -}}
+{{ define "block_conversation" }}
+{{ $conversation := .conversation }}
+{{ $user := .user }}
 	<li class="list-collection-row{{ if .conversation.Meta.Flags.Sticky }} row-pinned{{ end }} {{ if eq .conversation.Meta.Flags.Deleted true }} row-deleted{{ end }}" id="conversation{{ .conversation.ID }}" itemscope itemtype="http://schema.org/Article">
 		<div class="row block">
 			<div class="col-sm-8">
@@ -31,12 +31,12 @@
 					<div class="cell-forum">
 						in 
 						{{ if .conversation.Breadcrumb }}
-							{{- $breadcrumb := . -}}
+							{{ $breadcrumb := . }}
 							<div class="cell-forum">
 								in 
-								{{- range $index, $crumb := $breadcrumb -}}
-									<a href="{{- $crumb.Href -}}">{{- $crumb.Title | safeHTML -}}</a> {{- if ne $index (sub (len $breadcrumb) 1) -}}/{{- end -}}
-								{{- end -}}
+								{{ range $index, $crumb := $breadcrumb }}
+									<a href="{{ $crumb.Href }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (sub (len $breadcrumb) 1) }}/{{ end }}
+								{{ end }}
 							</div>
 						{{ else }}
 							{{ with (link .conversation.Meta.Links "microcosm") }}
@@ -72,4 +72,4 @@
 			</div>
 		</div>
 	</li>
-{{- end -}}
+{{ end }}
