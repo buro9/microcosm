@@ -2,22 +2,16 @@ package ui
 
 import "time"
 
-type ItemParent struct {
+type Item struct {
+	ID          int64           `json:"id"`
+	Title       string          `json:"title"`
 	MicrocosmID int64           `json:"microcosmId"`
 	Breadcrumb  []MicrocosmLink `json:"breadcrumb,omitempty"`
-}
-
-type Item struct {
-	ItemParent
 
 	ItemType string `json:"itemType"`
 
-	ID    int64  `json:"id"`
-	Title string `json:"title"`
-
-	CommentCount int64 `json:"totalComments"`
-	ViewCount    int64 `json:"totalViews"`
-
+	CommentCount         int64          `json:"totalComments"`
+	ViewCount            int64          `json:"totalViews"`
 	LastCommentID        int64          `json:"lastCommentId,omitempty"`
 	LastCommentCreatedBy ProfileSummary `json:"lastCommentCreatedBy,omitempty"`
 	LastCommentCreated   string         `json:"lastCommentCreated,omitempty"`
@@ -26,9 +20,10 @@ type Item struct {
 }
 
 type ItemDetail struct {
-	ID    int64  `json:"id"`
-	Title string `json:"title"`
-	ItemParent
+	ID          int64           `json:"id"`
+	Title       string          `json:"title"`
+	MicrocosmID int64           `json:"microcosmId"`
+	Breadcrumb  []MicrocosmLink `json:"breadcrumb,omitempty"`
 }
 
 type ItemDetailCommentsAndMeta struct {
@@ -40,7 +35,14 @@ type ItemSummary struct {
 	ID    int64  `json:"id"`
 	Title string `json:"title"`
 
-	ItemParent
+	CommentCount         int64          `json:"totalComments"`
+	ViewCount            int64          `json:"totalViews"`
+	LastCommentID        int64          `json:"lastCommentId,omitempty"`
+	LastCommentCreatedBy ProfileSummary `json:"lastCommentCreatedBy,omitempty"`
+	LastCommentCreated   string         `json:"lastCommentCreated,omitempty"`
+
+	MicrocosmID int64           `json:"microcosmId"`
+	Breadcrumb  []MicrocosmLink `json:"breadcrumb,omitempty"`
 }
 
 type ItemSummaryMeta struct {

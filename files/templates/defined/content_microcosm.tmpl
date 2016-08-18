@@ -20,7 +20,7 @@
 				{{- template "block_microcosm" (dict "microcosm" .AsMicrocosmSummary "showForum" false "user" $user) -}}
 			{{- else -}}
 				{{- if eq .ItemType "conversation" -}}
-					<li>{% conversation item %}</li>
+					{{- template "block_conversation" (dict "conversation" .AsConversationSummary "showForum" false "user" $user) -}}
 				{{- else -}}
 					{{- if eq .ItemType "event" -}}
 						<li>{% event item %}</li>

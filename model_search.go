@@ -1,10 +1,27 @@
 package ui
 
+import (
+	"encoding/json"
+	"time"
+)
+
 // SearchResults is a list of SearchResult
 type SearchResults struct {
 	Query     SearchQuery `json:"query"`
 	TimeTaken int64       `json:"timeTakenInMs,omitempty"`
-	Results   interface{} `json:"results,omitempty"`
+	// TODO: This needs to be an array of SearchResult
+	Results interface{} `json:"results,omitempty"`
+}
+
+type SearchResult struct {
+	ItemType       string          `json:"itemType"`
+	Item           json.RawMessage `json:"item"`
+	ParentItemType string          `json:"parentItemType,omitempty"`
+	ParentItem     json.RawMessage `json:"parentItem,omitempty"`
+	Unread         bool            `json:"unread"`
+	Rank           float64         `json:"rank"`
+	LastModified   time.Time       `json:"lastModified"`
+	Highlight      string          `json:"highlight"`
 }
 
 type SearchQuery struct {
