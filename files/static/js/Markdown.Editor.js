@@ -29,11 +29,6 @@
 	var linkDialogText = "Enter your link here";
 	var imageDialogText = "Enter or paste your image link here";
 
-	// The default text that appears in the dialog input box when entering
-	// links.
-	var imageDefaultText = "http://";
-	var linkDefaultText = "http://";
-
 	var defaultHelpHoverTitle = "Markdown Editing Help";
 
 	// -------------------------------------------------------------------
@@ -1467,10 +1462,10 @@
 
 			if (isImage) {
 				if (!this.hooks.insertImageDialog(linkEnteredCallback))
-					ui.prompt('Insert Image', imageDialogText, imageDefaultText, linkEnteredCallback);
+					ui.prompt('Insert Image', imageDialogText, '', linkEnteredCallback);
 			}
 			else {
-				ui.prompt('Insert Link', linkDialogText, linkDefaultText, linkEnteredCallback);
+				ui.prompt('Insert Link', linkDialogText, '', linkEnteredCallback);
 			}
 			return true;
 		}
