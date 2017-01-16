@@ -33,44 +33,46 @@ var (
 // RegisterFlags adds the flags needed by the UI if they have not already been
 // added
 func RegisterFlags() {
-	parseFlags.Do(func() {
-		filesPath = flag.String(
-			"filespath",
-			"/srv/microcosm-ui",
-			"directory that contains the templates and static files",
-		)
-		if *filesPath != "" {
-			*filesPath = strings.TrimRight(*filesPath, "/")
-		}
+	parseFlags.Do(
+		func() {
+			filesPath = flag.String(
+				"filespath",
+				"/srv/microcosm-ui",
+				"directory that contains the templates and static files",
+			)
+			if *filesPath != "" {
+				*filesPath = strings.TrimRight(*filesPath, "/")
+			}
 
-		listenPort = flag.Int(
-			"port",
-			80,
-			"port on which to serve HTTP",
-		)
+			listenPort = flag.Int(
+				"port",
+				80,
+				"port on which to serve HTTP",
+			)
 
-		tlsListenPort = flag.Int(
-			"tlsPort",
-			443,
-			"port on which to serve HTTPS",
-		)
+			tlsListenPort = flag.Int(
+				"tlsPort",
+				443,
+				"port on which to serve HTTPS",
+			)
 
-		certFile = flag.String(
-			"certFile",
-			"/etc/ssl/certs/microco.sm.crt",
-			"path to the TLS certificate file",
-		)
+			certFile = flag.String(
+				"certFile",
+				"/etc/ssl/certs/microco.sm.crt",
+				"path to the TLS certificate file",
+			)
 
-		keyFile = flag.String(
-			"keyFile",
-			"/etc/ssl/private/microco.sm.key",
-			"path to the TLS private key file",
-		)
+			keyFile = flag.String(
+				"keyFile",
+				"/etc/ssl/private/microco.sm.key",
+				"path to the TLS private key file",
+			)
 
-		apiDomain = flag.String(
-			"apiDomain",
-			"microco.sm",
-			"the .tld that serves the API",
-		)
-	})
+			apiDomain = flag.String(
+				"apiDomain",
+				"microco.sm",
+				"the .tld that serves the API",
+			)
+		},
+	)
 }
