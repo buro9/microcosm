@@ -192,6 +192,42 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/nicksnyder/go-i18n/goi18n",
+			"repository": "https://github.com/nicksnyder/go-i18n",
+			"vcs": "git",
+			"revision": "64786dc4f56b1cceffc2ce90a7f512d9ab70bba2",
+			"branch": "master",
+			"path": "/goi18n",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/nicksnyder/go-i18n/i18n/bundle",
+			"repository": "https://github.com/nicksnyder/go-i18n",
+			"vcs": "git",
+			"revision": "64786dc4f56b1cceffc2ce90a7f512d9ab70bba2",
+			"branch": "master",
+			"path": "i18n/bundle",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/nicksnyder/go-i18n/i18n/language",
+			"repository": "https://github.com/nicksnyder/go-i18n",
+			"vcs": "git",
+			"revision": "64786dc4f56b1cceffc2ce90a7f512d9ab70bba2",
+			"branch": "master",
+			"path": "i18n/language",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/nicksnyder/go-i18n/i18n/translation",
+			"repository": "https://github.com/nicksnyder/go-i18n",
+			"vcs": "git",
+			"revision": "64786dc4f56b1cceffc2ce90a7f512d9ab70bba2",
+			"branch": "master",
+			"path": "i18n/translation",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/onsi/ginkgo",
 			"repository": "https://github.com/onsi/ginkgo",
 			"vcs": "git",

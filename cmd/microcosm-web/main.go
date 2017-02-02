@@ -4,7 +4,7 @@ import (
 	"flag"
 	"log"
 
-	"github.com/microcosm-cc/microcosm-ui"
+	"github.com/buro9/microcosm"
 )
 
 func main() {

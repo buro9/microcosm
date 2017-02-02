@@ -11,8 +11,8 @@ import (
 
 	reflections "gopkg.in/oleiade/reflections.v1"
 
+	"github.com/buro9/microcosm/tpl"
 	humanize "github.com/dustin/go-humanize"
-	"github.com/microcosm-cc/microcosm-ui/tpl"
 )
 
 func funcMap() template.FuncMap {
