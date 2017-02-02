@@ -26,6 +26,7 @@ vendor:
 	-gvt fetch github.com/dustin/go-humanize
 	-gvt fetch github.com/eknkc/amber
 	-gvt fetch github.com/gregjones/httpcache
+	-gvt fetch github.com/nicksnyder/go-i18n/goi18n
 	-gvt fetch github.com/oxtoacart/bpool
 	-gvt fetch github.com/pressly/chi
 	-gvt fetch github.com/spf13/afero
@@ -34,6 +35,9 @@ vendor:
 	-gvt fetch github.com/spf13/hugo/helpers
 	-gvt fetch github.com/yosssi/ace
 	-gvt fetch gopkg.in/oleiade/reflections.v1
+
+	# Utility vendor
+	-gvt fetch github.com/stretchr/testify/require
 
 
 ### Code not in the repository root? Another binary? Add to the path like this.

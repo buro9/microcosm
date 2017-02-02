@@ -4,18 +4,20 @@ import (
 	"flag"
 	"log"
 
-	"github.com/buro9/microcosm"
+	"github.com/buro9/microcosm/web/opts"
+	"github.com/buro9/microcosm/web/server"
+	"github.com/buro9/microcosm/web/templates"
 )
 
 func main() {
-	ui.RegisterFlags()
+	opts.RegisterFlags()
 	flag.Parse()
 
-	ui.ParseTemplates()
+	templates.Load()
 
 	// Listen and wait for errors (none should ever be received, so we run
 	// forever)
-	errs := ui.ListenAndServe()
+	errs := server.ListenAndServe()
 	select {
 	case err := <-errs:
 		log.Fatal(err)
