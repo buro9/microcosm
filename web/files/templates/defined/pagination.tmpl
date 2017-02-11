@@ -1,29 +1,29 @@
 {{ define "pagination" }}
-	{{ if and (isset . "pagination") (gt .pagination.TotalPages 1) }}
+	{{ if and (isSet . "pagination") (gt .pagination.TotalPages 1) }}
 		<ul class="pagination">
-			{{ with (link .pagination.Links "first") }}
+			{{ with (microcosm_link .pagination.Links "first") }}
 				<li>
-					<a href="{{ .Href | guiURL }}">First</a>
+					<a href="{{ .Href | microcosm_api2ui }}">First</a>
 				</li>
 			{{ end }}
-			{{ with (link .pagination.Links "prev") }}
+			{{ with (microcosm_link .pagination.Links "prev") }}
 				<li>
-					<a href="{{ .Href | guiURL }}">{{ .Title }}</a>
+					<a href="{{ .Href | microcosm_api2ui }}">{{ .Title }}</a>
 				</li>
 			{{ end }}
-			{{ with (link .pagination.Links "self") }}
+			{{ with (microcosm_link .pagination.Links "self") }}
 				<li>
-					<a href="{{ .Href | guiURL }}">{{ .Title }}</a>
+					<a href="{{ .Href | microcosm_api2ui }}">{{ .Title }}</a>
 				</li>
 			{{ end }}
-			{{ with (link .pagination.Links "next") }}
+			{{ with (microcosm_link .pagination.Links "next") }}
 				<li>
-					<a href="{{ .Href | guiURL }}">{{ .Title }}</a>
+					<a href="{{ .Href | microcosm_api2ui }}">{{ .Title }}</a>
 				</li>
 			{{ end }}
-			{{ with (link .pagination.Links "last") }}
+			{{ with (microcosm_link .pagination.Links "last") }}
 				<li>
-					<a href="{{ .Href | guiURL }}">Last</a>
+					<a href="{{ .Href | microcosm_api2ui }}">Last</a>
 				</li>
 			{{ end }}
 		</ul>
@@ -48,20 +48,20 @@
 						class="form-control"
 					/>
 					<input name="offset" type="hidden" />
-					{{ if and (isset .Query) (ne .query.Searched "") }}
+					{{ if and (isSet .Query) (ne .query.Searched "") }}
 						<input name="q" type="hidden" value="{{ .query.Searched }}" />
 					{{ end }}
 				</form>
-				of {{ .pagination.TotalPages | intcomma }}
+				of {{ .pagination.TotalPages | numcomma }}
 			{{ else }}
 				Page 1 of 1
 			{{ end }}
 		</div>
 		<div class="pagination-alt-xs">
-			{{ with (link .pagination.Links "first") }}
+			{{ with (microcosm_link .pagination.Links "first") }}
 				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{ .Href }}">First</a>
 			{{ end }}
-			{{ with (link .pagination.Links "prev") }}
+			{{ with (microcosm_link .pagination.Links "prev") }}
 				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{ .Href }}">Prev</a>
 			{{ end }}
 			{{ if gt .pagination.TotalPages 1 }}
@@ -86,13 +86,13 @@
 					{{ if and .Query (ne .query.Searched "") }}
 						<input name="q" type="hidden" value="{{ .query.Searched }}" />
 					{{ end }}
-					/ {{ .pagination.TotalPages | intcomma }}
+					/ {{ .pagination.TotalPages | numcomma }}
 				</form>
 			{{ end }}
-			{{ with (link .pagination.Links "last") }}
+			{{ with (microcosm_link .pagination.Links "last") }}
 				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{ .Href }}">Last</a>
 			{{ end }}
-			{{ with (link .pagination.Links "next") }}
+			{{ with (microcosm_link .pagination.Links "next") }}
 				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{ .Href }}">Next</a>
 			{{ end }}
 		</div>

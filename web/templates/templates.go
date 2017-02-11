@@ -12,6 +12,7 @@ import (
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/opts"
+	"github.com/buro9/microcosm/web/templates/funcs"
 )
 
 var (
@@ -84,7 +85,7 @@ func Load() {
 						template.New(
 							filepath.Base(layout),
 						).Funcs(
-							funcMap(),
+							funcs.FuncMap,
 						).ParseFiles(
 							files...,
 						),

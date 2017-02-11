@@ -23,6 +23,7 @@ microcosm-web: .GOPATH/.ok
 vendor:
 	# Core dependencies
 	-gvt fetch github.com/bep/inflect
+	-gvt fetch github.com/buro9/funcs
 	-gvt fetch github.com/dustin/go-humanize
 	-gvt fetch github.com/eknkc/amber
 	-gvt fetch github.com/gregjones/httpcache

@@ -16,14 +16,14 @@
 			</div>
 			<div class="cell-icon-offset">
 				<h3 class="cell-title" itemprop="name">
-					<a href="/conversations/{{ $conversation.ID }}/{{ if $user }}newest/{{ end }}" itemprop="url">{{ if isset $conversation "Highlight" }}{{ $conversation.Highlight | safeHTML }}{{ else }}{{ $conversation.Title | safeHTML }}{{ end }}</a>
+					<a href="/conversations/{{ $conversation.ID }}/{{ if $user }}newest/{{ end }}" itemprop="url">{{ if isSet $conversation "Highlight" }}{{ $conversation.Highlight | safeHTML }}{{ else }}{{ $conversation.Title | safeHTML }}{{ end }}</a>
 					<!-- TODO: There was a .unread on this, is that if the microcosm is unread? -->
 					<!-- TODO: There was a $conversation.Unread on this, I think that's from a search result -->
 					{{ if $conversation.Meta.Flags.Unread }}<span class="label label-warning">NEW</span>{{ end }}
 				</h3>
 				{{ if $conversation.Meta.CreatedBy }}
 				<div class="cell-started">
-					<span itemprop="author" itemscope itemtype="http://schema.org/Person"><a href="{{ url `profile` $conversation.Meta.CreatedBy.ID }}" itemprop="url">@<span itemprop="name">{{ trunc $conversation.Meta.CreatedBy.ProfileName 25 | safeHTML }}</span></a></span>{{ if $user }}<a href="/conversations/{{ $conversation.ID }}/" >{{ end }} started {{ if $user }}</a>{{ end }}<time datetime="{{ $conversation.Meta.Created | utcRFC }}" itemprop="dateCreated">{{ $conversation.Meta.Created | relTime }}</time>
+					<span itemprop="author" itemscope itemtype="http://schema.org/Person"><a href="{{ microcosm_url `profile` $conversation.Meta.CreatedBy.ID }}" itemprop="url">@<span itemprop="name">{{ trunc $conversation.Meta.CreatedBy.ProfileName 25 | safeHTML }}</span></a></span>{{ if $user }}<a href="/conversations/{{ $conversation.ID }}/" >{{ end }} started {{ if $user }}</a>{{ end }}<time datetime="{{ $conversation.Meta.Created | rfcTime }}" itemprop="dateCreated">{{ $conversation.Meta.Created | naturalTime }}</time>
 				</div>
 				{{ end }}
 				{{ if $showForum }}
@@ -34,11 +34,11 @@
 						<div class="cell-forum">
 							in 
 							{{ range $index, $crumb := $breadcrumb }}
-								<a href="{{ $crumb.Href }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (sub (len $breadcrumb) 1) }}/{{ end }}
+								<a href="{{ $crumb.Href }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (subtract (len $breadcrumb) 1) }}/{{ end }}
 							{{ end }}
 						</div>
 					{{ else }}
-						{{ with (link $conversation.Meta.Links "microcosm") }}
+						{{ with (microcosm_link $conversation.Meta.Links "microcosm") }}
 							<a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
 						{{ end }}
 					{{ end }}
@@ -51,13 +51,13 @@
 				<ul class="list-stats list-stats-sm">
 					{{ if gt $conversation.CommentCount 0 }}
 					<li>
-						<span>{{ $conversation.CommentCount | intcomma }}</span>
+						<span>{{ $conversation.CommentCount | numcomma }}</span>
 						comment{{ if gt $conversation.CommentCount 1 }}s{{ end }}
 					</li>
 					{{ end }}
 					{{ if gt $conversation.ViewCount 0 }}
 					<li>
-						<span>{{ $conversation.ViewCount | intcomma }}</span>
+						<span>{{ $conversation.ViewCount | numcomma }}</span>
 						view{{ if gt $conversation.ViewCount 1 }}s{{ end }}
 					</li>
 					{{ end }}
@@ -65,7 +65,7 @@
 			</div>
 			<div class="cell-recent">
 				{{ if $conversation.LastComment }}
-					<a href="{{ url `profile` $conversation.LastComment.CreatedBy.ID }}">@{{$conversation.LastComment.CreatedBy.ProfileName | safeHTML }}</a> <a href="{{ url `comment-incontext` $conversation.LastComment.ID }}">replied</a> <time datetime="{{ $conversation.LastComment.Created | utcRFC }}">{{ $conversation.LastComment.Created | relTime }}</time>
+					<a href="{{ microcosm_url `profile` $conversation.LastComment.CreatedBy.ID }}">@{{$conversation.LastComment.CreatedBy.ProfileName | safeHTML }}</a> <a href="{{ microcosm_url `comment-incontext` $conversation.LastComment.ID }}">replied</a> <time datetime="{{ $conversation.LastComment.Created | rfcTime }}">{{ $conversation.LastComment.Created | naturalTime }}</time>
 				{{ end }}
 			</div>
 		</div>

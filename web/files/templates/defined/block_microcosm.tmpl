@@ -7,14 +7,14 @@
 		<div class="col-sm-7 col-md-7">
 			<div class="list-collection-row-icon">
 				{{ if $microcosm.LogoURL }}
-					<a href="{{ url `microcosm` $microcosm.ID }}"><img src="{{ $microcosm.LogoURL }}" title="Forum" style="max-width: 28px;" width="28" /></a>
+					<a href="{{ microcosm_url `microcosm` $microcosm.ID }}"><img src="{{ $microcosm.LogoURL }}" title="Forum" style="max-width: 28px;" width="28" /></a>
 				{{ else }}
-					<a href="{{ url `microcosm` $microcosm.ID }}" class="sprite sprite-microcosm" title="Forum"></a>
+					<a href="{{ microcosm_url `microcosm` $microcosm.ID }}" class="sprite sprite-microcosm" title="Forum"></a>
 				{{ end }}
 			</div>
 			<div class="list-collection-row-offset">
 				<h2 class="row-title">
-					<a href="{{ url `microcosm` $microcosm.ID }}">{{ $microcosm.Title | safeHTML }}</a>
+					<a href="{{ microcosm_url `microcosm` $microcosm.ID }}">{{ $microcosm.Title | safeHTML }}</a>
 					<!-- TODO: There was a $microcosm.Unread here, maybe from search? -->
 					{{ if $microcosm.Meta.Flags.Unread }}<span class="label label-warning">NEW</span>{{ end }}
 				</h2>
@@ -22,7 +22,7 @@
 					<span class="microcosm-item-description">
 						{{ $microcosm.Description | safeHTML }}
 						{{ if $showForum }}
-							{{ with (link $microcosm.Meta.Links "parent") }}
+							{{ with (microcosm_link $microcosm.Meta.Links "parent") }}
 								<br />in <a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
 							{{ end }}
 						{{ end }}
@@ -35,7 +35,7 @@
 					<div class="cell-forum">
 						in 
 						{{ range $index, $crumb := $breadcrumb }}
-							<a href="{{ $crumb.Href }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (sub (len $breadcrumb) 1) }}/{{ end }}
+							<a href="{{ $crumb.Href }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (subtract (len $breadcrumb) 1) }}/{{ end }}
 						{{ end }}
 					</div>
 				{{ end }}
@@ -45,11 +45,11 @@
 			<div class="row-stats">
 				<ul class="list-stats">
 					<li>
-						<span>{{ default $microcosm.ItemCount 0 | intcomma }}</span>
+						<span>{{ default $microcosm.ItemCount 0 | numcomma }}</span>
 						conversation{{ if gt $microcosm.ItemCount 1}}s{{ end }}
 					</li>
 					<li>
-						<span>{{ default $microcosm.CommentCount 0 | intcomma }}</span>
+						<span>{{ default $microcosm.CommentCount 0 | numcomma }}</span>
 						comment{{ if gt $microcosm.CommentCount 1}}s{{ end }}
 					</li>
 				</ul>
@@ -60,18 +60,18 @@
 					{{ if eq .ItemType "microcosm" }}
 					
 						{{ $mru := .AsMicrocosmSummary }}
-						<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if exists $user }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
-						<time datetime="{{ $mru.Meta.Created | utcRFC }}">{{ $mru.Meta.Created | relTime }}</time>
+						<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if not isNil $user }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
+						<time datetime="{{ $mru.Meta.Created | rfcTime }}">{{ $mru.Meta.Created | naturalTime }}</time>
 
 					{{ else }}
 
 						<!-- All items within a Microcosm derive from Conversation -->
 						{{ $mru := .AsConversationSummary }}
-						<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if exists $user }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
+						<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if not (isNil $user) }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
 						{{ if gt $mru.CommentCount 0 }}
-							<time datetime="{{ $mru.LastComment.Created | utcRFC }}">{{ $mru.LastComment.Created | relTime }}</time>
+							<time datetime="{{ $mru.LastComment.Created | rfcTime }}">{{ $mru.LastComment.Created | naturalTime }}</time>
 						{{ else }}
-							<time datetime="{{ $mru.Meta.Created | utcRFC }}">{{ $mru.Meta.Created | relTime }}</time>
+							<time datetime="{{ $mru.Meta.Created | rfcTime }}">{{ $mru.Meta.Created | naturalTime }}</time>
 						{{ end }}
 
 					{{ end }}

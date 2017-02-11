@@ -51,6 +51,14 @@
 			"notests": true
 		},
 		{
+			"importpath": "github.com/buro9/funcs",
+			"repository": "https://github.com/buro9/funcs",
+			"vcs": "git",
+			"revision": "c0afceeea9204595d16f5a6be0c254317aab4af7",
+			"branch": "master",
+			"notests": true
+		},
+		{
 			"importpath": "github.com/coreos/go-etcd/etcd",
 			"repository": "https://github.com/coreos/go-etcd",
 			"vcs": "git",

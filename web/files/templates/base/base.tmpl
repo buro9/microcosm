@@ -69,7 +69,7 @@ body {background-color: {{ .Site.BackgroundColor }};
 										<span id="logout" class="navbar-profile-logout" onclick="personaSignout();"><a href="#" title="Sign out" class="sprite sprite-logout"></a></span>
 
 										<div class="navbar-profile-row-1-left">
-											<a href="{{ url `profile` .User.ID }}" title="View your profile" class="navbar-profile-avatar"><img src="
+											<a href="{{ microcosm_url `profile` .User.ID }}" title="View your profile" class="navbar-profile-avatar"><img src="
 											{{ if in .User.AvatarURL `gravatar` }}
 												{{ .User.AvatarURL }}
 											{{ else }}
@@ -80,11 +80,11 @@ body {background-color: {{ .Site.BackgroundColor }};
 												{{ end }}
 											{{ end }}
 											" alt="Avatar for {{ .User.ProfileName | safeHTML }}" title="Edit your profile" /></a>
-											<a href="{{ url `profile` .User.ID }}" title="View your profile" id="profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
-											<a id="edit_profile" class="navbar-profile-edit" href="{{ url `profile-edit` .User.ID }}"><span class="sprite sprite-pencil-small"></span><span class="navbar-profile-edit-text">Edit Profile</span></a>
-											<a class="navbar-profile-row-1-huddles" href="{{ url `huddle-list` }}">
-											{{ if and (exists .User) (gt (stat .User.Meta.Stats "unreadHuddles") 0) }}
-												<span class="label label-warning">{{ stat .User.Meta.Stats "unreadHuddles" | intcomma }} <span class="sprite sprite-envelope"></span></span>
+											<a href="{{ microcosm_url `profile` .User.ID }}" title="View your profile" id="profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
+											<a id="edit_profile" class="navbar-profile-edit" href="{{ microcosm_url `profile-edit` .User.ID }}"><span class="sprite sprite-pencil-small"></span><span class="navbar-profile-edit-text">Edit Profile</span></a>
+											<a class="navbar-profile-row-1-huddles" href="{{ microcosm_url `huddle-list` }}">
+											{{ if and (not isNil .User) (gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0) }}
+												<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope"></span></span>
 											{{ else }}
 												<span class="sprite sprite-envelope"></span>
 											{{ end }}
@@ -93,9 +93,9 @@ body {background-color: {{ .Site.BackgroundColor }};
 
 									</div>
 									<div class="navbar-profile-row-2">
-										<a href="{{ url `huddle-list` }}">
-										{{ if (exists .User) and gt (stat .User.Meta.Stats "unreadHuddles") 0 }}
-											<span class="label label-warning">{{ stat .User.Meta.Stats "unreadHuddles" | intcomma }} <span class="sprite sprite-envelope-small"></span></span>
+										<a href="{{ microcosm_url `huddle-list` }}">
+										{{ if (not isNil .User) and gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}
+											<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope-small"></span></span>
 										{{ else }}
 											<span class="sprite sprite-envelope-small"></span>
 										{{ end }}
@@ -126,7 +126,7 @@ body {background-color: {{ .Site.BackgroundColor }};
 						<div class="navbar-profile">
 							<div class="navbar-profile-row-1">
 								<div class="navbar-profile-row-1-left">
-									<a href="{{ url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-avatar"><img src="
+									<a href="{{ microcosm_url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-avatar"><img src="
 									{{ if in .User.AvatarURL `gravatar` }}
 										{{ .User.AvatarURL }}
 									{{ else }}
@@ -137,12 +137,12 @@ body {background-color: {{ .Site.BackgroundColor }};
 										{{ end }}
 									{{ end }}
 									" alt="Avatar for {{ .User.ProfileName | safeHTML }}" /></a>
-									<a href="{{ url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
-									<a class="navbar-profile-row-1-huddles" href="{{ url `huddle-list` }}">{{ if (exists .User) and gt (stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ stat .User.Meta.Stats "unreadHuddles" | intcomma }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
+									<a href="{{ microcosm_url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
+									<a class="navbar-profile-row-1-huddles" href="{{ microcosm_url `huddle-list` }}">{{ if (not isNil .User) and gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
 								</div>
 							</div>
 							<div class="navbar-profile-row-2">
-								<a href="{{ url `huddle-list` }}">{{ if (exists .User) and gt (stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ stat .User.Meta.Stats "unreadHuddles" | intcomma }} <span class="sprite sprite-envelope-small"></span></span>{{ else }}<span class="sprite sprite-envelope-small"></span>{{ end }} <strong>Messages</strong></a>
+								<a href="{{ microcosm_url `huddle-list` }}">{{ if (not isNil .User) and gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope-small"></span></span>{{ else }}<span class="sprite sprite-envelope-small"></span>{{ end }} <strong>Messages</strong></a>
 							</div>
 						</div>
 					{{ else }}
@@ -172,7 +172,7 @@ body {background-color: {{ .Site.BackgroundColor }};
 										{{ end }}
 										tabindex="1"
 									/>
-									{{ if (eq .Query nil) or (eq .Section `today`) }}
+									{{ if (isNil .Query) or (eq .Section `today`) }}
 									<input type="hidden" name="defaults" value="true" />
 									{{ end }}
 									<span class="input-group-btn">
@@ -183,16 +183,16 @@ body {background-color: {{ .Site.BackgroundColor }};
 						</li>
 						<li class="lh">Pages</li>
 						<li class="first {{ if (eq .Section `home`) or (eq .Section `microcosm`) }}active{{ end }}">
-							<a href="{{ url `home` }}">Forums</a>
+							<a href="{{ microcosm_url `home` }}">Forums</a>
 						</li>
 						<li {{ if eq .Section `today` }}class="active"{{ end }}>
-							<a href="{{ url `today` }}">Today</a>
+							<a href="{{ microcosm_url `today` }}">Today</a>
 						</li>
 						<li {{ if eq .Section `updates` }}class="active"{{ end }}>
-							<a href="{{ url `update-list` }}">Following</a>
+							<a href="{{ microcosm_url `update-list` }}">Following</a>
 						</li>
 						<li {{ if eq .Section `people` }}class="active"{{ end }}>
-							<a href="{{ url `profile-list` }}?top=true">People</a>
+							<a href="{{ microcosm_url `profile-list` }}?top=true">People</a>
 						</li>
 
 						{{ if ge (len .Site.Menu) 1 }}
@@ -210,10 +210,10 @@ body {background-color: {{ .Site.BackgroundColor }};
 					<ul class="nav navbar-nav navbar-nav-registered">
 						<li class="lh">Your account</li>
 						<li>
-							<a href="{{ url `profile-edit` .User.ID }}">Edit profile</a>
+							<a href="{{ microcosm_url `profile-edit` .User.ID }}">Edit profile</a>
 						</li>
 						<li>
-							<a href="{{ url `update-settings` }}">Notification Settings</a>
+							<a href="{{ microcosm_url `update-settings` }}">Notification Settings</a>
 						</li>
 						<li>
 							<a href="#" id="logoutNavbar" onclick="personaSignout();">Sign out</a>
@@ -237,25 +237,25 @@ body {background-color: {{ .Site.BackgroundColor }};
 	<div class="footer">
 		<div class="container">
 			<ul class="clearfix footnav">
-				<li><a href="{{ url `home` }}">Forums</a></li>
-				<li><a href="{{ url `today` }}">Today</a></li>
-				<li><a href="{{ url `update-list` }}">Following</a></li>
-				<li><a href="{{ url `profile-list` }}?top=true">People</a></li>
+				<li><a href="{{ microcosm_url `home` }}">Forums</a></li>
+				<li><a href="{{ microcosm_url `today` }}">Today</a></li>
+				<li><a href="{{ microcosm_url `update-list` }}">Following</a></li>
+				<li><a href="{{ microcosm_url `profile-list` }}?top=true">People</a></li>
 				<li><a href="#" onClick="$('html, body').animate({ scrollTop: 0 }, 'fast'); return false;">Top</a></li>
 			</ul>
 			<hr />
 			<p>&copy; {{ .Site.Title | safeHTML }}, powered by <a href="http://microco.sm/">microcosm</a>.</p>
 			<p class="links">
-				<a href="{{ url `legal-list` }}">About</a>
-				<a href="{{ url `legal` `terms` }}">Terms of Use</a>
-				<a href="{{ url `legal` `privacy` }}">Privacy Policy</a>
-				<a href="{{ url `legal` `cookies` }}">Cookie Policy</a>
+				<a href="{{ microcosm_url `legal-list` }}">About</a>
+				<a href="{{ microcosm_url `legal` `terms` }}">Terms of Use</a>
+				<a href="{{ microcosm_url `legal` `privacy` }}">Privacy Policy</a>
+				<a href="{{ microcosm_url `legal` `cookies` }}">Cookie Policy</a>
 				<a href="mailto:david@buro9.com">Report a problem</a>
 			</p>
 		</div>
 	</div>
 
-	{{ if ne .User nil }}
+	{{ if not (isNil .User) }}
 	<div id="modal-signin" class="modal">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -288,14 +288,14 @@ body {background-color: {{ .Site.BackgroundColor }};
 	<script src="/static/js/metabar.js?v=20160619"></script>
 
 	<!-- Persona signin -->
-	<form id="signin-form" class="hidden" method="POST" action="{{ url `login` }}">
+	<form id="signin-form" class="hidden" method="POST" action="{{ microcosm_url `login` }}">
 		<!-- TODO: Add CSRF token here -->
 		<input id="Assertion" type="hidden" name="Assertion" value="" />
 		<input id="target_url" type="hidden" name="target_url" value="{{ .Request.URL }}" />
 	</form>
 
 	<!-- Persona signout -->
-	<form id="signout-form" class="hidden" method="POST" action="{{ url `logout` }}">
+	<form id="signout-form" class="hidden" method="POST" action="{{ microcosm_url `logout` }}">
 		<!-- TODO: Add CSRF token here -->
 	</form>
 
