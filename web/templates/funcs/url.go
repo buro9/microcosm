@@ -54,6 +54,8 @@ func url(key string, args ...interface{}) string {
 			return "/logout/"
 		case "profile-list":
 			return "/profiles/"
+		case "search":
+			return "/search/"
 		case "today":
 			return "/today/"
 		case "update-list":

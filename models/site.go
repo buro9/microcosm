@@ -4,6 +4,7 @@ import "time"
 
 type Site struct {
 	ID                 int64          `json:"siteId"`
+	SiteURL            string         `json:"siteURL"`
 	Title              string         `json:"title"`
 	Description        string         `json:"description"`
 	SubdomainKey       string         `json:"subdomainKey"`
@@ -19,6 +20,8 @@ type Site struct {
 	LinkColor          string         `json:"linkColor"`
 	GaWebPropertyID    string         `json:"gaWebPropertyId,omitempty"`
 	Menu               []Link         `json:"menu"`
+	Auth0Domain        string         `json:"auth0Domain,omitempty"`
+	Auth0ClientID      string         `json:"auth0ClientId,omitempty"`
 
 	Meta struct {
 		Created   time.Time      `json:"created"`

@@ -31,6 +31,7 @@ func TestURL(t *testing.T) {
 	assert.Equal(t, `/login/`, url(`login`))
 	assert.Equal(t, `/logout/`, url(`logout`))
 	assert.Equal(t, `/profiles/`, url(`profile-list`))
+	assert.Equal(t, `/search/`, url(`search`))
 	assert.Equal(t, `/today/`, url(`today`))
 	assert.Equal(t, `/updates/`, url(`update-list`))
 	assert.Equal(t, `/updates/settings/`, url(`update-settings`))
