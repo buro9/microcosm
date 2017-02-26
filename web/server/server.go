@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -23,12 +22,17 @@ func ListenAndServe() chan error {
 		router.Use(middleware.RequestID)
 		router.Use(middleware.Logger)
 		router.Use(middleware.Recoverer)
-		router.Use(middleware.RedirectSlashes)
 		router.Use(mm.ApiRoot)
 		router.Use(mm.ForceSSL)
 		router.Use(mm.Session)
 
 		router.Get("/", controllers.HomeGet)
+		router.Get("/auth0login/", controllers.Auth0LoginGet)
+
+		router.Post("/logout/", controllers.LogoutPost)
+
+		router.NotFound(controllers.NotFound)
+
 	})
 
 	// Static file group, defines minimal middleware
@@ -38,7 +42,6 @@ func ListenAndServe() chan error {
 		//router.Use(middleware.RequestID)
 		router.Use(middleware.Logger)
 		// router.Use(middleware.Recoverer)
-		// router.Use(middleware.RedirectSlashes)
 		// router.Use(apiRoot)
 		router.Use(mm.ForceSSL)
 
@@ -49,6 +52,8 @@ func ListenAndServe() chan error {
 		router.Get("/isogram", ok)
 		router.Get("/favicon.ico", ok)
 		router.Get("/robots.txt", ok)
+
+		router.NotFound(controllers.NotFoundStatic)
 	})
 
 	// This is the microcosm client and can work over http as well as https,
@@ -68,9 +73,9 @@ func ListenAndServe() chan error {
 	errs := make(chan error)
 
 	go func() {
-		log.Printf("Listening for HTTPS on %d ...", *opts.TLSListenPort)
+		log.Printf("Listening for HTTPS on %s ...", *opts.TLSListen)
 		err := http.ListenAndServeTLS(
-			fmt.Sprintf(":%d", *opts.TLSListenPort),
+			*opts.TLSListen,
 			*opts.CertFile,
 			*opts.KeyFile,
 			router,
@@ -81,9 +86,9 @@ func ListenAndServe() chan error {
 	}()
 
 	go func() {
-		log.Printf("Listening for HTTP on %d ...", *opts.ListenPort)
+		log.Printf("Listening for HTTP on %s ...", *opts.Listen)
 		err := http.ListenAndServe(
-			fmt.Sprintf(":%d", *opts.ListenPort),
+			*opts.Listen,
 			router,
 		)
 		if err != nil {

@@ -24,6 +24,8 @@ import (
 const (
 	apiVersion  string = "/api/v1"
 	apiMemcache string = "localhost:11211"
+
+	userAgent string = "microcosm web client"
 )
 
 var (
@@ -36,11 +38,6 @@ var apiCache = memcache.New(apiMemcache)
 // ApiRootFromRequest returns the URL of the API for the site associated with
 // the request, i.e. https://subdomain.apidomain.tld/api/v1
 func ApiRootFromRequest(req *http.Request) (string, error) {
-	// TODO: Remove this bit that forces LFGSS onto the world
-	if time.Now().Year() == 2016 {
-		return "https://lfgss.microco.sm" + apiVersion, nil
-	}
-
 	if strings.HasSuffix(req.Host, *opts.ApiDomain) {
 		return "https://" + req.Host + apiVersion, nil
 	}
@@ -132,19 +129,29 @@ func apiGet(
 
 	u := buildAPIURL(ctx, endpoint, q)
 
-	// Standard client using the cache transport
-	c := &http.Client{
-		Transport: httpcache.NewTransport(apiCache),
+	accessToken := bag.GetAccessToken(ctx)
+
+	var c *http.Client
+	if endpoint == "site" || accessToken == "" {
+		// Standard client using the cache transport for non-authenticated API
+		// requests
+		c = &http.Client{
+			Transport: httpcache.NewTransport(apiCache),
+		}
+	} else {
+		// Context cancellable transport for authenticated API requests
+		c = http.DefaultClient
 	}
+
 	req, err := http.NewRequest("GET", u.String(), nil)
-	req.Header.Add("User-Agent", "microcosm-ui")
+	req.WithContext(ctx)
+	req.Header.Add("User-Agent", userAgent)
+	//req.Header.Add("X-Disable-Boiler", "true")
 
 	// Add auth if we have it, though we never use it for the "site" endpoint as
 	// that is a perma-cache item
-	if endpoint != "site" {
-		if at := bag.GetAccessToken(ctx); at != "" {
-			req.Header.Add("Authorization", "Bearer "+at)
-		}
+	if endpoint != "site" && accessToken != "" {
+		req.Header.Add("Authorization", "Bearer "+accessToken)
 	}
 
 	start := time.Now()
@@ -164,7 +171,7 @@ func apiPost(
 	ctx context.Context,
 	endpoint string,
 	q *url.Values,
-	data string,
+	data interface{},
 ) (*http.Response, error) {
 
 	u := buildAPIURL(ctx, endpoint, q)
@@ -172,12 +179,19 @@ func apiPost(
 	c := &http.Client{}
 
 	var br *bytes.Reader
-	if data != "" {
-		br = bytes.NewReader([]byte(data))
+	if data != nil {
+		bs, err := json.Marshal(data)
+		if err != nil {
+			return nil, err
+		}
+
+		br = bytes.NewReader(bs)
 	}
 	req, err := http.NewRequest("POST", u.String(), br)
 
-	req.Header.Add("User-Agent", "microcosm-ui")
+	req.Header.Add("User-Agent", userAgent)
+	//req.Header.Add("X-Disable-Boiler", "true")
+	req.Header.Add("Content-Type", "application/json")
 	if at := bag.GetAccessToken(ctx); at != "" {
 		req.Header.Add("Authorization", "Bearer "+at)
 	}

@@ -2,6 +2,7 @@ package opts
 
 import (
 	"flag"
+	"os"
 	"strings"
 	"sync"
 )
@@ -13,11 +14,11 @@ var (
 	// the static file and template directories
 	FilesPath *string
 
-	// ListenPort is the port that the HTTP server will listen on
-	ListenPort *int
+	// Listen is the addr:port that the HTTP server will listen on
+	Listen *string
 
-	// TLSListenPort is the port that the TLS server will listen on
-	TLSListenPort *int
+	// TLSListen is the addr:port that the TLS server will listen on
+	TLSListen *string
 
 	// CertFile is the path to the certificate that will be used for the TLS
 	// connection
@@ -28,6 +29,10 @@ var (
 
 	// ApiDomain is the top level domain name that serves the api
 	ApiDomain *string
+
+	// ClientSecret is the secret that this client uses when talking to the API
+	// for exchanging auth credentials
+	ClientSecret *string
 )
 
 // RegisterFlags adds the flags needed by the UI if they have not already been
@@ -36,7 +41,7 @@ func RegisterFlags() {
 	parseFlags.Do(
 		func() {
 			FilesPath = flag.String(
-				"Filespath",
+				"files",
 				"/srv/microcosm-web",
 				"directory that contains the templates and static files",
 			)
@@ -44,26 +49,26 @@ func RegisterFlags() {
 				*FilesPath = strings.TrimRight(*FilesPath, "/")
 			}
 
-			ListenPort = flag.Int(
-				"port",
-				80,
-				"port on which to serve HTTP",
+			Listen = flag.String(
+				"listen",
+				":80",
+				"addr:port on which to serve HTTP",
 			)
 
-			TLSListenPort = flag.Int(
-				"tlsPort",
-				443,
-				"port on which to serve HTTPS",
+			TLSListen = flag.String(
+				"tlsListen",
+				":443",
+				"addr:port on which to serve HTTPS",
 			)
 
 			CertFile = flag.String(
-				"CertFile",
+				"certFile",
 				"/etc/ssl/certs/microco.sm.crt",
 				"path to the TLS certificate file",
 			)
 
 			KeyFile = flag.String(
-				"KeyFile",
+				"keyFile",
 				"/etc/ssl/private/microco.sm.key",
 				"path to the TLS private key file",
 			)
@@ -72,6 +77,12 @@ func RegisterFlags() {
 				"apiDomain",
 				"microco.sm",
 				"the .tld that serves the API",
+			)
+
+			ClientSecret = flag.String(
+				"clientSecret",
+				os.Getenv("MICROCOSM_API_CLIENT_SECRET"),
+				"the API client secret",
 			)
 		},
 	)

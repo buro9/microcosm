@@ -89,7 +89,7 @@ func accessTokenFromRequest(req *http.Request) string {
 
 	// finally the cookie
 	cookie, _ := req.Cookie("access_token")
-	if cookie != nil && cookie.Value != "" && cookie.Secure {
+	if cookie != nil && cookie.Value != "" {
 		return cookie.Value
 	}
 

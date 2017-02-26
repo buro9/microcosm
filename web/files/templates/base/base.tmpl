@@ -107,12 +107,12 @@
 												<a href="{{ microcosm_url `profile` .User.ID }}" title="View your profile" class="navbar-profile-avatar"><img src="{{ if in .User.AvatarURL `gravatar` }}{{ .User.AvatarURL }}{{ else }}{{ if in .User.AvatarURL `files` }}https://{{ .Site.SubdomainKey}}.microco.sm{{ .User.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}{{ end }}" alt="Avatar for {{ .User.ProfileName | safeHTML }}" title="Edit your profile" /></a>
 												<a href="{{ microcosm_url `profile` .User.ID }}" title="View your profile" id="profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
 												<a id="edit_profile" class="navbar-profile-edit" href="{{ microcosm_url `profile-edit` .User.ID }}"><span class="sprite sprite-pencil-small"></span><span class="navbar-profile-edit-text">Edit Profile</span></a>
-												<a class="navbar-profile-row-1-huddles" href="{{ microcosm_url `huddle-list` }}">{{ if and (not isNil .User) (gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0) }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
+												<a class="navbar-profile-row-1-huddles" href="{{ microcosm_url `huddle-list` }}">{{ if (gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0) }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
 											</div>
 
 										</div>
 										<div class="navbar-profile-row-2">
-											<a href="{{ microcosm_url `huddle-list` }}">{{ if (not isNil .User) and gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope-small"></span></span>{{ else }}<span class="sprite sprite-envelope-small"></span>{{ end }} <strong>Messages</strong></a>
+											<a href="{{ microcosm_url `huddle-list` }}">{{ if gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope-small"></span></span>{{ else }}<span class="sprite sprite-envelope-small"></span>{{ end }} <strong>Messages</strong></a>
 										</div>
 									{{ else }}
 										<div class="navbar-profile-row-4">
@@ -141,11 +141,11 @@
 									<div class="navbar-profile-row-1-left">
 										<a href="{{ microcosm_url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-avatar"><img src="{{ if in .User.AvatarURL `gravatar` }}{{ .User.AvatarURL }}{{ else }}{{ if in .User.AvatarURL `files` }}https://{{ .Site.SubdomainKey}}.microco.sm{{ .User.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}{{ end }}" alt="Avatar for {{ .User.ProfileName }}" /></a>
 										<a href="{{ microcosm_url `profile` .User.ID }}" title="Edit your profile" class="navbar-profile-name"><strong>{{ .User.ProfileName | safeHTML }}</strong></a>
-										<a class="navbar-profile-row-1-huddles" href="{{ microcosm_url `huddle-list` }}">{{ if (not isNil .User) and gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
+										<a class="navbar-profile-row-1-huddles" href="{{ microcosm_url `huddle-list` }}">{{ if gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope"></span></span>{{ else }}<span class="sprite sprite-envelope"></span>{{ end }}</a>
 									</div>
 								</div>
 								<div class="navbar-profile-row-2">
-									<a href="{{ microcosm_url `huddle-list` }}">{{ if (not isNil .User) and gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope-small"></span></span>{{ else }}<span class="sprite sprite-envelope-small"></span>{{ end }} <strong>Messages</strong></a>
+									<a href="{{ microcosm_url `huddle-list` }}">{{ if gt (microcosm_stat .User.Meta.Stats "unreadHuddles") 0 }}<span class="label label-warning">{{ microcosm_stat .User.Meta.Stats "unreadHuddles" | numcomma }} <span class="sprite sprite-envelope-small"></span></span>{{ else }}<span class="sprite sprite-envelope-small"></span>{{ end }} <strong>Messages</strong></a>
 								</div>
 							</div>
 							{{ else }}

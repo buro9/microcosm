@@ -11,8 +11,9 @@ Front end for Microcosm, a Go web server that serves the static files, templates
 
 ## Dependencies
 
-* Go1.7 (yes, really - we use the new context and HTTP/2)
-* Memcached running on localhost:11211 (used by httpcache for the API)
+* Go1.7+
+* Memcached running on localhost:11211 (the web client uses a httpcache transport for the API)
+* PostgreSQL 9.4+ with postgresql-contrib and the ltree module installed
 
 NB: I'm currently not vendoring and am using the latest of a few different things. I will add vendoring when things have settled and the list of packages we're using has stabilised. You'll need to `go get` a few things to get things running.
 
@@ -23,20 +24,22 @@ Use Lets Encrypt or buy a cert... you need a cert and key to run the UI as we'll
 flags reveal usage:
 
 ```
-$ microcosm-ui --help
-Usage of microcosm-ui:
+$ microcosm-web --help
+Usage of microcosm-web:
   -apiDomain string
-    	the .tld that serves the API (default "microco.sm")
+      the .tld that serves the API (default "microco.sm")
   -certFile string
-    	path to the TLS certificate file (default "/etc/ssl/certs/microco.sm.crt")
-  -filespath string
-    	directory that contains the templates and static files (default "/srv/microcosm-ui")
+      path to the TLS certificate file (default "/etc/ssl/certs/microco.sm.crt")
+  -clientSecret string
+      the API client secret (default os.Getenv("MICROCOSM_API_CLIENT_SECRET"))
+  -files string
+      directory that contains the templates and static files (default "/srv/microcosm-web")
   -keyFile string
-    	path to the TLS private key file (default "/etc/ssl/private/microco.sm.key")
-  -port int
-    	port on which to serve HTTP (default 80)
-  -tlsPort int
-    	port on which to serve HTTPS (default 443)
+      path to the TLS private key file (default "/etc/ssl/private/microco.sm.key")
+  -listen string
+      addr:port on which to serve HTTP (default ":80")
+  -tlsListen string
+      addr:port on which to serve HTTPS (default ":443")
 ```
 
 I've symlinked `/srv/microcosm-ui` to point to `/home/buro9/Dev/src/github.com/microcosm-cc/microcosm-ui/files/` which is my local dev location for this repo. I expect to deploy to a prod environment where the static files actually are within `/srv/microcosm-ui`. You don't need to do this... you can just set the `-filespath``flag.

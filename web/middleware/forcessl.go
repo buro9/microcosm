@@ -65,7 +65,16 @@ func redirectURLtoTLS(req *http.Request) string {
 		return req.URL.String()
 	}
 
-	if *opts.TLSListenPort == 443 {
+	if strings.Contains(*opts.TLSListen, ":443") {
+		return fmt.Sprintf(
+			"https://%s%s",
+			req.Host,
+			req.URL.RequestURI(),
+		)
+	}
+
+	addrPort := strings.Split(*opts.TLSListen, ":")
+	if len(addrPort) != 2 || addrPort[1] == "443" {
 		return fmt.Sprintf(
 			"https://%s%s",
 			req.Host,
@@ -76,7 +85,7 @@ func redirectURLtoTLS(req *http.Request) string {
 	return fmt.Sprintf(
 		"https://%s:%d%s",
 		req.Host,
-		*opts.TLSListenPort,
+		addrPort[1],
 		req.URL.RequestURI(),
 	)
 }
