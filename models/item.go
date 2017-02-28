@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type Item struct {
 	ID          int64  `json:"id"`
@@ -26,6 +29,15 @@ type Item struct {
 	LastCommentCreated   string         `json:"lastCommentCreated,omitempty"`
 
 	Meta DefaultMeta `json:"meta"`
+
+	// Search only fields
+	Item           json.RawMessage `json:"item"`
+	ParentItemType string          `json:"parentItemType,omitempty"`
+	ParentItem     json.RawMessage `json:"parentItem,omitempty"`
+	Unread         bool            `json:"unread"`
+	Rank           float64         `json:"rank"`
+	LastModified   time.Time       `json:"lastModified"`
+	Highlight      string          `json:"highlight"`
 }
 
 type ItemDetail struct {

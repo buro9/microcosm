@@ -44,7 +44,8 @@ type Data struct {
 
 	// Depending on context, templates will expect the applicable one to be
 	// filled in
-	Microcosm *models.Microcosm
+	Microcosm     *models.Microcosm
+	SearchResults *models.SearchResults
 }
 
 // Template returns the full path to a template for a given templates' name
@@ -61,7 +62,7 @@ func Load() {
 				templates = make(map[string]*template.Template)
 			}
 
-			layouts, err := filepath.Glob(*opts.FilesPath + "/templates/base/*.tmpl")
+			layouts, err := filepath.Glob(*opts.FilesPath + "/templates/base/base.tmpl")
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -78,18 +79,20 @@ func Load() {
 
 			// Generate our templates map from our directories
 			for _, layout := range layouts {
-				files := append(append(pages, defined...), layout)
+				for _, page := range pages {
+					files := append(append([]string{page}, defined...), layout)
 
-				templates[filepath.Base(layout)] =
-					template.Must(
-						template.New(
-							filepath.Base(layout),
-						).Funcs(
-							funcs.FuncMap,
-						).ParseFiles(
-							files...,
-						),
-					)
+					templates[filepath.Base(page)] =
+						template.Must(
+							template.New(
+								filepath.Base(layout),
+							).Funcs(
+								funcs.FuncMap,
+							).ParseFiles(
+								files...,
+							),
+						)
+				}
 			}
 		},
 	)
@@ -105,7 +108,7 @@ func RenderHTML(
 	data Data,
 ) error {
 	// Ensure the template exists in the map.
-	tmpl := templates["base.tmpl"].Lookup(name)
+	tmpl := templates[name].Lookup(name)
 	if tmpl == nil {
 		return fmt.Errorf("the template named '%s' does not exist", name)
 	}

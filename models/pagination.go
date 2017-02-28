@@ -1,11 +1,12 @@
 package models
 
 type Pagination struct {
-	Page       int64
-	TotalPages int64
-	Limit      int64
-	Offset     int64
-	Links      []Link
+	Page       int64  `json:"page"`
+	TotalPages int64  `json:"totalPages"`
+	Limit      int64  `json:"limit"`
+	Offset     int64  `json:"offset"`
+	MaxOffset  int64  `json:"maxOffset"`
+	Links      []Link `json:"links"`
 }
 
 func ParsePagination(array Array) *Pagination {

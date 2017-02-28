@@ -1,0 +1,26 @@
+
+{{ define "title" }}
+<title>Today on {{ .Site.Title | safeHTML }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="Today on {{ .Site.Title | safeHTML }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }}" />
+{{ end }}
+
+{{ define "content" }}
+    {{ template "content_searchresults" . }}
+{{ end }}
+
+{{ define "sidebar" }}
+    {{ template "sidebar_today" . }}
+{{ end }}
+
+{{ define "js" }}
+<script type="text/javascript" src="/static/js/filters.js"></script>
+<script type="text/javascript">
+(function(){
+	window.search_filters = new Filters({
+		el     : '.metabar-filters',
+		query  : '',
+		url    : '/today/?q=$1'
+	});
+})();
+</script>
+{{ end }}

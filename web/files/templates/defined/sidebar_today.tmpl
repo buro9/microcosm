@@ -1,0 +1,29 @@
+{{ define "sidebar_today" }}
+
+<div class="metabar-module metabar-filters">
+	<h5>Today</h5>
+	<div class="metabar-module-body">
+		<p>All updates within the last 24 hours are listed here.</p>
+		<p>In addition to new conversations and events you will also see any new members listed here, and any messages that you are a member of.</p>
+	</div>
+
+
+	{{ if or .Query .User }}
+	<h5>Filters</h5>
+	<div class="metabar-module-body">
+		<ul class="list-group">
+			{{ if .User }}
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-following">
+						<input id="filter-following" type="checkbox" name="following" value="true" {{ if .Query }}{{ if .Query.Following }}checked="checked"{{ end }}{{ end }}/>
+						Following
+					</label>
+				</div>
+			</li>
+			{{ end }}
+		</ul>
+	</div>
+	{{ end }}
+</div> <!-- / filters -->
+{{ end }}
