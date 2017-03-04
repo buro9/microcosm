@@ -27,9 +27,9 @@ func HomeGet(w http.ResponseWriter, req *http.Request) {
 		Microcosm: rootMicrocosm,
 	}
 
-	err = templates.RenderHTML(w, "home.tmpl", data)
+	err = templates.RenderHTML(w, "home", data)
 	if err != nil {
-		fmt.Println("could not render home.tmpl")
+		fmt.Println("could not render home")
 		w.Write([]byte(err.Error()))
 	}
 }

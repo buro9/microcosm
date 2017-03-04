@@ -20,9 +20,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	// MustCompile all templates as a compile error is more preferable than a
-	// runtime error
-	templates.Load()
+	// Compile all templates, these are .MustCompile and so will prevent later
+	// runtime errors relating to badly formatted templates
+	templates.Compile()
 
 	// Listen and wait for errors (none should ever be received, so we should
 	// run forever)

@@ -40,9 +40,9 @@ func TodayGet(w http.ResponseWriter, req *http.Request) {
 		SearchResults: searchResults,
 	}
 
-	err = templates.RenderHTML(w, "today.tmpl", data)
+	err = templates.RenderHTML(w, "today", data)
 	if err != nil {
-		fmt.Println("could not render today.tmpl")
+		fmt.Println("could not render today")
 		w.Write([]byte(err.Error()))
 	}
 }
