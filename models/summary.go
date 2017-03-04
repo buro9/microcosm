@@ -33,3 +33,12 @@ func (item *SummaryItem) AsConversationSummary() *ConversationSummary {
 
 	return &m
 }
+
+func (item *SummaryItem) AsEventSummary() *EventSummary {
+	var m EventSummary
+	if err := json.Unmarshal(item.Item, &m); err != nil {
+		return nil
+	}
+
+	return &m
+}

@@ -1,0 +1,94 @@
+{{ define "block_event" }}
+{{ $event := .event }}
+{{ $showForum := .showForum }}
+{{ $user := .user }}
+<li class="list-collection-row{{ if $event.Meta.Flags.Sticky }} row-pinned{{ end }} {{ if eq $event.Meta.Flags.Deleted true }} row-deleted{{ end }}" id="event{{ $event.ID }}" itemscope itemtype="http://schema.org/Event">
+	<div class="row block">
+		<div class="col-sm-8">
+			<div class="cell-icon">
+				{{ if not $event.Meta.Flags.Open }}
+				<a class="sprite sprite-lock" title="Closed event"></a>
+				{{ else if $event.Meta.Flags.Sticky }}
+				<a class="sprite sprite-pushpin" title="Pinned event"></a>
+				{{ else }}
+				<a class="sprite sprite-calendar" title="Event"></a>
+				{{ end }}
+			</div>
+			<div class="cell-icon-offset">
+				<h3 class="cell-title" itemprop="name">
+					<a href="/events/{{ $event.ID }}/{{ if $user }}newest/{{ end }}" itemprop="url">{{ if isSet $event "Highlight" }}{{ $event.Highlight | safeHTML }}{{ else }}{{ $event.Title | safeHTML }}{{ end }}</a>
+					<!-- TODO: There was a .unread on this, is that if the microcosm is unread? -->
+					<!-- TODO: There was a $event.Unread on this, I think that's from a search result -->				
+					{{ if $event.Meta.Flags.Unread }}<span class="label label-warning">NEW</span>{{ end }}
+				</h3>
+				{{ if $event.Meta.CreatedBy }}
+				<div class="cell-started">
+					<span itemprop="attendee" itemscope itemtype="http://schema.org/Person"><a href="{{ microcosm_url `profile` $event.Meta.CreatedBy.ID }}" itemprop="url">@<span itemprop="name">{{ trunc $event.Meta.CreatedBy.ProfileName 25 | safeHTML }}</span></a></span> {{ if $user }}<a href="/events/{{ $event.ID }}/" >{{ end }}started{{ if $user }}</a>{{ end }} <time datetime="{{ $event.Meta.Created | rfcTime }}">{{ $event.Meta.Created | naturalTime }}</time>
+				</div>
+				{{ end }}
+				<div class="cell-meta-event">
+					{{ if $event.When }}
+					<span>
+						<time class="plain" datetime="{{ $event.When | rfcTime }}" itemprop="startDate">{{ $event.When.Format "Jan 2" }}<!--TODO ordinals 2nd 3rd 4th --></time>
+					</span>
+					{{ else }}
+					<span>
+						<time class="plain" title="Date to be determined">TBD</time>
+					</span>
+					{{ end }}
+					{{ if $event.Where }}
+					<span class="cell-meta-event-where" itemprop="location" itemscope itemtype="http://schema.org/Place">
+						<span itemprop="name" title="{{ $event.Where | safeHTML }}">{{ $event.Where | safeHTML }}</span>
+					</span>
+					{{ else }}
+					<span class="cell-meta-event-where">
+						<span title="Location to be determined">TBD</span>
+					</span>
+					{{ end }}
+				</div>
+				{{ if $showForum }}
+				<div class="cell-forum">
+					in 
+					{{ if $event.Breadcrumb }}
+						{{ $breadcrumb := . }}
+						<div class="cell-forum">
+							in 
+							{{ range $index, $crumb := $breadcrumb }}
+								<a href="{{ $crumb.Href }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (subtract (len $breadcrumb) 1) }}/{{ end }}
+							{{ end }}
+						</div>
+					{{ else }}
+						{{ with (microcosm_link $event.Meta.Links "microcosm") }}
+							<a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
+						{{ end }}
+					{{ end }}
+				</div>
+				{{ end }}
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="cell-stats">
+				<ul class="list-stats list-stats-sm">
+					{{ if gt $event.CommentCount 0 }}
+					<li>
+						<span>{{ $event.CommentCount | numcomma }}</span>
+						comment{{ if gt $event.CommentCount 1 }}s{{ end }}
+					</li>
+					{{ end }}
+					{{ if gt $event.ViewCount 0 }}
+					<li>
+						<span>{{ $event.ViewCount | numcomma }}</span>
+						view{{ if gt $event.ViewCount 1 }}s{{ end }}
+					</li>
+					{{ end }}
+				</ul>
+			</div>
+			<div class="cell-recent">
+				{{ if $event.LastComment }}
+					<a href="{{ microcosm_url `profile` $event.LastComment.CreatedBy.ID }}">@{{ $event.LastComment.CreatedBy.ProfileName | safeHTML }}</a> <a href="{{ microcosm_url `comment-incontext` $event.LastComment.ID }}">replied</a> <time datetime="{{ $event.LastComment.Created | rfcTime }}">{{ $event.LastComment.Created | naturalTime }}</time>
+				{{ end }}
+			</div>
+		</div>
+	</div>
+</li>
+{{ end }}

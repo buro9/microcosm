@@ -8,7 +8,7 @@
 			<div class="cell-icon">
 				{{ if not $conversation.Meta.Flags.Open }}
 					<a class="sprite sprite-lock" title="Closed conversation"></a>
-				{{ else  if $conversation.Meta.Flags.Sticky }}
+				{{ else if $conversation.Meta.Flags.Sticky }}
 					<a class="sprite sprite-pushpin" title="Pinned conversation"></a>
 				{{ else }}
 					<a class="sprite sprite-speech-bubble" title="Conversation"></a>

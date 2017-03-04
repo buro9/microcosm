@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type ConversationSummary struct {
+type EventSummary struct {
 	ID          int64 `json:"id"`
 	MicrocosmID int64 `json:"microcosmId"`
 	Breadcrumb  []struct {
@@ -16,6 +16,22 @@ type ConversationSummary struct {
 		ParentID int64  `json:"parentId,omitempty"`
 	} `json:"breadcrumb,omitempty"`
 	Title string `json:"title"`
+
+	When          *time.Time `json:"when"`
+	TZ            *string    `json:"tz"`
+	WhenTZ        *time.Time `json:"whentz"`
+	Duration      *int64     `json:"duration"`
+	Where         *string    `json:"where"`
+	Lat           *float64   `json:"lat"`
+	Lon           *float64   `json:"lon"`
+	North         *float64   `json:"north"`
+	East          *float64   `json:"east"`
+	South         *float64   `json:"south"`
+	West          *float64   `json:"west"`
+	Status        string     `json:"status"`
+	RSVPLimit     int32      `json:"rsvpLimit"`
+	RSVPAttending int32      `json:"rsvpAttend,omitempty"`
+	RSVPSpaces    int32      `json:"rsvpSpaces,omitempty"`
 
 	CommentCount int64 `json:"totalComments"`
 	ViewCount    int64 `json:"totalViews"`

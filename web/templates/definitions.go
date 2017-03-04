@@ -11,33 +11,33 @@ var page = []string{
 
 var microcosms = []string{
 	"content_microcosm",
-	"block_conversation",
 	"block_microcosm",
+	"block_conversation",
+	"block_event",
 }
 
 var searchResults = []string{
 	"content_searchresults",
-	"block_conversation",
 	"block_microcosm",
+	"block_conversation",
+	"block_event",
 }
 
 func loadDefinitions() {
-	loadDefinitionsOnce.Do(func() {
-
-		Templates = []Template{
-
-			Template{
-				Base:     "base",
-				Page:     "home",
-				Includes: Collate("sidebar_home", page, microcosms),
-			},
-
-			Template{
-				Base:     "base",
-				Page:     "today",
-				Includes: Collate("sidebar_today", page, searchResults),
-			},
-		}
-
-	})
+	loadDefinitionsOnce.Do(
+		func() {
+			Templates = []Template{
+				Template{
+					Base:     "base",
+					Page:     "home",
+					Includes: Collate("sidebar_home", page, microcosms),
+				},
+				Template{
+					Base:     "base",
+					Page:     "today",
+					Includes: Collate("sidebar_today", page, searchResults),
+				},
+			}
+		},
+	)
 }

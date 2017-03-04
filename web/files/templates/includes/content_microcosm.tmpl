@@ -24,6 +24,10 @@
 
 				{{ template "block_conversation" (dict "conversation" .AsConversationSummary "showForum" false "user" $user) }}
 
+			{{ else if eq .ItemType "event" }}
+
+				{{ template "block_event" (dict "event" .AsEventSummary "showForum" false "user" $user) }}
+
 			{{ else }}
 
 				<li>{% .ItemType item %}</li>
