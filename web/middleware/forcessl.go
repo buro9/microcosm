@@ -28,7 +28,7 @@ var (
 func ForceSSL(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, req *http.Request) {
 		if req.TLS == nil {
-			if strings.HasSuffix(req.Host, *opts.ApiDomain) {
+			if strings.HasSuffix(req.Host, *opts.APIDomain) {
 				http.Redirect(
 					w,
 					req,

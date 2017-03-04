@@ -38,7 +38,7 @@ var apiCache = memcache.New(apiMemcache)
 // ApiRootFromRequest returns the URL of the API for the site associated with
 // the request, i.e. https://subdomain.apidomain.tld/api/v1
 func ApiRootFromRequest(req *http.Request) (string, error) {
-	if strings.HasSuffix(req.Host, *opts.ApiDomain) {
+	if strings.HasSuffix(req.Host, *opts.APIDomain) {
 		return "https://" + req.Host + apiVersion, nil
 	}
 
@@ -55,7 +55,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 	resp, err := http.Get(
 		fmt.Sprintf(
 			"https://%s/api/v1/hosts/%s",
-			*opts.ApiDomain,
+			*opts.APIDomain,
 			req.Host,
 		),
 	)
@@ -83,7 +83,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 	// the body should just be a text string of the host name which we can test
 	// because it will end in the *opts.ApiDomain
 	host := string(b)
-	if strings.HasSuffix(host, *opts.ApiDomain) {
+	if strings.HasSuffix(host, *opts.APIDomain) {
 		u, err := url.Parse("https://" + string(b) + apiVersion)
 		if err != nil {
 			// extremely unlikely but this is insurance to check it was valid
