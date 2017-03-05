@@ -38,6 +38,11 @@ func loadDefinitions() {
 					Page:     "today",
 					Includes: Collate("sidebar_today", page, searchResults),
 				},
+				Template{
+					Base:     "base",
+					Page:     "updates",
+					Includes: Collate("sidebar_updates", page, searchResults),
+				},
 			}
 		},
 	)

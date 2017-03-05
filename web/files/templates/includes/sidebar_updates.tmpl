@@ -1,0 +1,19 @@
+{{ define "sidebar_updates" }}
+	{{ if .User }}
+	<div class="metabar-module">
+		<div class="metabar-module-primary-buttons">
+			<a href="{{ microcosm_url `updates-settings` }}" class="btn btn-large btn-block btn-primary"><span class="glyphicon glyphicon-comment"></span> Update notification settings</a>
+		</div>
+	</div> <!-- primary actions -->
+	{{ end }}
+
+	<div class="metabar-module">
+		<h5>About</h5>
+		<div class="metabar-module-title">
+			<h3>Following</h3>
+			<p>Updates on the items that you are following are shown with the most recent update at the top.</p>
+			<p>Unfollow items by visiting them directly, remember that if you are following a forum you will need to unfollow that.</p>
+			<p>Interactions such as replies and @mentions will always be shown.</p>
+		</div>
+	</div> <!-- / about -->
+{{ end }}

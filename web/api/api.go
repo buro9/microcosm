@@ -100,7 +100,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 	return "", fmt.Errorf("%s is not a valid host", host)
 }
 
-func buildAPIURL(ctx context.Context, endpoint string, q *url.Values) *url.URL {
+func buildAPIURL(ctx context.Context, endpoint string, q url.Values) *url.URL {
 	// ensure that we start with a trailing slash
 	if !strings.HasPrefix(endpoint, "/") {
 		endpoint = "/" + endpoint
@@ -124,7 +124,7 @@ func buildAPIURL(ctx context.Context, endpoint string, q *url.Values) *url.URL {
 func apiGet(
 	ctx context.Context,
 	endpoint string,
-	q *url.Values,
+	q url.Values,
 ) (*http.Response, error) {
 
 	u := buildAPIURL(ctx, endpoint, q)
@@ -170,7 +170,7 @@ func apiGet(
 func apiPost(
 	ctx context.Context,
 	endpoint string,
-	q *url.Values,
+	q url.Values,
 	data interface{},
 ) (*http.Response, error) {
 

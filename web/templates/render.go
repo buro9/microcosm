@@ -33,8 +33,9 @@ type Data struct {
 	// If signed-in
 	User *models.Profile
 
-	// Depending on context, templates will expect the applicable one to be
+	// Depending on context, templates may expect the applicable one to be
 	// filled in
+	Array         *models.Array
 	Microcosm     *models.Microcosm
 	SearchResults *models.SearchResults
 }

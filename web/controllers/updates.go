@@ -11,20 +11,14 @@ import (
 	"github.com/buro9/microcosm/web/templates"
 )
 
-func TodayGet(w http.ResponseWriter, req *http.Request) {
+func UpdatesGet(w http.ResponseWriter, req *http.Request) {
 	q := url.Values{}
-	q.Add("since", "-1")
-	q.Add("type", "conversation")
-	q.Add("type", "event")
-	q.Add("type", "profile")
-	q.Add("type", "huddle")
-
 	offset := req.URL.Query().Get("offset")
 	if offset != "" {
 		q.Add("offset", offset)
 	}
 
-	searchResults, err := api.DoSearch(req.Context(), q)
+	updatesResults, err := api.GetUpdates(req.Context(), q)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
@@ -34,15 +28,15 @@ func TodayGet(w http.ResponseWriter, req *http.Request) {
 		Request:    req,
 		Site:       bag.GetSite(req.Context()),
 		User:       bag.GetProfile(req.Context()),
-		Section:    `today`,
-		Pagination: models.ParsePagination(searchResults.Items),
+		Section:    `updates`,
+		Pagination: models.ParsePagination(updatesResults.Items),
 
-		SearchResults: searchResults,
+		Array: &updatesResults.Items,
 	}
 
-	err = templates.RenderHTML(w, "today", data)
+	err = templates.RenderHTML(w, "updates", data)
 	if err != nil {
-		fmt.Println("could not render today")
+		fmt.Println("could not render updates")
 		w.Write([]byte(err.Error()))
 	}
 }

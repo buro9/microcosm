@@ -1,0 +1,62 @@
+
+{{ define "title" }}
+<title>Following{{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="Following{{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}" />
+{{ end }}
+
+{{ define "content" }}
+	<div class="content-header padded">
+		<div class="row">
+			<div class="col-sm-6">
+				{{ template "breadcrumb" (dict "content" .Array "skipParents" true "skipSelf" true "section" .Section) }}
+			</div>
+			<div class="col-sm-6">
+				{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
+			</div>
+		</div>
+	</div>
+
+	<div class="content-body">
+		<!-- TODO {% include "forms/content-moderation.html" %} -->
+		<div class="list-items">
+		{{ if .User }}
+			{{ if not .Array.Items }}
+				<p class="row-meta">No updates to show. When your name is mentioned or a new comment is posted on something that you are following, it will show here.</p>
+			{{ else }}
+				<ul class="list-collection bordered padded">
+				{{ $user := .User }}
+				{{ range .Array.Items }}
+					{{ if eq .ItemType "microcosm" }}
+						{{ template "block_microcosm" (dict "microcosm" .AsMicrocosmSummary "showForum" false "user" $user) }}
+					{{ else if eq .ItemType "conversation" }}
+						{{ template "block_conversation" (dict "conversation" .AsConversationSummary "showForum" false "user" $user) }}
+					{{ else if eq .ItemType "event" }}
+						{{ template "block_event" (dict "event" .AsEventSummary "showForum" false "user" $user) }}
+					{{ else if eq .ItemType "profile" }}
+						{{ template "block_profile" (dict "profile" .AsProfileSummary "sendMessage" true "showAvatar" true "user" $user) }}
+					{{ else }}
+						<li>{{ .ItemType }}</li>
+					{{ end }}
+				{{ end }}
+				</ul>
+			{{ end }}
+		{{ else }}
+			Please sign in to view updates on the items that you are following.
+		{{ end }}
+		</div>
+		<!-- TODO {% include "forms/content-moderation.html" %} -->
+	</div>
+
+	<div class="content-footer padded">
+		<div class="row">
+			<div class="col-sm-6"></div>
+			<div class="col-sm-6">
+				{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
+			</div>
+		</div>
+	</div>
+{{ end }}
+
+{{ define "sidebar" }}
+    {{ template "sidebar_updates" . }}
+{{ end }}
