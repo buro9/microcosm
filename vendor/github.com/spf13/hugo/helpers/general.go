@@ -32,7 +32,6 @@ import (
 	bp "github.com/spf13/hugo/bufferpool"
 	jww "github.com/spf13/jwalterweatherman"
 	"github.com/spf13/pflag"
-	"github.com/spf13/viper"
 )
 
 // FilePathSeparator as defined by os.Separator.
@@ -81,6 +80,8 @@ func GuessType(in string) string {
 		return "rst"
 	case "html", "htm":
 		return "html"
+	case "org":
+		return "org"
 	}
 
 	return "unknown"
@@ -196,8 +197,8 @@ func ReaderContains(r io.Reader, subslice []byte) bool {
 }
 
 // ThemeSet checks whether a theme is in use or not.
-func ThemeSet() bool {
-	return viper.GetString("theme") != ""
+func (p *PathSpec) ThemeSet() bool {
+	return p.theme != ""
 }
 
 type logPrinter interface {
@@ -275,11 +276,11 @@ func InitLoggers() {
 // plenty of time to fix their templates.
 func Deprecated(object, item, alternative string, err bool) {
 	if err {
-		DistinctErrorLog.Printf("%s's %s is deprecated and will be removed in Hugo %s. Use %s instead.", object, item, NextHugoReleaseVersion(), alternative)
+		DistinctErrorLog.Printf("%s's %s is deprecated and will be removed in Hugo %s. %s.", object, item, NextHugoReleaseVersion(), alternative)
 
 	} else {
 		// Make sure the users see this while avoiding build breakage. This will not lead to an os.Exit(-1)
-		DistinctFeedbackLog.Printf("WARNING: %s's %s is deprecated and will be removed in a future release. Use %s instead.", object, item, alternative)
+		DistinctFeedbackLog.Printf("WARNING: %s's %s is deprecated and will be removed in a future release. %s.", object, item, alternative)
 	}
 }
 

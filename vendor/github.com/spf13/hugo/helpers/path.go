@@ -23,10 +23,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/spf13/hugo/hugofs"
-
 	"github.com/spf13/afero"
-	"github.com/spf13/viper"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/unicode/norm"
 )
@@ -155,71 +152,71 @@ func ReplaceExtension(path string, newExt string) string {
 
 // AbsPathify creates an absolute path if given a relative path. If already
 // absolute, the path is just cleaned.
-func AbsPathify(inPath string) string {
+func (p *PathSpec) AbsPathify(inPath string) string {
 	if filepath.IsAbs(inPath) {
 		return filepath.Clean(inPath)
 	}
 
 	// TODO(bep): Consider moving workingDir to argument list
-	return filepath.Clean(filepath.Join(viper.GetString("workingDir"), inPath))
+	return filepath.Clean(filepath.Join(p.workingDir, inPath))
 }
 
 // GetLayoutDirPath returns the absolute path to the layout file dir
 // for the current Hugo project.
-func GetLayoutDirPath() string {
-	return AbsPathify(viper.GetString("layoutDir"))
+func (p *PathSpec) GetLayoutDirPath() string {
+	return p.AbsPathify(p.layoutDir)
 }
 
 // GetStaticDirPath returns the absolute path to the static file dir
 // for the current Hugo project.
-func GetStaticDirPath() string {
-	return AbsPathify(viper.GetString("staticDir"))
+func (p *PathSpec) GetStaticDirPath() string {
+	return p.AbsPathify(p.staticDir)
 }
 
 // GetThemeDir gets the root directory of the current theme, if there is one.
 // If there is no theme, returns the empty string.
-func GetThemeDir() string {
-	if ThemeSet() {
-		return AbsPathify(filepath.Join(viper.GetString("themesDir"), viper.GetString("theme")))
+func (p *PathSpec) GetThemeDir() string {
+	if p.ThemeSet() {
+		return p.AbsPathify(filepath.Join(p.themesDir, p.theme))
 	}
 	return ""
 }
 
 // GetRelativeThemeDir gets the relative root directory of the current theme, if there is one.
 // If there is no theme, returns the empty string.
-func GetRelativeThemeDir() string {
-	if ThemeSet() {
-		return strings.TrimPrefix(filepath.Join(viper.GetString("themesDir"), viper.GetString("theme")), FilePathSeparator)
+func (p *PathSpec) GetRelativeThemeDir() string {
+	if p.ThemeSet() {
+		return strings.TrimPrefix(filepath.Join(p.themesDir, p.theme), FilePathSeparator)
 	}
 	return ""
 }
 
 // GetThemeStaticDirPath returns the theme's static dir path if theme is set.
 // If theme is set and the static dir doesn't exist, an error is returned.
-func GetThemeStaticDirPath() (string, error) {
-	return getThemeDirPath("static")
+func (p *PathSpec) GetThemeStaticDirPath() (string, error) {
+	return p.getThemeDirPath("static")
 }
 
 // GetThemeDataDirPath returns the theme's data dir path if theme is set.
 // If theme is set and the data dir doesn't exist, an error is returned.
-func GetThemeDataDirPath() (string, error) {
-	return getThemeDirPath("data")
+func (p *PathSpec) GetThemeDataDirPath() (string, error) {
+	return p.getThemeDirPath("data")
 }
 
 // GetThemeI18nDirPath returns the theme's i18n dir path if theme is set.
 // If theme is set and the i18n dir doesn't exist, an error is returned.
-func GetThemeI18nDirPath() (string, error) {
-	return getThemeDirPath("i18n")
+func (p *PathSpec) GetThemeI18nDirPath() (string, error) {
+	return p.getThemeDirPath("i18n")
 }
 
-func getThemeDirPath(path string) (string, error) {
-	if !ThemeSet() {
+func (p *PathSpec) getThemeDirPath(path string) (string, error) {
+	if !p.ThemeSet() {
 		return "", ErrThemeUndefined
 	}
 
-	themeDir := filepath.Join(GetThemeDir(), path)
-	if _, err := hugofs.Source().Stat(themeDir); os.IsNotExist(err) {
-		return "", fmt.Errorf("Unable to find %s directory for theme %s in %s", path, viper.GetString("theme"), themeDir)
+	themeDir := filepath.Join(p.GetThemeDir(), path)
+	if _, err := p.fs.Source.Stat(themeDir); os.IsNotExist(err) {
+		return "", fmt.Errorf("Unable to find %s directory for theme %s in %s", path, p.theme, themeDir)
 	}
 
 	return themeDir, nil
@@ -228,17 +225,17 @@ func getThemeDirPath(path string) (string, error) {
 // GetThemesDirPath gets the static files directory of the current theme, if there is one.
 // Ignores underlying errors.
 // TODO(bep) Candidate for deprecation?
-func GetThemesDirPath() string {
-	dir, _ := getThemeDirPath("static")
+func (p *PathSpec) GetThemesDirPath() string {
+	dir, _ := p.getThemeDirPath("static")
 	return dir
 }
 
 // MakeStaticPathRelative makes a relative path to the static files directory.
 // It does so by taking either the project's static path or the theme's static
 // path into consideration.
-func MakeStaticPathRelative(inPath string) (string, error) {
-	staticDir := GetStaticDirPath()
-	themeStaticDir := GetThemesDirPath()
+func (p *PathSpec) MakeStaticPathRelative(inPath string) (string, error) {
+	staticDir := p.GetStaticDirPath()
+	themeStaticDir := p.GetThemesDirPath()
 
 	return makePathRelative(inPath, staticDir, themeStaticDir)
 }
@@ -362,20 +359,20 @@ func GetRelativePath(path, base string) (final string, err error) {
 }
 
 // PaginateAliasPath creates a path used to access the aliases in the paginator.
-func PaginateAliasPath(base string, page int) string {
-	paginatePath := Config().GetString("paginatePath")
-	uglify := viper.GetBool("uglyURLs")
-	var p string
+func (p *PathSpec) PaginateAliasPath(base string, page int) string {
+	paginatePath := p.paginatePath
+	uglify := p.uglyURLs
+	var pth string
 	if base != "" {
-		p = filepath.FromSlash(fmt.Sprintf("/%s/%s/%d", base, paginatePath, page))
+		pth = filepath.FromSlash(fmt.Sprintf("/%s/%s/%d", base, paginatePath, page))
 	} else {
-		p = filepath.FromSlash(fmt.Sprintf("/%s/%d", paginatePath, page))
+		pth = filepath.FromSlash(fmt.Sprintf("/%s/%d", paginatePath, page))
 	}
 	if uglify {
-		p += ".html"
+		pth += ".html"
 	}
 
-	return p
+	return pth
 }
 
 // GuessSection returns the section given a source path.

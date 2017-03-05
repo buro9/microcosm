@@ -13,6 +13,13 @@
 
 package helpers
 
+import (
+	"fmt"
+
+	"github.com/spf13/hugo/config"
+	"github.com/spf13/hugo/hugofs"
+)
+
 // PathSpec holds methods that decides how paths in URLs and files in Hugo should look like.
 type PathSpec struct {
 	disablePathToLower bool
@@ -20,10 +27,19 @@ type PathSpec struct {
 	uglyURLs           bool
 	canonifyURLs       bool
 
-	currentContentLanguage *Language
+	language *Language
 
 	// pagination path handling
 	paginatePath string
+
+	baseURL string
+	theme   string
+
+	// Directories
+	themesDir  string
+	layoutDir  string
+	workingDir string
+	staticDir  string
 
 	// The PathSpec looks up its config settings in both the current language
 	// and then in the global Viper config.
@@ -33,21 +49,41 @@ type PathSpec struct {
 	defaultContentLanguageInSubdir bool
 	defaultContentLanguage         string
 	multilingual                   bool
+
+	// The file systems to use
+	fs *hugofs.Fs
 }
 
-// NewPathSpecFromConfig creats a new PathSpec from the given ConfigProvider.
-func NewPathSpecFromConfig(config ConfigProvider) *PathSpec {
-	return &PathSpec{
-		disablePathToLower:             config.GetBool("disablePathToLower"),
-		removePathAccents:              config.GetBool("removePathAccents"),
-		uglyURLs:                       config.GetBool("uglyURLs"),
-		canonifyURLs:                   config.GetBool("canonifyURLs"),
-		multilingual:                   config.GetBool("multilingual"),
-		defaultContentLanguageInSubdir: config.GetBool("defaultContentLanguageInSubdir"),
-		defaultContentLanguage:         config.GetString("defaultContentLanguage"),
-		currentContentLanguage:         config.Get("currentContentLanguage").(*Language),
-		paginatePath:                   config.GetString("paginatePath"),
+func (p PathSpec) String() string {
+	return fmt.Sprintf("PathSpec, language %q, prefix %q, multilingual: %T", p.language.Lang, p.getLanguagePrefix(), p.multilingual)
+}
+
+// NewPathSpec creats a new PathSpec from the given filesystems and Language.
+func NewPathSpec(fs *hugofs.Fs, cfg config.Provider) *PathSpec {
+
+	ps := &PathSpec{
+		fs:                             fs,
+		disablePathToLower:             cfg.GetBool("disablePathToLower"),
+		removePathAccents:              cfg.GetBool("removePathAccents"),
+		uglyURLs:                       cfg.GetBool("uglyURLs"),
+		canonifyURLs:                   cfg.GetBool("canonifyURLs"),
+		multilingual:                   cfg.GetBool("multilingual"),
+		defaultContentLanguageInSubdir: cfg.GetBool("defaultContentLanguageInSubdir"),
+		defaultContentLanguage:         cfg.GetString("defaultContentLanguage"),
+		paginatePath:                   cfg.GetString("paginatePath"),
+		baseURL:                        cfg.GetString("baseURL"),
+		themesDir:                      cfg.GetString("themesDir"),
+		layoutDir:                      cfg.GetString("layoutDir"),
+		workingDir:                     cfg.GetString("workingDir"),
+		staticDir:                      cfg.GetString("staticDir"),
+		theme:                          cfg.GetString("theme"),
 	}
+
+	if language, ok := cfg.(*Language); ok {
+		ps.language = language
+	}
+
+	return ps
 }
 
 // PaginatePath returns the configured root path used for paginator pages.

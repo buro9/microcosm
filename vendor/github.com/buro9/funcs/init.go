@@ -25,6 +25,7 @@ func init() {
 		"lower":       strings.ToLower,
 		"naturalTime": transform.NaturalTime,
 		"numcomma":    transform.NumComma,
+		"ord2suffix":  transform.OrdToSuffix,
 		"rfcTime":     transform.RFCTime,
 		"title":       strings.Title,
 		"trunc":       transform.Trunc,
@@ -41,6 +42,7 @@ func init() {
 		"safeURL":      safe.URL,
 
 		// Inspect your data
+		"contains": strings.Contains,
 		"hasField": inspect.HasField,
 		"in":       inspect.In,
 		"isNil":    inspect.IsNil,

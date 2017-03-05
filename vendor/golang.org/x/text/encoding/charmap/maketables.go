@@ -34,6 +34,14 @@ var encodings = []struct {
 	mapping     string
 }{
 	{
+		"IBM Code Page 037",
+		"IBM037",
+		"",
+		"CodePage037",
+		0x3f,
+		"http://source.icu-project.org/repos/icu/data/trunk/charset/data/ucm/glibc-IBM037-2.1.2.ucm",
+	},
+	{
 		"IBM Code Page 437",
 		"PC8CodePage437",
 		"",
@@ -112,6 +120,22 @@ var encodings = []struct {
 		"CodePage866",
 		encoding.ASCIISub,
 		"http://encoding.spec.whatwg.org/index-ibm866.txt",
+	},
+	{
+		"IBM Code Page 1047",
+		"IBM1047",
+		"",
+		"CodePage1047",
+		0x3f,
+		"http://source.icu-project.org/repos/icu/data/trunk/charset/data/ucm/glibc-IBM1047-2.1.2.ucm",
+	},
+	{
+		"IBM Code Page 1140",
+		"IBM01140",
+		"",
+		"CodePage1140",
+		0x3f,
+		"http://source.icu-project.org/repos/icu/data/trunk/charset/data/ucm/ibm-1140_P100-1997.ucm",
 	},
 	{
 		"ISO 8859-1",
