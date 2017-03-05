@@ -42,3 +42,12 @@ func (item *SummaryItem) AsEventSummary() *EventSummary {
 
 	return &m
 }
+
+func (item *SummaryItem) AsProfileSummary() *ProfileSummary {
+	var m ProfileSummary
+	if err := json.Unmarshal(item.Item, &m); err != nil {
+		return nil
+	}
+
+	return &m
+}

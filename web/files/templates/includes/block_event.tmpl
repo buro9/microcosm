@@ -29,7 +29,7 @@
 				<div class="cell-meta-event">
 					{{ if $event.When }}
 					<span>
-						<time class="plain" datetime="{{ $event.When | rfcTime }}" itemprop="startDate">{{ $event.When.Format "Jan 2" }}<!--TODO ordinals 2nd 3rd 4th --></time>
+						<time class="plain" datetime="{{ $event.When | rfcTime }}" itemprop="startDate">{{ $event.When.Format "Jan 2" }}{{ ord2suffix $event.When.Day }}</time>
 					</span>
 					{{ else }}
 					<span>

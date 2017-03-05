@@ -1,0 +1,29 @@
+{{ define "block_profile" }}
+{{ $profile := .profile }}
+{{ $showAvatar := .showAvatar }}
+{{ $sendMessage := .sendMessage }}
+{{ $user := .user }}
+<li class="list-collection-row" id="profile{{ $profile.ID }}">
+	<div class="row block">
+		<div class="col-sm-8">
+			{{ if $showAvatar }}
+			<div class="cell-icon">
+				<a class="sprite sprite-user" title="profile"></a>
+			</div>
+			{{ end }}
+			<div class="cell-icon-offset">
+				<div class="cell-title">
+					<a href="{{ microcosm_url `profile` $profile.ID }}"><img src="{{ if (contains $profile.AvatarURL `gravatar`) }}{{ $profile.AvatarURL }}{{ else if (contains $profile.AvatarURL `files`) }}https://{{ .Site.SubdomainKey }}.microco.sm{{ $profile.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}" alt="Avatar for {{ $profile.ProfileName | safeHTML }}" align="left" /> <strong>@{{ $profile.ProfileName | safeHTML }}</strong></a>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			{{ if $user and $sendMessage }}
+			<div class="cell-profile-message">
+				<a class="pull-right" href="{{ microcosm_url `huddle-create` }}?to={{ $profile.ID }}">send message</a>
+			</div>
+			{{ end }}
+		</div>
+	</div>
+</li>
+{{ end }}

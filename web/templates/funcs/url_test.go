@@ -26,6 +26,7 @@ func TestAPI2UI(t *testing.T) {
 
 func TestURL(t *testing.T) {
 	assert.Equal(t, `/`, url(`home`))
+	assert.Equal(t, `/huddles/create/`, url(`huddle-create`))
 	assert.Equal(t, `/huddles/`, url(`huddle-list`))
 	assert.Equal(t, `/legal/`, url(`legal-list`))
 	assert.Equal(t, `/login/`, url(`login`))

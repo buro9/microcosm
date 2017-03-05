@@ -44,6 +44,8 @@ func url(key string, args ...interface{}) string {
 		switch key {
 		case "home":
 			return "/"
+		case "huddle-create":
+			return "/huddles/create/"
 		case "huddle-list":
 			return "/huddles/"
 		case "legal-list":

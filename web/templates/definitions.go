@@ -21,6 +21,7 @@ var searchResults = []string{
 	"block_microcosm",
 	"block_conversation",
 	"block_event",
+	"block_profile",
 }
 
 func loadDefinitions() {
