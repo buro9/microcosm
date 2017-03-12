@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+
+  web:
+    image: microcosm
+    build:
+      context: .
+      dockerfile: ./containers/Dockerfile.microcosm
+    ports:
+     - "80:80"
+     - "443:443"
+    volumes:
+     - .:/go/src/github/buro9/microcosm
+    depends_on:
+     - cache
+
+  db:
+    image: "postgres:9.6"
+
+  cache:
+    image: "memcached:latest"

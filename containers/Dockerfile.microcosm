@@ -1,0 +1,34 @@
+FROM golang:1.7
+MAINTAINER <>
+
+RUN apt-get -y update
+RUN apt-get -y install curl iproute2 netbase vim screen openssl
+
+ARG WEB_DOMAIN=dev.microco.sm
+ENV WEB_DOMAIN $WEB_DOMAIN
+
+ARG CODE_HOME=/go/src/github.com/buro9/microcosm
+ENV CODE_HOME $CODE_HOME
+
+RUN mkdir -p /etc/ssl/certs \
+    && openssl req -x509 -newkey rsa:4096 -nodes -days 999 \
+       -subj "/CN=$WEB_DOMAIN" \
+       -keyout /etc/ssl/certs/$WEB_DOMAIN.key \
+       -out /etc/ssl/certs/$WEB_DOMAIN.crt
+
+COPY  . $CODE_HOME
+WORKDIR $CODE_HOME
+
+RUN make
+
+EXPOSE 80 443
+
+ENV MICROCOSM_WEB_CERT_FILE /etc/ssl/certs/$WEB_DOMAIN.crt
+ENV MICROCOSM_WEB_KEY_FILE /etc/ssl/certs/$WEB_DOMAIN.key
+ENV MICROCOSM_WEB_API_CLIENT_SECRET "yolopolo"
+
+RUN ln -s $CODE_HOME/web/files /srv/microcosm-web
+
+# Default entrypoint: web layer
+ENTRYPOINT "${CODE_HOME}/bin/microcosm-web"
+
