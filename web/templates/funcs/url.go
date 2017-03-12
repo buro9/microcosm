@@ -80,6 +80,10 @@ func url(key string, args ...interface{}) string {
 				return fmt.Sprintf("/microcosms/%d/create/conversation/", v)
 			case "event-create":
 				return fmt.Sprintf("/microcosms/%d/create/event/", v)
+			case "huddle":
+				return fmt.Sprintf("/huddles/%d/", v)
+			case "huddle-newest":
+				return fmt.Sprintf("/huddles/%d/newest/", v)
 			case "memberships-list":
 				return fmt.Sprintf("/microcosms/%d/memberships/", v)
 			case "microcosm":

@@ -19,6 +19,7 @@ var microcosms = []string{
 var searchResults = []string{
 	"block_conversation",
 	"block_event",
+	"block_huddle",
 	"block_list_comment",
 	"block_microcosm",
 	"block_profile",

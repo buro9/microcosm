@@ -95,6 +95,19 @@ func (m *SummaryItem) AsEventSummary(raw json.RawMessage) *EventSummary {
 	return &summary
 }
 
+func (m *SummaryItem) AsHuddleSummary(raw json.RawMessage) *HuddleSummary {
+	if raw == nil {
+		return nil
+	}
+
+	var summary HuddleSummary
+	if err := json.Unmarshal(raw, &summary); err != nil {
+		return nil
+	}
+
+	return &summary
+}
+
 func (m *SummaryItem) AsMicrocosmSummary(raw json.RawMessage) *MicrocosmSummary {
 	if raw == nil {
 		return nil

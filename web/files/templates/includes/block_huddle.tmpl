@@ -1,0 +1,62 @@
+{{ define "block_huddle" }}
+{{ $huddle := .huddle }}
+{{ $unread := .unread }}
+{{ $site := .site }}
+{{ $user := .user }}
+<li class="list-collection-row">
+	<div class="row block">
+		<div class="col-sm-8">
+			<div class="cell-icon">
+				<a class="sprite sprite-envelope" title="Message"></a>
+			</div>
+			<div class="cell-icon-offset">
+				<h3 class="cell-title">
+					<a href="{{ microcosm_url "huddle-newest" $huddle.ID }}">{{ $huddle.Title | safeHTML }}</a>
+					{{ if $unread }}
+					<span class="label label-warning">NEW</span>
+					{{ end }}
+				</h3>
+				{{ if $huddle.Meta.CreatedBy }}
+				<div class="cell-started">
+					<a href="{{ microcosm_url "profile" $huddle.Meta.CreatedBy.ID }}">@{{ trunc $huddle.Meta.CreatedBy.ProfileName 25 | safeHTML }}</a> <a href="{{ microcosm_url "huddle" $huddle.ID }}" >started</a> <time datetime="{{ $huddle.Meta.Created | rfcTime }}">{{ $huddle.Meta.Created | naturalTime }}</time>
+					&bull;
+				</div>
+				{{ end }}
+				<div class="cell-meta-huddle">
+					<ul class="list-people list-people-sm">
+						{{ range $index, $participant := $huddle.Participants }}
+							{{ if lt $index 6 }}
+								<li>
+									<a href="{{ microcosm_url "profile" $participant.ID }}" data-toggle="tooltip" title="@{{ $participant.ProfileName | safeHTML }}"><img src="{{ microcosm_avatar_url $participant.AvatarURL $site.SubdomainKey }}" alt="Avatar for {{ $participant.ProfileName | safeHTML }}"/></a>
+								</li>
+							{{ end }}
+						{{ end }}
+						<li>
+						{{ if gt (len $huddle.Participants) 6 }}
+							+{{ subtract (len $huddle.Participants) 6 }}
+						{{ end }}
+						</li>
+					</ul>
+				</div>
+			</div> <!-- /list-collection-row-offset -->
+		</div> <!-- /col-sm-8 -->
+		<div class="col-sm-4">
+			<div class="cell-stats">
+				<ul class="list-stats list-stats-sm">
+					<li>
+						<span>{{ default $huddle.CommentCount 0 | numcomma }}</span>
+						comment{{ if gt $huddle.CommentCount 1 }}s{{ end }}
+					</li>
+				</ul>
+			</div>
+			<div class="cell-recent">
+				{{ if gt $huddle.LastComment.ID 0 }}
+					<a href="{{ microcosm_url "profile" $huddle.LastComment.CreatedBy.ID }}">@{{ trunc $huddle.LastComment.CreatedBy.ProfileName 25 | safeHTML }}</a> <a href="{{ microcosm_url "comment-incontext" $huddle.LastComment.ID }}">replied</a> <time datetime="{{ $huddle.LastComment.Created | rfcTime }}">{{ $huddle.LastComment.Created | naturalTime }}</time>
+				{{ else }}
+					<a href="{{ microcosm_url "profile" $huddle.Meta.CreatedBy.ID }}">@{{ trunc $huddle.Meta.CreatedBy.ProfileName 25 | safeHTML }}</a> replied <time datetime="{{ $huddle.Meta.Created | rfcTime }}">{{ $huddle.Meta.Created | naturalTime }}</time>
+				{{ end }}
+			</div>
+		</div> <!-- /col-sm-4 -->
+	</div> <!--/row -->
+</li>
+{{ end }}
