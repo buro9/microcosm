@@ -83,7 +83,7 @@ func redirectURLtoTLS(req *http.Request) string {
 	}
 
 	return fmt.Sprintf(
-		"https://%s:%d%s",
+		"https://%s:%s%s",
 		req.Host,
 		addrPort[1],
 		req.URL.RequestURI(),
