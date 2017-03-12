@@ -25,6 +25,7 @@ func buildFuncMap() template.FuncMap {
 
 	funcMap[Namespace+"api2ui"] = api2ui
 	funcMap[Namespace+"url"] = url
+	funcMap[Namespace+"avatar_url"] = avatarURL
 	funcMap[Namespace+"link"] = linkFromLinks
 	funcMap[Namespace+"reverseLinks"] = reverseLinks
 	funcMap[Namespace+"stat"] = stat

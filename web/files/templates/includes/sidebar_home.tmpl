@@ -2,7 +2,7 @@
 	{{ if .Microcosm }}
 		{{ $microcosmID := .Microcosm.ID }}
 		{{ if .Microcosm.Meta.Flags.Open }}
-			{{ if (.Microcosm.Meta.Permissions.IsSiteOwner) or (.Microcosm.Meta.Permissions.IsOwner) or (.Microcosm.Meta.Permissions.IsModerator) }}
+			{{ if or (.Microcosm.Meta.Permissions.IsSiteOwner) (.Microcosm.Meta.Permissions.IsOwner) (.Microcosm.Meta.Permissions.IsModerator) }}
 				<div class="metabar-module">
 					<div class="metabar-module-primary-buttons">
 						{{ range .Microcosm.ItemTypes }}
@@ -49,7 +49,7 @@
 			</ul>
 		</div> <!-- Population -->
 		<div class="metabar-module">
-			{{ if (gt (microcosm_stat .Site.Meta.Stats "totalConversations") 0) or (gt (microcosm_stat .Site.Meta.Stats "totalEvents") 0) }}
+			{{ if or (gt (microcosm_stat .Site.Meta.Stats "totalConversations") 0) (gt (microcosm_stat .Site.Meta.Stats "totalEvents") 0) }}
 			<h5>Content</h5>
 			<ul class="list-group">
 				{{ if gt (microcosm_stat .Site.Meta.Stats "totalConversations") 0 }}
@@ -84,7 +84,7 @@
 			<div class="metabar-module-body">
 				<!-- TODO {% include 'forms/mark-read.html' %} -->
 			</div>
-			{{ if (.Microcosm.Meta.Permissions.IsSiteOwner) or (.Microcosm.Meta.Permissions.IsOwner) or (.Microcosm.Meta.Permissions.IsModerator) }}
+			{{ if or (.Microcosm.Meta.Permissions.IsSiteOwner) (.Microcosm.Meta.Permissions.IsOwner) (.Microcosm.Meta.Permissions.IsModerator) }}
 				<div class="metabar-module-body">
 					<a href="{{ microcosm_url `memberships-list` .Microcosm.ID }}">Manage site permissions</a>
 				</div>

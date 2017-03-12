@@ -1,4 +1,3 @@
-
 {{ define "title" }}
 <title>Following{{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
 <meta name="Description" content="Following{{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}" />
@@ -20,6 +19,8 @@
 		<!-- TODO {% include "forms/content-moderation.html" %} -->
 		<div class="list-items">
 		{{ if .User }}
+			{{ $site := .Site }}
+			{{ $user := .User }}
 			{{ if not .Array.Items }}
 				<p class="row-meta">No updates to show. When your name is mentioned or a new comment is posted on something that you are following, it will show here.</p>
 			{{ else }}
@@ -27,13 +28,29 @@
 				{{ $user := .User }}
 				{{ range .Array.Items }}
 					{{ if eq .ItemType "microcosm" }}
-						{{ template "block_microcosm" (dict "microcosm" .AsMicrocosmSummary "showForum" false "user" $user) }}
+						{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" false "user" $user) }}
 					{{ else if eq .ItemType "conversation" }}
-						{{ template "block_conversation" (dict "conversation" .AsConversationSummary "showForum" false "user" $user) }}
+						{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .Item) "showForum" false "user" $user) }}
 					{{ else if eq .ItemType "event" }}
-						{{ template "block_event" (dict "event" .AsEventSummary "showForum" false "user" $user) }}
+						{{ template "block_event" (dict "event" (.AsEventSummary .Item) "showForum" false "user" $user) }}
 					{{ else if eq .ItemType "profile" }}
-						{{ template "block_profile" (dict "profile" .AsProfileSummary "sendMessage" true "showAvatar" true "user" $user) }}
+						{{ template "block_profile" (dict "profile" (.AsProfileSummary .Item) "sendMessage" true "showAvatar" true "user" $user) }}
+					{{ else if eq .ItemType "huddle" }}
+						<li>HUDDLE</li>
+					{{ else if eq .ItemType "comment" }}
+						{{ if or (eq .UpdateType "new_comment") (eq .UpdateType "new_comment_in_huddle")}}
+							{{ if eq .ParentItemType "conversation" }}
+								{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .ParentItem) "showForum" true "user" $user)}}
+							{{ else if eq .ParentItemType "event" }}
+								{{ template "block_event" (dict "event" (.AsEventSummary .ParentItem) "showForum" true "user" $user)}}
+							{{ else if eq .ParentItemType "profile" }}
+								{{ template "block_profile" (dict "profile" (.AsProfileSummary .ParentItem) "sendMessage" true "showAvatar" true "user" $user) }}
+							{{ else if eq .ParentItemType "huddle" }}
+								<li>NEW COMMENT IN HUDDLE</li>
+							{{ end }}
+						{{ else }}
+							{{ template "block_list_comment" (dict "action" .UpdateType "comment" (.AsCommentSummary .Item) "parent" (.AsConversationSummary .ParentItem) "result" . "site" $site)}}
+						{{ end }}
 					{{ else }}
 						<li>{{ .ItemType }}</li>
 					{{ end }}

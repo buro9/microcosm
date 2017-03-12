@@ -28,9 +28,8 @@
 				{{ end }}
 				{{ if $showForum }}
 				<div class="cell-forum">
-					in 
 					{{ if $conversation.Breadcrumb }}
-						{{ $breadcrumb := . }}
+						{{ $breadcrumb := $conversation.Breadcrumb }}
 						<div class="cell-forum">
 							in 
 							{{ range $index, $crumb := $breadcrumb }}
@@ -39,7 +38,7 @@
 						</div>
 					{{ else }}
 						{{ with (microcosm_link $conversation.Meta.Links "microcosm") }}
-							<a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
+							in <a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
 						{{ end }}
 					{{ end }}
 				</div>

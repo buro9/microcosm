@@ -13,7 +13,7 @@
 			{{ end }}
 			<div class="cell-icon-offset">
 				<div class="cell-title">
-					<a href="{{ microcosm_url `profile` $profile.ID }}"><img src="{{ if (contains $profile.AvatarURL `gravatar`) }}{{ $profile.AvatarURL }}{{ else if (contains $profile.AvatarURL `files`) }}https://{{ .Site.SubdomainKey }}.microco.sm{{ $profile.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}" alt="Avatar for {{ $profile.ProfileName | safeHTML }}" align="left" /> <strong>@{{ $profile.ProfileName | safeHTML }}</strong></a>
+					<a href="{{ microcosm_url `profile` $profile.ID }}"><img src="{{ microcosm_avatar_url $profile.AvatarURL .Site.SubdomainKey }}" alt="Avatar for {{ $profile.ProfileName | safeHTML }}" align="left" /> <strong>@{{ $profile.ProfileName | safeHTML }}</strong></a>
 				</div>
 			</div>
 		</div>

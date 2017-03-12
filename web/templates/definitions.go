@@ -10,18 +10,19 @@ var page = []string{
 }
 
 var microcosms = []string{
-	"content_microcosm",
-	"block_microcosm",
 	"block_conversation",
 	"block_event",
+	"block_microcosm",
+	"content_microcosm",
 }
 
 var searchResults = []string{
-	"content_searchresults",
-	"block_microcosm",
 	"block_conversation",
 	"block_event",
+	"block_list_comment",
+	"block_microcosm",
 	"block_profile",
+	"content_searchresults",
 }
 
 func loadDefinitions() {

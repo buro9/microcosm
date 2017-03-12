@@ -29,7 +29,7 @@
 			<li><a href="{{ (microcosm_link .content.Meta.Links "self").Href | microcosm_api2ui }}">{{ .content.ProfileName | safeHTML }}</a></li>
 			{{ if in (microcosm_link .content.Meta.Links "self").Href "huddles" }}
 				<li><a href="{{ (microcosm_link .content.Meta.Links "self").Href | microcosm_api2ui }}">Messages</a></li>
-			{{ else  if eq .section "legal" }}
+			{{ else if eq .section "legal" }}
 				<li><a href="{{ microcosm_url "legal-list" }}">About</a></li>
 			{{ else if not isNil .content.Title }}
 				<li><a href="{{ (microcosm_link .content.Meta.Links "self").Href | microcosm_api2ui }}">{{ .content.Text }}</a></li>
