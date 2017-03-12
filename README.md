@@ -3,14 +3,19 @@
 Microcosm is forum software written in Go.
 
 Logically it is implemented as:
+
 * Web UI within a Go server that is itself a client of the API
 * API within a Go server that interacts with a PostgreSQL database
 * PostgreSQL database
 
-This repository can produce three binaries:
+
+This repository will eventually produce three binaries:
+
 1. `microcosm-web` which is the web client and can be deployed and pointed at a JSON API
 2. `microcosm-api` which is the JSON API server and talks to the database
 3. `microcosm` which is a combined web application and API in one binary for single server or homogenous server installs
+
+NOTE: Right now only `microcosm-web` is being produced, when the web UI is complete the existing [https://github.com/microcosm-cc/microcosm](https://github.com/microcosm-cc/microcosm) repo that contains the API will be merged or copied in.
 
 All of the binaries can be load balanced and will scale horizontally.
 
