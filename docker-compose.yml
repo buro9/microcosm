@@ -13,6 +13,10 @@ services:
     volumes:
      - .:/go/src/github/buro9/microcosm
     depends_on:
+     - db
+     - cache
+    links:
+     - db
      - cache
 
   db:
@@ -20,3 +24,5 @@ services:
 
   cache:
     image: "memcached:latest"
+    ports:
+      - "11211:11211"

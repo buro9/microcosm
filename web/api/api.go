@@ -14,7 +14,6 @@ import (
 	"time"
 
 	"github.com/gregjones/httpcache"
-	"github.com/gregjones/httpcache/memcache"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/bag"
@@ -22,18 +21,14 @@ import (
 )
 
 const (
-	apiVersion  string = "/api/v1"
-	apiMemcache string = "localhost:11211"
-
-	userAgent string = "microcosm web client"
+	apiVersion string = "/api/v1"
+	userAgent  string = "microcosm Go web client"
 )
 
 var (
 	cnameToAPIRoot     map[string]string
 	cnameToAPIRootLock sync.RWMutex
 )
-
-var apiCache = memcache.New(apiMemcache)
 
 // ApiRootFromRequest returns the URL of the API for the site associated with
 // the request, i.e. https://subdomain.apidomain.tld/api/v1
@@ -132,7 +127,7 @@ func apiGet(
 	accessToken := bag.GetAccessToken(ctx)
 
 	var c *http.Client
-	if endpoint == "site" || accessToken == "" {
+	if (endpoint == "site" || accessToken == "") && apiCache != nil {
 		// Standard client using the cache transport for non-authenticated API
 		// requests
 		c = &http.Client{

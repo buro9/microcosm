@@ -29,8 +29,8 @@
 		<div class="metabar-module">
 			<h5>About</h5>
 			<div class="metabar-module-title">
-				<h3>{{ .Site.Title }}</h3>
-				<p>{{ .Site.Description }}</p>
+				<h3>{{ .Site.Title | safeHTML }}</h3>
+				<p>{{ .Site.Description | safeHTML }}</p>
 			</div>
 		</div> <!-- / about -->
 		<div class="metabar-module">

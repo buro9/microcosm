@@ -30,7 +30,7 @@
 				{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" false "user" $user) }}
 
 			{{ else if eq .ItemType "profile" }}
-				{{ template "block_profile" (dict "profile" (.AsProfileSummary .Item) "sendMessage" true "showAvatar" true "user" $user) }}
+				{{ template "block_profile" (dict "profile" (.AsProfileSummary .Item) "sendMessage" true "showAvatar" true "site" $site "user" $user) }}
 
 			{{ else }}
 				<li>{{ .ItemType }}</li>

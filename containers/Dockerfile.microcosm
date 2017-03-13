@@ -4,7 +4,7 @@ MAINTAINER <>
 RUN apt-get -y update
 RUN apt-get -y install curl iproute2 netbase vim screen openssl
 
-ARG WEB_DOMAIN=dev.microco.sm
+ARG WEB_DOMAIN=dev.microcosmcc.com
 ENV WEB_DOMAIN $WEB_DOMAIN
 
 ARG CODE_HOME=/go/src/github.com/buro9/microcosm
@@ -23,12 +23,13 @@ RUN make
 
 EXPOSE 80 443
 
+RUN ln -s $CODE_HOME/web/files /srv/microcosm-web
+
 ENV MICROCOSM_WEB_CERT_FILE /etc/ssl/certs/$WEB_DOMAIN.crt
 ENV MICROCOSM_WEB_KEY_FILE /etc/ssl/certs/$WEB_DOMAIN.key
 ENV MICROCOSM_WEB_API_CLIENT_SECRET "yolopolo"
-
-RUN ln -s $CODE_HOME/web/files /srv/microcosm-web
+ENV MICROCOSM_WEB_MEMCACHE_ADDR cache:11211
+ENV MICROCOSM_WEB_FILES $CODE_HOME/web/files
 
 # Default entrypoint: web layer
 ENTRYPOINT "${CODE_HOME}/bin/microcosm-web"
-

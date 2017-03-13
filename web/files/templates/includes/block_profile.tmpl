@@ -1,7 +1,8 @@
 {{ define "block_profile" }}
 {{ $profile := .profile }}
-{{ $showAvatar := .showAvatar }}
 {{ $sendMessage := .sendMessage }}
+{{ $showAvatar := .showAvatar }}
+{{ $site := .site }}
 {{ $user := .user }}
 <li class="list-collection-row" id="profile{{ $profile.ID }}">
 	<div class="row block">
@@ -13,15 +14,17 @@
 			{{ end }}
 			<div class="cell-icon-offset">
 				<div class="cell-title">
-					<a href="{{ microcosm_url `profile` $profile.ID }}"><img src="{{ microcosm_avatar_url $profile.AvatarURL .Site.SubdomainKey }}" alt="Avatar for {{ $profile.ProfileName | safeHTML }}" align="left" /> <strong>@{{ $profile.ProfileName | safeHTML }}</strong></a>
+					<a href="{{ microcosm_url `profile` $profile.ID }}"><img src="{{ microcosm_avatar_url $profile.AvatarURL $site.SubdomainKey }}" alt="Avatar for {{ $profile.ProfileName | safeHTML }}" align="left" /> <strong>@{{ $profile.ProfileName | safeHTML }}</strong></a>
 				</div>
 			</div>
 		</div>
 		<div class="col-sm-4">
-			{{ if $user and $sendMessage }}
+			{{ if $sendMessage }}
+			{{ if $user }}
 			<div class="cell-profile-message">
 				<a class="pull-right" href="{{ microcosm_url `huddle-create` }}?to={{ $profile.ID }}">send message</a>
 			</div>
+			{{ end }}
 			{{ end }}
 		</div>
 	</div>

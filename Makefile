@@ -3,21 +3,17 @@
 # If you change this, run `make clean`. Read more: https://git.io/vM7zV
 IMPORT_PATH := github.com/buro9/microcosm
 
-# V := 1 # When V is set, print commands and build progress.
+V := 1
 
 # Space separated patterns of packages to skip in list, test, format.
 IGNORED_PACKAGES := /vendor/
 
 .PHONY: all
-all: build
-
-.PHONY: build
-build: microcosm-web
-	$Q go install $(if $V,-v) $(VERSION_FLAGS) $(IMPORT_PATH)
+all: microcosm-web
 
 .PHONY: microcosm-web
 microcosm-web: .GOPATH/.ok
-	$Q go install $(if $V,-v) $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
+	$Q go install -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
 
 .PHONY: vendor
 vendor:
@@ -40,11 +36,13 @@ vendor:
 	# Utility vendor
 	-gvt fetch github.com/stretchr/testify/require
 
+run: microcosm-web
+	$Q docker-compose up
 
-### Code not in the repository root? Another binary? Add to the path like this.
-# .PHONY: otherbin
-# otherbin: .GOPATH/.ok
-# 	$Q go install $(if $V,-v) $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/otherbin
+refresh: microcosm-web
+	$Q docker-compose stop web
+	$Q docker-compose rm -f web
+	$Q docker-compose up -d
 
 ##### ^^^^^^ EDIT ABOVE ^^^^^^ #####
 

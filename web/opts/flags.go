@@ -18,6 +18,7 @@ const (
 	defaultKeyFile      = "/etc/ssl/private/microco.sm.key"
 	defaultAPIDomain    = "microco.sm"
 	defaultClientSecret = ""
+	defaultMemcacheAddr = "localhost:11211"
 )
 
 var parseFlags sync.Once
@@ -46,6 +47,10 @@ var (
 	// ClientSecret is the secret that this client uses when talking to the API
 	// for exchanging auth credentials
 	ClientSecret *string
+
+	// MemcacheAddr contains the connection information for memcached, typically
+	// the address localhost:11211
+	MemcacheAddr *string
 )
 
 // RegisterFlags adds the flags needed by the UI if they have not already been
@@ -112,6 +117,14 @@ func RegisterFlags() {
 				"",
 				`the API client secret
 	alternatively $`+envPrefix+`API_CLIENT_SECRET
+	(default "`+defaultClientSecret+`")`,
+			)
+
+			MemcacheAddr = flag.String(
+				"microcosmWebMemcacheAddr",
+				"",
+				`the API client secret
+	alternatively $`+envPrefix+`MEMCACHE_ADDR
 	(default "`+defaultClientSecret+`")`,
 			)
 		},
@@ -200,6 +213,16 @@ func ValidateFlags() error {
 	}
 	if *ClientSecret == "" {
 		return ErrClientSecretRequired
+	}
+
+	// MemcacheAddr
+	if MemcacheAddr == nil || *MemcacheAddr == "" {
+		memcacheAddr := os.Getenv(envPrefix + "MEMCACHE_ADDR")
+		MemcacheAddr = &memcacheAddr
+	}
+	if *MemcacheAddr == "" {
+		memcacheAddr := defaultMemcacheAddr
+		MemcacheAddr = &memcacheAddr
 	}
 
 	return nil
