@@ -11,18 +11,15 @@ services:
      - "80:80"
      - "443:443"
     volumes:
-     - .:/go/src/github/buro9/microcosm
+     - .:/go/src/github.com/buro9/microcosm
     depends_on:
      - db
      - cache
     links:
      - db
-     - cache
 
   db:
     image: "postgres:9.6"
 
   cache:
     image: "memcached:latest"
-    ports:
-      - "11211:11211"
