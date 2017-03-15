@@ -15,6 +15,12 @@ all: microcosm-web
 microcosm-web: .GOPATH/.ok
 	$Q go install -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
 
+# Alternate version of build step for docker: runs make inside a container so it compiles for the container arch, not the host arch.
+# Use this if you're mounting your local dir into the running container for testing.
+.PHONY: microcosm-web-docker
+microcosm-web-docker: .GOPATH/.ok
+	$Q docker run --rm -v $(PWD):/go/src/$(IMPORT_PATH) -w /go/src/$(IMPORT_PATH) --entrypoint=make golang:1.7
+
 .PHONY: vendor
 vendor:
 	# Core dependencies
@@ -36,10 +42,10 @@ vendor:
 	# Utility vendor
 	-gvt fetch github.com/stretchr/testify/require
 
-run: microcosm-web
+run: microcosm-web-docker
 	$Q docker-compose up
 
-refresh: microcosm-web
+refresh: microcosm-web-docker
 	$Q docker-compose stop web
 	$Q docker-compose rm -f web
 	$Q docker-compose up -d
