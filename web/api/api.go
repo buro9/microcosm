@@ -35,8 +35,8 @@ var (
 func ApiRootFromRequest(req *http.Request) (string, error) {
 	// remove :port from req.Host if present
 	var hostName string
-	if cPos := strings.Index(req.Host, ":"); cPos > -1 {
-		hostName = req.Host[0:cPos]
+	if portPos := strings.Index(req.Host, ":"); portPos > -1 {
+		hostName = req.Host[0:portPos]
 	} else {
 		hostName = req.Host
 	}
