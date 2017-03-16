@@ -30,3 +30,5 @@ services:
      - "9090:9090"
     volumes:
      - ./containers/prometheus.yml:/etc/prometheus/prometheus.yml
+    links:
+     - web:dev.microcosmcc.com
