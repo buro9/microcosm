@@ -33,13 +33,21 @@ var (
 // ApiRootFromRequest returns the URL of the API for the site associated with
 // the request, i.e. https://subdomain.apidomain.tld/api/v1
 func ApiRootFromRequest(req *http.Request) (string, error) {
-	if strings.HasSuffix(req.Host, *opts.APIDomain) {
-		return "https://" + req.Host + apiVersion, nil
+	// remove :port from req.Host if present
+	var hostName string
+	if cPos := strings.Index(req.Host, ":"); cPos > -1 {
+		hostName = req.Host[0:cPos]
+	} else {
+		hostName = req.Host
+	}
+
+	if strings.HasSuffix(hostName, *opts.APIDomain) {
+		return "https://" + hostName + apiVersion, nil
 	}
 
 	// Check cache
 	cnameToAPIRootLock.RLock()
-	apiURL, ok := cnameToAPIRoot[req.Host]
+	apiURL, ok := cnameToAPIRoot[hostName]
 	cnameToAPIRootLock.RUnlock()
 	if ok {
 		return apiURL, nil
@@ -51,7 +59,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 		fmt.Sprintf(
 			"https://%s/api/v1/hosts/%s",
 			*opts.APIDomain,
-			req.Host,
+			hostName,
 		),
 	)
 	if err != nil {
@@ -64,7 +72,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 		return "",
 			fmt.Errorf(
 				"%s lookup failed: %s",
-				req.Host,
+				hostName,
 				http.StatusText(resp.StatusCode),
 			)
 	}
@@ -87,7 +95,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 
 		// Add to cache
 		cnameToAPIRootLock.Lock()
-		cnameToAPIRoot[req.Host] = u.String()
+		cnameToAPIRoot[hostName] = u.String()
 		cnameToAPIRootLock.Unlock()
 		return u.String(), nil
 	}
