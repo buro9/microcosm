@@ -5,16 +5,16 @@ import (
 )
 
 func TestNormalizePath(t *testing.T) {
-	if in := ""; normalizePathForMetric(in) != in {
-		t.Fatalf("Unexpected return for %s", in)
+	if testPath := ""; normalizePathForMetric(testPath) != testPath {
+		t.Fatalf("Unexpected return for %s", testPath)
 	}
-	if in := "/"; normalizePathForMetric(in) != in {
-		t.Fatalf("Unexpected return for %s", in)
+	if testPath := "/"; normalizePathForMetric(testPath) != testPath {
+		t.Fatalf("Unexpected return for %s", testPath)
 	}
-	if in := "/0/1"; normalizePathForMetric(in) != "/{id}/{id}" {
-		t.Fatalf("Unexpected return for %s", in)
+	if testPath := "/0/1"; normalizePathForMetric(testPath) != "/{id}/{id}" {
+		t.Fatalf("Unexpected return for %s", testPath)
 	}
-	if in := "//foo/09/"; normalizePathForMetric(in) != "//foo/{id}/" {
-		t.Fatalf("Unexpected return for %s", in)
+	if testPath := "//foo/09/"; normalizePathForMetric(testPath) != "//foo/{id}/" {
+		t.Fatalf("Unexpected return for %s", testPath)
 	}
 }
