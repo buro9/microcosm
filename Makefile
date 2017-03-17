@@ -31,6 +31,7 @@ vendor:
 	-gvt fetch github.com/spf13/hugo/bufferpool
 	-gvt fetch github.com/spf13/hugo/helpers
 	-gvt fetch github.com/yosssi/ace
+	-gvt fetch github.com/prometheus/client_golang/prometheus
 	-gvt fetch gopkg.in/oleiade/reflections.v1
 
 	# Utility vendor
