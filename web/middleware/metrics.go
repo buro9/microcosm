@@ -25,7 +25,7 @@ var (
 		[]string{"httpHost", "httpMethod", "normalizedPath", "httpStatus"},
 	)
 
-	httpRequestDuration = prometheus.NewHistogramVec(
+	httpRequestsDuration = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
 			Namespace: namespace,
 			Subsystem: subsystem,
@@ -42,7 +42,7 @@ var (
 
 func init() {
 	prometheus.MustRegister(httpRequests)
-	prometheus.MustRegister(httpRequestDuration)
+	prometheus.MustRegister(httpRequestsDuration)
 }
 
 
@@ -56,7 +56,7 @@ func UpdateMetrics(h http.Handler) http.Handler {
 
 		statusString := strconv.Itoa(hsMetrics.Code)
 
-		httpRequestDuration.With(
+		httpRequestsDuration.With(
 			prometheus.Labels{
 				"httpHost": req.Host,
 				"httpMethod": req.Method,
