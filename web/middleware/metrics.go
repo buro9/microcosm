@@ -48,33 +48,25 @@ func init() {
 
 func UpdateMetrics(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, req *http.Request) {
-		hsMetrics := httpsnoop.CaptureMetrics(h, w, req)
 
-		//h.ServeHTTP(w, req)
+		// httpsnoop provides convenient access to some exit-side data such as the status code, and a duration
+		snoopMetrics := httpsnoop.CaptureMetrics(h, w, req)
 		
 		normPath := normalizePathForMetric(req.URL.Path)
 
-		statusString := strconv.Itoa(hsMetrics.Code)
+		statusString := strconv.Itoa(snoopMetrics.Code)
 
-		httpRequestsDuration.With(
-			prometheus.Labels{
+		standardLabels := prometheus.Labels{
 				"httpHost": req.Host,
 				"httpMethod": req.Method,
 				"normalizedPath": normPath,
-				"httpStatus": statusString},
-		).Observe( hsMetrics.Duration.Seconds() )
+				"httpStatus": statusString}
 
-		httpRequests.With(
-			prometheus.Labels{
-				"httpHost": req.Host,
-				"httpMethod": req.Method,
-				"normalizedPath": normPath,
-				"httpStatus": statusString},
-		).Inc()
+		httpRequests.With(standardLabels).Inc()
+		httpRequestsDuration.With(standardLabels).Observe( snoopMetrics.Duration.Seconds() )
 	}
 
 	return http.HandlerFunc(fn)
-
 }
 
 func normalizePathForMetric(path string) string {
