@@ -37,6 +37,7 @@ type Data struct {
 	// filled in
 	Array         *models.Array
 	Microcosm     *models.Microcosm
+	Profiles      *models.Profiles
 	SearchResults *models.SearchResults
 }
 

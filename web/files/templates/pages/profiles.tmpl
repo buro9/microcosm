@@ -1,0 +1,65 @@
+
+{{ define "title" }}
+<title>People {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="People {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }}" />
+{{ end }}
+
+{{ define "content" }}
+    {{ template "content_profiles" . }}
+{{ end }}
+
+{{ define "sidebar" }}
+    {{ template "sidebar_profiles" . }}
+{{ end }}
+
+{{ define "js" }}
+<script type="text/javascript" src="/static/js/filters.js"></script>
+<script type="text/javascript">
+(function(){
+	var search_filters = new Filters({
+		el     : '.metabar-filters',
+		query  : '',
+		url    : '?$1',
+		concat_char : '&',
+		param_char : '='
+	});
+
+	$('input#filter-name').on('change',function(e){
+		var filter = $('input#filter-name');
+		if (filter.is(':checked') && "{{ .Profiles.Query.Q }}" === filter.val()) {
+			e.stopPropagation();
+		} else if (!filter.is(':checked') && "" === filter.val()) {
+			e.stopPropagation();
+		}
+	});
+
+	$('#select-name-prefix').on('change',function(e){
+		var select = $('#select-name-prefix'),
+		    filter = $('input#filter-name'),
+		    original = "{{ .Profiles.Query.Q }}";
+
+		if (select.val() !== "") {
+			filter.val(select.val()).prop('checked', true);
+			if (select.val() != original) {
+				search_filters.changeHandler();
+			}
+		} else {
+			filter.val("").prop('checked', false);
+			if (select.val() != original) {
+				search_filters.changeHandler();
+			}
+		}
+	});
+})();
+
+var subscribe = new Subscribe({
+	el        : '.subscribe',
+	url       : '{% url 'single-watcher' %}',
+	updateType: 9,
+	type      : 'profile',
+	id        : 0,
+//	token     : '{ { csrf_token } }',
+	is_subscribed : {{ if .Profiles.Meta.Flags.Watched }}"true"{{ else }}"false"{{ end }}
+});
+</script>
+{{ end }}

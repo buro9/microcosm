@@ -15,7 +15,7 @@
 	<div class="list-items">
 		<ul class="list-collection bordered padded">
 		{{ $user := .User }}
-		{{ range .Microcosm.Items.Items }}
+		{{ range .Microcosm.Items.AsSummaryItems}}
 			{{ if eq .ItemType "conversation" }}
 				{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .Item) "showForum" false "user" $user) }}
 

@@ -49,3 +49,27 @@ type ProfileResponse struct {
 	BoilerPlate
 	Data Profile `json:"data"`
 }
+
+type Profiles struct {
+	Query struct {
+		Following bool   `json:"following,omitempty"`
+		Online    bool   `json:"online,omitempty"`
+		Q         string `json:"q"`
+		Top       bool   `json:"top,omitempty"`
+	} `json:"query"`
+	Items Array `json:"profiles"`
+	Meta  struct {
+		Flags struct {
+			Watched   bool `json:"watched,omitempty"`
+			SendEmail bool `json:"sendEmail,omitempty"`
+			SendSMS   bool `json:"sendSMS,omitempty"`
+		} `json:"flags,omitempty"`
+		Links       []Link     `json:"links,omitempty"`
+		Permissions Permission `json:"permissions,omitempty"`
+	} `json:"meta"`
+}
+
+type ProfilesResponse struct {
+	BoilerPlate
+	Data Profiles `json:"data"`
+}

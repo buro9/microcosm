@@ -1,0 +1,102 @@
+{{ define "sidebar_profiles" }}
+
+<div class="metabar-module metabar-filters">
+	<h5>Filters</h5>
+	<div class="metabar-module-title">
+		<h3>
+			Show me ...
+		</h3>
+	</div>
+	<div class="metabar-module-body">
+		<ul class="list-group">
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-name">
+					<input id="filter-name" type="checkbox" name="q" value="{{ .Profiles.Query.Q }}"{{ if .Profiles.Query.Q }} checked="checked"{{ end }}/>
+					Name starting with:
+					</label>
+					<select id="select-name-prefix">
+						<option></option>
+						<option value="a"{{ if eq .Profiles.Query.Q "a" }} selected="selected"{{ end }}></option>
+						<option value="b"{{ if eq .Profiles.Query.Q "b" }} selected="selected"{{ end }}></option>
+						<option value="c"{{ if eq .Profiles.Query.Q "c" }} selected="selected"{{ end }}></option>
+						<option value="d"{{ if eq .Profiles.Query.Q "d" }} selected="selected"{{ end }}></option>
+						<option value="e"{{ if eq .Profiles.Query.Q "e" }} selected="selected"{{ end }}></option>
+						<option value="f"{{ if eq .Profiles.Query.Q "f" }} selected="selected"{{ end }}></option>
+						<option value="g"{{ if eq .Profiles.Query.Q "g" }} selected="selected"{{ end }}></option>
+						<option value="h"{{ if eq .Profiles.Query.Q "h" }} selected="selected"{{ end }}></option>
+						<option value="i"{{ if eq .Profiles.Query.Q "i" }} selected="selected"{{ end }}></option>
+						<option value="j"{{ if eq .Profiles.Query.Q "j" }} selected="selected"{{ end }}></option>
+						<option value="k"{{ if eq .Profiles.Query.Q "k" }} selected="selected"{{ end }}></option>
+						<option value="l"{{ if eq .Profiles.Query.Q "l" }} selected="selected"{{ end }}></option>
+						<option value="m"{{ if eq .Profiles.Query.Q "m" }} selected="selected"{{ end }}></option>
+						<option value="n"{{ if eq .Profiles.Query.Q "n" }} selected="selected"{{ end }}></option>
+						<option value="o"{{ if eq .Profiles.Query.Q "o" }} selected="selected"{{ end }}></option>
+						<option value="p"{{ if eq .Profiles.Query.Q "p" }} selected="selected"{{ end }}></option>
+						<option value="q"{{ if eq .Profiles.Query.Q "q" }} selected="selected"{{ end }}></option>
+						<option value="r"{{ if eq .Profiles.Query.Q "r" }} selected="selected"{{ end }}></option>
+						<option value="s"{{ if eq .Profiles.Query.Q "s" }} selected="selected"{{ end }}></option>
+						<option value="t"{{ if eq .Profiles.Query.Q "t" }} selected="selected"{{ end }}></option>
+						<option value="u"{{ if eq .Profiles.Query.Q "u" }} selected="selected"{{ end }}></option>
+						<option value="v"{{ if eq .Profiles.Query.Q "v" }} selected="selected"{{ end }}></option>
+						<option value="w"{{ if eq .Profiles.Query.Q "w" }} selected="selected"{{ end }}></option>
+						<option value="x"{{ if eq .Profiles.Query.Q "x" }} selected="selected"{{ end }}></option>
+						<option value="y"{{ if eq .Profiles.Query.Q "y" }} selected="selected"{{ end }}></option>
+						<option value="z"{{ if eq .Profiles.Query.Q "z" }} selected="selected"{{ end }}></option>
+					</select>
+				</div>
+			</li>
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-online">
+						<input id="filter-online" type="checkbox" name="online" value="true"{{ if .Profiles.Query.Online }} checked="checked"{{ end }}/>
+						Online now
+					</label>
+				</div>
+			</li>
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-following">
+						<input id="filter-following" type="checkbox" name="following" value="true"{{ if .Profiles.Query.Following }} checked="checked"{{ end }}/>
+						Following
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="metabar-module-title">
+		<h3>
+			Options
+		</h3>
+	</div>
+	<div class="metabar-module-body">
+		<ul class="list-group">
+			<li class="list-group-item">
+				<div class="checkbox">
+					<input id="filter-comment-count" type="checkbox" name="top" value="true"{{ if .Profiles.Query.Top }} checked="checked"{{ end }}/>
+					<label for="filter-comment-count">Order by comment count</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div> <!-- / filters -->
+
+<div class="metabar-module">
+	<h5>Actions</h5>
+	<div class="metabar-module-body">
+		<p>{ { include 'forms/subscribe.html' } }</p>
+	</div>
+</div>
+
+<div class="metabar-module">
+	<h5>About</h5>
+	<div class="metabar-module-title">
+		<h3>
+			People
+		</h3>
+		<p>
+			Find and discover other people in your community.
+		</p>
+	</div>
+</div> <!-- / about -->
+{{ end }}

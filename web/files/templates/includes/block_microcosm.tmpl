@@ -57,23 +57,21 @@
 			<div class="row-context">
 				<!-- {#<input type="checkbox" class="row-admin-checkbox" /> #} -->
 				{{ with $microcosm.MostRecentUpdate }}
-					{{ if eq .ItemType "microcosm" }}
-					
-						{{ $mru := (.AsMicrocosmSummary .Item) }}
-						<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if not isNil $user }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
-						<time datetime="{{ $mru.Meta.Created | rfcTime }}">{{ $mru.Meta.Created | naturalTime }}</time>
-
-					{{ else }}
-
-						<!-- All items within a Microcosm derive from Conversation -->
-						{{ $mru := (.AsConversationSummary .Item) }}
-						<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if not (isNil $user) }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
-						{{ if gt $mru.CommentCount 0 }}
-							<time datetime="{{ $mru.LastComment.Created | rfcTime }}">{{ $mru.LastComment.Created | naturalTime }}</time>
-						{{ else }}
+					{{ if not (isNil .Item )}}
+						{{ if eq .ItemType "microcosm" }}
+							{{ $mru := (.AsMicrocosmSummary .Item) }}
+							<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if not isNil $user }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
 							<time datetime="{{ $mru.Meta.Created | rfcTime }}">{{ $mru.Meta.Created | naturalTime }}</time>
+						{{ else }}
+							<!-- All items within a Microcosm derive from Conversation -->
+							{{ $mru := (.AsConversationSummary .Item) }}
+							<a href="/{{ .ItemType }}s/{{ $mru.ID }}/{{ if not (isNil $user) }}newest/{{ end }}" title="{{ $mru.Title | safeHTML }}">{{ trunc $mru.Title 30 | safeHTML }}</a>
+							{{ if gt $mru.CommentCount 0 }}
+								<time datetime="{{ $mru.LastComment.Created | rfcTime }}">{{ $mru.LastComment.Created | naturalTime }}</time>
+							{{ else }}
+								<time datetime="{{ $mru.Meta.Created | rfcTime }}">{{ $mru.Meta.Created | naturalTime }}</time>
+							{{ end }}
 						{{ end }}
-
 					{{ end }}
 				{{ end }}
 			</div>

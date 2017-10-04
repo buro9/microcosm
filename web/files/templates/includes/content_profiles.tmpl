@@ -1,0 +1,35 @@
+{{ define "content_profiles" }}
+<div class="content-header padded">
+	<div class="row">
+		<div class="col-sm-6">
+			{{ template "breadcrumb" (dict "content" .Profiles "skipParents" true "skipSelf" true "section" .Section) }}
+		</div>
+		<div class="col-sm-6">
+			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
+		</div>
+	</div>
+</div>
+
+<div class="content-body">
+	<!-- TODO {% include "forms/content-moderation.html" %} -->
+	<div class="list-items">
+		<ul class="list-collection bordered padded">
+		{{ $site := .Site }}
+		{{ $user := .User }}
+		{{ range .Profiles.Items.AsProfileSummaries }}
+			{{ template "block_profile" (dict "profile" . "sendMessage" true "showAvatar" true "site" $site "user" $user) }}
+		{{ end }}
+		</ul>
+	</div>
+	<!-- TODO {% include "forms/content-moderation.html" %} -->
+</div>
+
+<div class="content-footer padded">
+	<div class="row">
+		<div class="col-sm-6"></div>
+		<div class="col-sm-6">
+			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
+		</div>
+	</div>
+</div>
+{{ end }}

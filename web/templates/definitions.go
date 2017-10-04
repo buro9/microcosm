@@ -16,6 +16,11 @@ var microcosms = []string{
 	"content_microcosm",
 }
 
+var profiles = []string{
+	"block_profile",
+	"content_profiles",
+}
+
 var searchResults = []string{
 	"block_conversation",
 	"block_event",
@@ -34,6 +39,11 @@ func loadDefinitions() {
 					Base:     "base",
 					Page:     "home",
 					Includes: Collate("sidebar_home", page, microcosms),
+				},
+				Template{
+					Base:     "base",
+					Page:     "profiles",
+					Includes: Collate("sidebar_profiles", page, profiles),
 				},
 				Template{
 					Base:     "base",

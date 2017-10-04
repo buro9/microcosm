@@ -16,7 +16,7 @@
 		<ul class="list-collection bordered padded">
 		{{ $site := .Site }}
 		{{ $user := .User }}
-		{{ range .SearchResults.Items.Items }}
+		{{ range .SearchResults.Items.AsSummaryItems }}
 			{{ if eq .ItemType "conversation" }}
 				{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .Item) "showForum" false "user" $user) }}
 

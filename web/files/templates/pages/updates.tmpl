@@ -25,7 +25,7 @@
 				<p class="row-meta">No updates to show. When your name is mentioned or a new comment is posted on something that you are following, it will show here.</p>
 			{{ else }}
 				<ul class="list-collection bordered padded">
-				{{ range .Array.Items }}
+				{{ range .Array.AsSummaryItems }}
 					{{ if eq .ItemType "comment" }}
 						{{ if or (eq .UpdateType "new_comment") (eq .UpdateType "new_comment_in_huddle")}}
 

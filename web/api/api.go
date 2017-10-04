@@ -127,7 +127,9 @@ func apiGet(
 	accessToken := bag.GetAccessToken(ctx)
 
 	var c *http.Client
-	if (endpoint == "site" || accessToken == "") && apiCache != nil {
+	if (endpoint == "site" ||
+		endpoint == "profiles" ||
+		accessToken == "") && apiCache != nil {
 		// Standard client using the cache transport for non-authenticated API
 		// requests
 		c = &http.Client{
@@ -145,7 +147,7 @@ func apiGet(
 
 	// Add auth if we have it, though we never use it for the "site" endpoint as
 	// that is a perma-cache item
-	if endpoint != "site" && accessToken != "" {
+	if endpoint != "site" && endpoint != "profiles" && accessToken != "" {
 		req.Header.Add("Authorization", "Bearer "+accessToken)
 	}
 

@@ -48,9 +48,11 @@
 						class="form-control"
 					/>
 					<input name="offset" type="hidden" />
-					{{ if and (isSet .Query) (ne .query.Searched "") }}
-						<input name="q" type="hidden" value="{{ .query.Searched }}" />
-					{{ end }}
+					<!-- TODO: Enable pagination with queries 
+					{ { if and (isSet .Query "Searched") (ne .Query.Searched "") } }
+						<input name="q" type="hidden" value="{ { .query.Searched } }" />
+					{ { end } }
+					-->
 				</form>
 				of {{ .pagination.TotalPages | numcomma }}
 			{{ else }}
@@ -83,9 +85,11 @@
 						class="form-control"
 					/>
 					<input name="offset" type="hidden" />
-					{{ if and .Query (ne .query.Searched "") }}
-						<input name="q" type="hidden" value="{{ .query.Searched }}" />
-					{{ end }}
+					<!-- TODO: Enable pagination with queries 
+					{ { if and .Query (ne .query.Searched "") } }
+						<input name="q" type="hidden" value="{ { .query.Searched } }" />
+					{ { end } }
+					-->
 					/ {{ .pagination.TotalPages | numcomma }}
 				</form>
 			{{ end }}
