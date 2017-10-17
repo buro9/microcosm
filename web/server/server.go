@@ -7,6 +7,8 @@ import (
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+
 	"github.com/buro9/microcosm/web/controllers"
 	mm "github.com/buro9/microcosm/web/middleware"
 	"github.com/buro9/microcosm/web/opts"
@@ -25,6 +27,7 @@ func ListenAndServe() chan error {
 		router.Use(mm.ApiRoot)
 		router.Use(mm.ForceSSL)
 		router.Use(mm.Session)
+		router.Use(mm.UpdateMetrics)
 
 		router.Get("/", controllers.HomeGet)
 		router.Get("/auth0login/", controllers.Auth0LoginGet)
@@ -36,6 +39,13 @@ func ListenAndServe() chan error {
 
 		router.NotFound(controllers.NotFound)
 
+	})
+
+	// Non user-facing group
+	router.Group(func(router chi.Router) {
+		router.Use(mm.RealIP)
+		router.Use(middleware.Logger)
+		router.Handle("/metrics", promhttp.Handler())
 	})
 
 	// Static file group, defines minimal middleware

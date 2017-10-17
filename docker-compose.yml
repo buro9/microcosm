@@ -23,3 +23,12 @@ services:
 
   cache:
     image: "memcached:latest"
+
+  prometheus:
+    image: "prom/prometheus"
+    ports:
+     - "9090:9090"
+    volumes:
+     - ./containers/prometheus.yml:/etc/prometheus/prometheus.yml
+    links:
+     - web:dev.microcosmcc.com
