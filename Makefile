@@ -15,27 +15,6 @@ all: microcosm-web
 microcosm-web: .GOPATH/.ok
 	$Q go install -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
 
-.PHONY: vendor
-vendor:
-	# Core dependencies
-	-gvt fetch github.com/bep/inflect
-	-gvt fetch github.com/buro9/funcs
-	-gvt fetch github.com/dustin/go-humanize
-	-gvt fetch github.com/eknkc/amber
-	-gvt fetch github.com/gregjones/httpcache
-	-gvt fetch github.com/nicksnyder/go-i18n/goi18n
-	-gvt fetch github.com/oxtoacart/bpool
-	-gvt fetch github.com/pressly/chi
-	-gvt fetch github.com/spf13/afero
-	-gvt fetch github.com/spf13/cast
-	-gvt fetch github.com/spf13/hugo/bufferpool
-	-gvt fetch github.com/spf13/hugo/helpers
-	-gvt fetch github.com/yosssi/ace
-	-gvt fetch gopkg.in/oleiade/reflections.v1
-
-	# Utility vendor
-	-gvt fetch github.com/stretchr/testify/require
-
 run: microcosm-web
 	$Q docker-compose up
 
