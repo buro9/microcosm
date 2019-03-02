@@ -3,6 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
+	"regexp"
 
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/middleware"
@@ -105,9 +106,24 @@ func ListenAndServe() chan error {
 func staticFiles() http.Handler {
 	router := chi.NewRouter()
 
+	var css = regexp.MustCompile("\\.css$")
+	var gif = regexp.MustCompile("\\.gif$")
+	var js = regexp.MustCompile("\\.js$")
+	var png = regexp.MustCompile("\\.png$")
+
 	// Do nothing, but implement http.Handler
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, router *http.Request) {
+			switch {
+			case css.MatchString(router.RequestURI):
+				w.Header().Set("Content-Type", "text/css")
+			case gif.MatchString(router.RequestURI):
+				w.Header().Set("Content-Type", "image/gif")
+			case js.MatchString(router.RequestURI):
+				w.Header().Set("Content-Type", "text/javascript")
+			case png.MatchString(router.RequestURI):
+				w.Header().Set("Content-Type", "image/png")
+			}
 			next.ServeHTTP(w, router)
 		})
 	})

@@ -55,7 +55,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 		),
 	)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Print(err)
 		return "", err
 	}
 	defer resp.Body.Close()
@@ -71,7 +71,7 @@ func ApiRootFromRequest(req *http.Request) (string, error) {
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Print(err)
 		return "", err
 	}
 

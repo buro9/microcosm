@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/url"
 
 	"github.com/buro9/microcosm/models"
@@ -19,7 +19,7 @@ func DoSearch(ctx context.Context, q url.Values) (*models.SearchResults, error) 
 	var apiResp models.SearchResultsResponse
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Print(err)
 		return nil, err
 	}
 

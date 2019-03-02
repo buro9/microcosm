@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log"
 
 	"github.com/buro9/microcosm/models"
 )
@@ -18,7 +18,7 @@ func GetMicrocosms(ctx context.Context) (*models.Microcosm, error) {
 	var apiResp models.MicrocosmResponse
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Print(err)
 		return nil, err
 	}
 

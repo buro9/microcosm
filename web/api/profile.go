@@ -3,7 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -32,7 +32,7 @@ func ProfileFromAPIContext(ctx context.Context) (*models.Profile, error) {
 			// No access token provided
 			return nil, nil
 		case http.StatusNotFound: // 404
-			// Valid access token for a now deleted or banned user
+			// Valid access token for` a now deleted or banned user
 			return nil, nil
 		default:
 			// An unexpected error
@@ -44,6 +44,7 @@ func ProfileFromAPIContext(ctx context.Context) (*models.Profile, error) {
 	var apiResp models.ProfileResponse
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
+		log.Print(err)
 		return nil, err
 	}
 
@@ -88,7 +89,7 @@ func GetProfiles(ctx context.Context, query url.Values) (*models.Profiles, error
 	var apiResp models.ProfilesResponse
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Print(err)
 		return nil, err
 	}
 

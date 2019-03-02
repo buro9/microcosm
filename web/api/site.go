@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"log"
 
 	"github.com/buro9/microcosm/models"
 )
@@ -19,6 +20,7 @@ func SiteFromAPIContext(ctx context.Context) (*models.Site, error) {
 	var apiResp models.SiteResponse
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
+		log.Print(err)
 		return nil, err
 	}
 
