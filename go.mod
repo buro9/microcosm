@@ -14,6 +14,6 @@ require (
 	github.com/spf13/cast v1.3.0 // indirect
 	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.3.0
-	golang.org/x/net v0.0.0-20190301231341-16b79f2e4e95 // indirect
+	golang.org/x/net v0.0.0-20190310075202-c10a0554eabf // indirect
 	gopkg.in/oleiade/reflections.v1 v1.0.0 // indirect
 )
