@@ -9,6 +9,8 @@ import (
 	"github.com/buro9/microcosm/models"
 )
 
+// GetUpdates returns the personalised list of items that have been updated for
+// the given user (defined by context)
 func GetUpdates(ctx context.Context, q url.Values) (*models.UpdatesResults, error) {
 	resp, err := apiGet(ctx, "updates", q)
 	if err != nil {

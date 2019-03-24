@@ -11,6 +11,7 @@ import (
 	"github.com/buro9/microcosm/web/templates"
 )
 
+// UpdatesGet will return the updates page
 func UpdatesGet(w http.ResponseWriter, req *http.Request) {
 	q := url.Values{}
 	offset := req.URL.Query().Get("offset")

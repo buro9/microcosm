@@ -8,14 +8,14 @@ import (
 	"github.com/buro9/microcosm/web/bag"
 )
 
-// ApiRoot is a middleware that populates the context with the root path of the
+// APIRoot is a middleware that populates the context with the root path of the
 // API that serves this site. If this cannot be determined then this is not a
 // valid Microcosm site and we error out
-func ApiRoot(h http.Handler) http.Handler {
+func APIRoot(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, req *http.Request) {
 		// Get the URL that is the root of the API for this site and store it
 		// in the request context
-		apiRoot, err := api.ApiRootFromRequest(req)
+		apiRoot, err := api.RootFromRequest(req)
 		if err != nil {
 			fmt.Println(err.Error())
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// NotFound will return a 404 page
 func NotFound(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write(
@@ -17,6 +18,7 @@ func NotFound(w http.ResponseWriter, req *http.Request) {
 	)
 }
 
+// NotFoundStatic will return a 404 page for a static item
 func NotFoundStatic(w http.ResponseWriter, req *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
 	w.Write(

@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Item describes a generic item that can be stored within a microcosm
 type Item struct {
 	ID          int64  `json:"id"`
 	Title       string `json:"title"`
@@ -40,6 +41,7 @@ type Item struct {
 	Highlight      string          `json:"highlight"`
 }
 
+// ItemDetail describes an item within a microcosm
 type ItemDetail struct {
 	ID          int64  `json:"id"`
 	Title       string `json:"title"`
@@ -56,11 +58,14 @@ type ItemDetail struct {
 	} `json:"breadcrumb,omitempty"`
 }
 
+// ItemDetailCommentsAndMeta describes the comments associated to an item
 type ItemDetailCommentsAndMeta struct {
 	Comments Array       `json:"comments"`
 	Meta     DefaultMeta `json:"meta"`
 }
 
+// ItemSummary describes an item within a microcosm for the purpose of listing
+// microcosm contents
 type ItemSummary struct {
 	ID    int64  `json:"id"`
 	Title string `json:"title"`
@@ -84,6 +89,7 @@ type ItemSummary struct {
 	} `json:"breadcrumb,omitempty"`
 }
 
+// ItemSummaryMeta describes the metadata of an ItemSummary
 type ItemSummaryMeta struct {
 	CommentCount int64       `json:"totalComments"`
 	ViewCount    int64       `json:"totalViews"`
@@ -91,6 +97,7 @@ type ItemSummaryMeta struct {
 	Meta         SummaryMeta `json:"meta"`
 }
 
+// LastComment describes the last visible comment made against an item
 type LastComment struct {
 	ID        int64          `json:"id"`
 	Created   time.Time      `json:"created"`

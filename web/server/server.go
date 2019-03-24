@@ -13,6 +13,7 @@ import (
 	"github.com/buro9/microcosm/web/opts"
 )
 
+// ListenAndServe will run the web server
 func ListenAndServe() chan error {
 	router := chi.NewRouter()
 
@@ -23,7 +24,7 @@ func ListenAndServe() chan error {
 		router.Use(middleware.RequestID)
 		router.Use(middleware.Logger)
 		router.Use(middleware.Recoverer)
-		router.Use(mm.ApiRoot)
+		router.Use(mm.APIRoot)
 		router.Use(mm.ForceSSL)
 		router.Use(mm.Session)
 

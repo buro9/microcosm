@@ -2,6 +2,7 @@ package models
 
 import "encoding/json"
 
+// Array describes arrays returned by the API
 type Array struct {
 	Total     int64           `json:"total"`
 	Limit     int64           `json:"limit"`
@@ -14,6 +15,7 @@ type Array struct {
 	Items     json.RawMessage `json:"items"`
 }
 
+// AsSummaryItems will return the array items as summaries (of mixed types)
 func (m *Array) AsSummaryItems() *[]SummaryItem {
 	if m.Items == nil {
 		return nil
@@ -27,6 +29,7 @@ func (m *Array) AsSummaryItems() *[]SummaryItem {
 	return &summaries
 }
 
+// AsProfileSummaries will return the array items as summaries (of profile type)
 func (m *Array) AsProfileSummaries() *[]ProfileSummary {
 	if m.Items == nil {
 		return nil

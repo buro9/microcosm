@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// ConversationSummary describes a conversation summary returned by the API
 type ConversationSummary struct {
 	ID          int64 `json:"id"`
 	MicrocosmID int64 `json:"microcosmId"`

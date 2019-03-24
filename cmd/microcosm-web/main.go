@@ -31,7 +31,7 @@ func main() {
 	// runtime errors relating to badly formatted templates
 	templates.Compile()
 
-	api.NewAPICache(*opts.MemcacheAddr)
+	api.NewCache(*opts.MemcacheAddr)
 
 	// Listen and wait for errors (none should ever be received, so we should
 	// run forever)

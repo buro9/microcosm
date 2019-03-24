@@ -1,5 +1,7 @@
 package models
 
+// Permission describes the permissions of the current user as identified by the
+// context
 type Permission struct {
 	CanCreate     bool `json:"create"`
 	CanRead       bool `json:"read"`

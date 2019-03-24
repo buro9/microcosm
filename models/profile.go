@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Profile describes a profile
 type Profile struct {
 	// Updateable
 	ID          int64  `json:"id"`
@@ -35,6 +36,7 @@ type Profile struct {
 	} `json:"meta"`
 }
 
+// ProfileSummary summarises a profile
 type ProfileSummary struct {
 	ID          int64        `json:"id"`
 	SiteID      int64        `json:"siteId,omitempty"`
@@ -45,11 +47,13 @@ type ProfileSummary struct {
 	Meta        ExtendedMeta `json:"meta"`
 }
 
+// ProfileResponse describes the API response that contains a Profile
 type ProfileResponse struct {
 	BoilerPlate
 	Data Profile `json:"data"`
 }
 
+// Profiles describes an array of profiles
 type Profiles struct {
 	Query struct {
 		Following bool   `json:"following,omitempty"`
@@ -69,6 +73,8 @@ type Profiles struct {
 	} `json:"meta"`
 }
 
+// ProfilesResponse describes the API response that contains an array of
+// profiles
 type ProfilesResponse struct {
 	BoilerPlate
 	Data Profiles `json:"data"`

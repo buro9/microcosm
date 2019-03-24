@@ -30,9 +30,9 @@ var (
 	cnameToAPIRootLock sync.RWMutex
 )
 
-// ApiRootFromRequest returns the URL of the API for the site associated with
+// RootFromRequest returns the URL of the API for the site associated with
 // the request, i.e. https://subdomain.apidomain.tld/api/v1
-func ApiRootFromRequest(req *http.Request) (string, error) {
+func RootFromRequest(req *http.Request) (string, error) {
 	if strings.HasSuffix(req.Host, *opts.APIDomain) {
 		return "https://" + req.Host + apiVersion, nil
 	}

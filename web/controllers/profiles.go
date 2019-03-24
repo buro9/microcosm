@@ -10,6 +10,7 @@ import (
 	"github.com/buro9/microcosm/web/templates"
 )
 
+// ProfilesGet will return a page listing profiles
 func ProfilesGet(w http.ResponseWriter, req *http.Request) {
 	// Query the profiles
 	profiles, err := api.GetProfiles(req.Context(), req.URL.Query())

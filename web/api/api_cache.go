@@ -6,6 +6,7 @@ import (
 
 var apiCache *memcache.Cache
 
-func NewAPICache(addr string) {
+// NewCache will create an API cache for a given memcached server address
+func NewCache(addr string) {
 	apiCache = memcache.New(addr)
 }

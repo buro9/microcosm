@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// SummaryItem describes the summary of an item
 type SummaryItem struct {
 	// The item type being summarised
 	ItemType string `json:"itemType"`
@@ -43,6 +44,7 @@ type SummaryItem struct {
 	Highlight string `json:"highlight"`
 }
 
+// AsItemSummary will return the raw input as a SummaryItem
 func (m *SummaryItem) AsItemSummary(raw json.RawMessage) *ItemSummary {
 	if raw == nil {
 		return nil
@@ -56,6 +58,7 @@ func (m *SummaryItem) AsItemSummary(raw json.RawMessage) *ItemSummary {
 	return &summary
 }
 
+// AsCommentSummary will return the raw input as a CommentSummary
 func (m *SummaryItem) AsCommentSummary(raw json.RawMessage) *CommentSummary {
 	if raw == nil {
 		return nil
@@ -69,6 +72,7 @@ func (m *SummaryItem) AsCommentSummary(raw json.RawMessage) *CommentSummary {
 	return &summary
 }
 
+// AsConversationSummary will return the raw input as a ConversationSummary
 func (m *SummaryItem) AsConversationSummary(raw json.RawMessage) *ConversationSummary {
 	if raw == nil {
 		return nil
@@ -82,6 +86,7 @@ func (m *SummaryItem) AsConversationSummary(raw json.RawMessage) *ConversationSu
 	return &summary
 }
 
+// AsEventSummary will return the raw input as a EventSummary
 func (m *SummaryItem) AsEventSummary(raw json.RawMessage) *EventSummary {
 	if raw == nil {
 		return nil
@@ -95,6 +100,7 @@ func (m *SummaryItem) AsEventSummary(raw json.RawMessage) *EventSummary {
 	return &summary
 }
 
+// AsHuddleSummary will return the raw input as a HuddleSummary
 func (m *SummaryItem) AsHuddleSummary(raw json.RawMessage) *HuddleSummary {
 	if raw == nil {
 		return nil
@@ -108,6 +114,7 @@ func (m *SummaryItem) AsHuddleSummary(raw json.RawMessage) *HuddleSummary {
 	return &summary
 }
 
+// AsMicrocosmSummary will return the raw input as a MicrocosmSummary
 func (m *SummaryItem) AsMicrocosmSummary(raw json.RawMessage) *MicrocosmSummary {
 	if raw == nil {
 		return nil
@@ -121,6 +128,7 @@ func (m *SummaryItem) AsMicrocosmSummary(raw json.RawMessage) *MicrocosmSummary 
 	return &summary
 }
 
+// AsProfileSummary will return the raw input as a ProfileSummary
 func (m *SummaryItem) AsProfileSummary(raw json.RawMessage) *ProfileSummary {
 	if raw == nil {
 		return nil

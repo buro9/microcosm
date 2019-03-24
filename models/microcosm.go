@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Microcosm describes a microcosm
 type Microcosm struct {
 	ID         int64 `json:"id"`
 	SiteID     int64 `json:"siteId"`
@@ -48,6 +49,7 @@ type Microcosm struct {
 	} `json:"meta"`
 }
 
+// MicrocosmSummary describes the summary of a microcosm
 type MicrocosmSummary struct {
 	ID         int64 `json:"id"`
 	ParentID   int64 `json:"parentId"`
@@ -105,6 +107,7 @@ type MicrocosmSummary struct {
 	} `json:"meta"`
 }
 
+// MicrocosmResponse describes the API response that contains a microcosm
 type MicrocosmResponse struct {
 	BoilerPlate
 	Data Microcosm `json:"data"`

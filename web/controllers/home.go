@@ -10,6 +10,7 @@ import (
 	"github.com/buro9/microcosm/web/templates"
 )
 
+// HomeGet will fetch the home page
 func HomeGet(w http.ResponseWriter, req *http.Request) {
 	rootMicrocosm, err := api.GetMicrocosms(req.Context())
 	if err != nil {

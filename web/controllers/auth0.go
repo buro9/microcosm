@@ -7,6 +7,8 @@ import (
 	"github.com/buro9/microcosm/web/api"
 )
 
+// Auth0LoginGet will attempt to log the user in using Auth0 and then set
+// the session cookie for the current user before redirecting to the destination
 func Auth0LoginGet(w http.ResponseWriter, req *http.Request) {
 	q := req.URL.Query()
 	code := q.Get("code")
@@ -33,7 +35,7 @@ func Auth0LoginGet(w http.ResponseWriter, req *http.Request) {
 	}
 
 	var cookie http.Cookie
-	cookie.Name = "access_token"
+	cookie.Name = "session"
 	cookie.Value = accessToken
 	cookie.Expires = time.Now().Add(time.Hour * 24 * 365)
 	cookie.Domain = req.Host

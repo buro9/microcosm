@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// HuddleSummary describes a huddle summary returned by the API
 type HuddleSummary struct {
 	ID          int64 `json:"id"`
 	MicrocosmID int64 `json:"microcosmId"`

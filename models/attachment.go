@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Attachment describes an attachment returned by the API
 type Attachment struct {
 	ProfileID int64     `json:"profileId"`
 	FileHash  string    `json:"fileHash"`

@@ -11,6 +11,7 @@ import (
 	"github.com/buro9/microcosm/web/templates"
 )
 
+// TodayGet will return the today page
 func TodayGet(w http.ResponseWriter, req *http.Request) {
 	q := url.Values{}
 	q.Add("since", "-1")

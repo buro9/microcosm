@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Site describes a site
 type Site struct {
 	ID                 int64          `json:"siteId"`
 	SiteURL            string         `json:"siteURL"`
@@ -37,6 +38,7 @@ type Site struct {
 	} `json:"meta"`
 }
 
+// SiteResponse describes the API response that contains a site
 type SiteResponse struct {
 	BoilerPlate
 	Data Site `json:"data"`

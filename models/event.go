@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// EventSummary describes an event summary returned by the API
 type EventSummary struct {
 	ID          int64 `json:"id"`
 	MicrocosmID int64 `json:"microcosmId"`

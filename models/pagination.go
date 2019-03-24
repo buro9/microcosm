@@ -1,5 +1,6 @@
 package models
 
+// Pagination describes the pagination of an array
 type Pagination struct {
 	Page       int64  `json:"page"`
 	TotalPages int64  `json:"totalPages"`
@@ -9,6 +10,7 @@ type Pagination struct {
 	Links      []Link `json:"links"`
 }
 
+// ParsePagination returns the Pagination for an Array
 func ParsePagination(array Array) *Pagination {
 	p := Pagination{
 		Page:       array.Page,

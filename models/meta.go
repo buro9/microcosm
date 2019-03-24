@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// DefaultMeta describes the universal metadata that all items have
 type DefaultMeta struct {
 	Created    time.Time       `json:"created"`
 	CreatedBy  ProfileSummary  `json:"createdBy"`
@@ -11,23 +12,27 @@ type DefaultMeta struct {
 	ExtendedMeta
 }
 
+// SummaryMeta describes the metadata that summary items have
 type SummaryMeta struct {
 	Created   time.Time      `json:"created"`
 	CreatedBy ProfileSummary `json:"createdBy"`
 	ExtendedMeta
 }
 
+// ExtendedMeta is shared by DefaultMeta and SummaryMeta
 type ExtendedMeta struct {
 	Flags Flags `json:"flags,omitempty"`
 	CoreMeta
 }
 
+// CoreMeta describes per item stats, links and permissions
 type CoreMeta struct {
 	Stats       []Stat      `json:"stats,omitempty"`
 	Links       []Link      `json:"links,omitempty"`
 	Permissions *Permission `json:"permissions,omitempty"`
 }
 
+// Flags describes per item flags
 type Flags struct {
 	Sticky    bool `json:"sticky,omitempty"`
 	Open      bool `json:"open,omitempty"`

@@ -1,5 +1,7 @@
 package models
 
+// SearchResultsResponse describes a response from the API that contains search
+// results
 type SearchResultsResponse struct {
 	BoilerPlate
 	Data SearchResults `json:"data"`
@@ -23,6 +25,7 @@ type SearchResults struct {
 // 	Highlight      string          `json:"highlight"`
 // }
 
+// SearchQuery describes a search
 type SearchQuery struct {
 	Query             string   `json:"q,omitempty"`
 	InTitle           bool     `json:"inTitle,omitempty"`

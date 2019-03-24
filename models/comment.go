@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// CommentSummary describes a comment summary returned by the API
 type CommentSummary struct {
 	ID          int64        `json:"id"`
 	ItemType    string       `json:"itemType"`
