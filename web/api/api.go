@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/gregjones/httpcache"
+	"github.com/pressly/chi/middleware"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/bag"
@@ -146,9 +147,9 @@ func apiGet(params Params) (*http.Response, error) {
 
 	// Add auth if we have it, though we never use it for the "site" endpoint as
 	// that is a perma-cache item
-	if params.Endpoint != "site" &&
+	if accessToken != "" && (params.Endpoint != "site" &&
 		params.Endpoint != "profiles" &&
-		params.Endpoint != "" {
+		params.Endpoint != "") {
 		req.Header.Add("Authorization", "Bearer "+accessToken)
 	}
 
@@ -157,7 +158,13 @@ func apiGet(params Params) (*http.Response, error) {
 	if err != nil {
 		return resp, err
 	}
-	log.Printf("%s %s", u.String(), time.Since(start))
+	log.Printf(
+		"[%s] GET %s %d %s",
+		middleware.GetReqID(params.Ctx),
+		u.String(),
+		resp.StatusCode,
+		time.Since(start),
+	)
 
 	return resp, errFromResp(resp)
 }
@@ -189,10 +196,18 @@ func apiPost(params Params, data interface{}) (*http.Response, error) {
 		req.Header.Add("Authorization", "Bearer "+at)
 	}
 
+	start := time.Now()
 	resp, err := c.Do(req)
 	if err != nil {
 		return resp, err
 	}
+	log.Printf(
+		"[%s] POST %s %d %s",
+		middleware.GetReqID(params.Ctx),
+		u.String(),
+		resp.StatusCode,
+		time.Since(start),
+	)
 
 	return resp, errFromResp(resp)
 }
