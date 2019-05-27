@@ -2,7 +2,6 @@ package api
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -95,19 +94,23 @@ func RootFromRequest(req *http.Request) (string, error) {
 	return "", fmt.Errorf("%s is not a valid host", host)
 }
 
-func buildAPIURL(ctx context.Context, endpoint string, q url.Values) *url.URL {
+func buildAPIURL(params Params) *url.URL {
 	// ensure that we start with a trailing slash
-	if !strings.HasPrefix(endpoint, "/") {
-		endpoint = "/" + endpoint
+	if !strings.HasPrefix(params.Endpoint, "/") {
+		params.Endpoint = "/" + params.Endpoint
 	}
 
 	// not possible to generate an error at this point, as this is not called
 	// before newContext which already barfs on any failure to set the apiRoot
-	u, _ := url.Parse(bag.GetAPIRoot(ctx) + endpoint)
+	u, _ := url.Parse(bag.GetAPIRoot(params.Ctx) + params.Endpoint)
+
+	if params.ID != 0 {
+		u.Path = fmt.Sprintf("%s/%d", u.Path, params.ID)
+	}
 
 	// Add any querystring args that were set
-	if q != nil {
-		u.RawQuery = q.Encode()
+	if params.Q != nil {
+		u.RawQuery = params.Q.Encode()
 	}
 
 	return u
@@ -116,19 +119,15 @@ func buildAPIURL(ctx context.Context, endpoint string, q url.Values) *url.URL {
 // apiGet will perform an API call and if an error has occurred the body will
 // have been read. If no error occurred the callee must read the body and ensure
 // it is closed.
-func apiGet(
-	ctx context.Context,
-	endpoint string,
-	q url.Values,
-) (*http.Response, error) {
+func apiGet(params Params) (*http.Response, error) {
 
-	u := buildAPIURL(ctx, endpoint, q)
+	u := buildAPIURL(params)
 
-	accessToken := bag.GetAccessToken(ctx)
+	accessToken := bag.GetAccessToken(params.Ctx)
 
 	var c *http.Client
-	if (endpoint == "site" ||
-		endpoint == "profiles" ||
+	if (params.Endpoint == "site" ||
+		params.Endpoint == "profiles" ||
 		accessToken == "") && apiCache != nil {
 		// Standard client using the cache transport for non-authenticated API
 		// requests
@@ -141,13 +140,15 @@ func apiGet(
 	}
 
 	req, err := http.NewRequest("GET", u.String(), nil)
-	req.WithContext(ctx)
+	req.WithContext(params.Ctx)
 	req.Header.Add("User-Agent", userAgent)
 	//req.Header.Add("X-Disable-Boiler", "true")
 
 	// Add auth if we have it, though we never use it for the "site" endpoint as
 	// that is a perma-cache item
-	if endpoint != "site" && endpoint != "profiles" && accessToken != "" {
+	if params.Endpoint != "site" &&
+		params.Endpoint != "profiles" &&
+		params.Endpoint != "" {
 		req.Header.Add("Authorization", "Bearer "+accessToken)
 	}
 
@@ -164,14 +165,9 @@ func apiGet(
 // apiPost will perform an API call and if an error has occurred the body will
 // have been read. If no error occurred the callee must read the body and ensure
 // it is closed.
-func apiPost(
-	ctx context.Context,
-	endpoint string,
-	q url.Values,
-	data interface{},
-) (*http.Response, error) {
+func apiPost(params Params, data interface{}) (*http.Response, error) {
 
-	u := buildAPIURL(ctx, endpoint, q)
+	u := buildAPIURL(params)
 
 	c := &http.Client{}
 
@@ -189,7 +185,7 @@ func apiPost(
 	req.Header.Add("User-Agent", userAgent)
 	//req.Header.Add("X-Disable-Boiler", "true")
 	req.Header.Add("Content-Type", "application/json")
-	if at := bag.GetAccessToken(ctx); at != "" {
+	if at := bag.GetAccessToken(params.Ctx); at != "" {
 		req.Header.Add("Authorization", "Bearer "+at)
 	}
 

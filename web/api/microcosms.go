@@ -8,10 +8,10 @@ import (
 	"github.com/buro9/microcosm/models"
 )
 
-// GetMicrocosms returns a list of the microcosms that this user (defined by
-// context) has permission to view
-func GetMicrocosms(ctx context.Context) (*models.Microcosm, error) {
-	resp, err := apiGet(ctx, "microcosms", nil)
+// GetMicrocosm returns a microcosm if this user (defined by context) has
+// permission to view it
+func GetMicrocosm(ctx context.Context, id int64) (*models.Microcosm, error) {
+	resp, err := apiGet(Params{Ctx: ctx, Endpoint: "microcosms", ID: id})
 	if err != nil {
 		return nil, err
 	}

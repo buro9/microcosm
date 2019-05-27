@@ -22,7 +22,7 @@ func ProfileFromAPIContext(ctx context.Context) (*models.Profile, error) {
 		return nil, nil
 	}
 
-	resp, err := apiGet(ctx, "whoami", nil)
+	resp, err := apiGet(Params{Ctx: ctx, Endpoint: "whoami"})
 	if err != nil {
 		switch resp.StatusCode {
 		case http.StatusUnauthorized: // 401
@@ -80,7 +80,7 @@ func GetProfiles(ctx context.Context, query url.Values) (*models.Profiles, error
 		q.Add("offset", offset)
 	}
 
-	resp, err := apiGet(ctx, "profiles", q)
+	resp, err := apiGet(Params{Ctx: ctx, Endpoint: "profiles", Q: q})
 	if err != nil {
 		return nil, err
 	}
