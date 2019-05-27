@@ -72,7 +72,7 @@ func url(key string, args ...interface{}) string {
 			case "legal":
 				return fmt.Sprintf("/legal/%s/", v)
 			}
-		case int:
+		case int64:
 			switch key {
 			case "comment-incontext":
 				return fmt.Sprintf("/comments/%d/incontext/", v)
