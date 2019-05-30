@@ -5,6 +5,8 @@ func WrapByteSlice(full []byte, headerLength int) ByteSlice {
 	return ByteSlice{
 		full:    full,
 		current: full[headerLength:],
+		head:    headerLength,
+		end:     len(full),
 	}
 }
 
@@ -12,6 +14,8 @@ func WrapByteSlice(full []byte, headerLength int) ByteSlice {
 type ByteSlice struct {
 	full    []byte
 	current []byte
+	head    int
+	end     int
 }
 
 // ResliceTo reslices the end of the current slice.
@@ -19,12 +23,19 @@ func (b ByteSlice) ResliceTo(end int) ByteSlice {
 	return ByteSlice{
 		full:    b.full,
 		current: b.current[:end],
+		head:    b.head,
+		end:     b.head + end,
 	}
 }
 
 // Bytes returns the current slice
 func (b ByteSlice) Bytes() []byte {
 	return b.current
+}
+
+// BytesWithHeader returns the current slice preceded by the header
+func (b ByteSlice) BytesWithHeader() []byte {
+	return b.full[:b.end]
 }
 
 // Full returns the full original buffer underlying the ByteSlice

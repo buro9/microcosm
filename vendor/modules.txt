@@ -16,7 +16,7 @@ github.com/go-chi/chi
 # github.com/gregjones/httpcache v0.0.0-20190212212710-3befbb6ad0cc
 github.com/gregjones/httpcache
 github.com/gregjones/httpcache/memcache
-# github.com/oxtoacart/bpool v0.0.0-20190530173603-18b0496e4113
+# github.com/oxtoacart/bpool v0.0.0-20190530203125-03653db5a59c
 github.com/oxtoacart/bpool
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
