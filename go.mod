@@ -9,7 +9,7 @@ require (
 	github.com/go-chi/chi v4.0.2+incompatible // indirect
 	github.com/gregjones/httpcache v0.0.0-20190212212710-3befbb6ad0cc
 	github.com/oleiade/reflections v1.0.0 // indirect
-	github.com/oxtoacart/bpool v0.0.0-20190524133444-8c0b41497736
+	github.com/oxtoacart/bpool v0.0.0-20190530173603-18b0496e4113
 	github.com/pressly/chi v4.0.2+incompatible
 	github.com/spf13/cast v1.3.0 // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
