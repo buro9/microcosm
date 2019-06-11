@@ -7,7 +7,7 @@ require (
 	github.com/buro9/funcs v0.0.0-20170305152809-19d36aaebab5
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/go-chi/chi v4.0.2+incompatible // indirect
-	github.com/gregjones/httpcache v0.0.0-20190212212710-3befbb6ad0cc
+	github.com/gregjones/httpcache v0.0.0-20190611162947-901d90724c79
 	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530203125-03653db5a59c
 	github.com/pressly/chi v4.0.2+incompatible
