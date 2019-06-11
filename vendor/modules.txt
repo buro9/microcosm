@@ -13,7 +13,7 @@ github.com/davecgh/go-spew/spew
 github.com/dustin/go-humanize
 # github.com/go-chi/chi v4.0.2+incompatible
 github.com/go-chi/chi
-# github.com/gregjones/httpcache v0.0.0-20190212212710-3befbb6ad0cc
+# github.com/gregjones/httpcache v0.0.0-20190611162947-901d90724c79
 github.com/gregjones/httpcache
 github.com/gregjones/httpcache/memcache
 # github.com/oxtoacart/bpool v0.0.0-20190530203125-03653db5a59c
