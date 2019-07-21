@@ -1,0 +1,82 @@
+{{ define "content_profile" }}
+
+					<div class="content-header padded">
+						<div class="row">
+							<div class="col-xs-12">
+								{{ template "breadcrumb" (dict "content" .Profile "skipParents" true "skipSelf" true "section" .Section) }}
+							</div>
+						</div>
+					</div>
+
+					<div class="content-body">
+
+						<div class="profile-header padded">
+
+							<img class="profile-header-avatar"
+									 src="{{ if contains .Profile.AvatarURL `gravatar` }}{{ .Profile.AvatarURL }}{{ else }}{{ if contains .Profile.AvatarURL `files` }}https://{{ .Site.SubdomainKey}}.microco.sm{{ .Profile.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}{{ end }}" class="gravatar" alt="Avatar for {{ .Profile.ProfileName | safeHTML }}" />
+							<div class="profile-header-text">
+								<h1><a href="{{ (microcosm_link .Profile.Meta.Links "self").Href }}">{{ .Profile.ProfileName | safeHTML }}</a></h1>
+								Member since {{ .Profile.Created.Month }} {{.Profile.Created.Year }}
+								&bull;
+								Last active {{ .Profile.LastActive.Month }} {{ .Profile.LastActive.Year }}
+							</div>
+							 <ul class="list-stats profile-header-stats">
+									<li>
+										<span stat="{{ default .Profile.ItemCount 0 }}">{{ if gt .Profile.ItemCount 0 }}<a href="/search?type=conversation&amp;authorId={{ .Profile.ID }}">{{ .Profile.ItemCount | numcomma }}</a>{{ else }}0{{ end }}</span>
+										conversations
+									</li>
+									<li>
+										<span stat="{{ default .Profile.CommentCount 0 }}">{{ if gt .Profile.CommentCount 0 }}<a href="/search?type=comment&amp;authorId={{ .Profile.ID}}">{{ .Profile.CommentCount | numcomma }}</a>{{ else }}0{{ end }}</span>
+										comments
+									</li>
+								</ul>
+						</div> <!-- /profile-header -->
+
+						{{ if .Profile.ProfileComment }}
+						<div class="comment-item-body padded">
+							{{ .Profile.ProfileComment.HTML | safeHTML }}
+						</div> <!-- /profile-description -->
+						{{ end }}
+
+						<!-- START :: SEARCH -->
+						<div class="profile-section">
+
+						{{ if eq .SearchResults.Items.Total 0 }}
+							<h3 class="padded">Recent activity</h3>
+							<div class="empty-state padded">
+								<p class="row-meta">
+									This person has not yet posted anything.
+								</p>
+							</div>
+						{{ else }}
+							<h3 class="padded">Most recent activity</h3>
+							<ul class="list-collection bordered padded">
+							{{ $site := .Site }}
+							{{ $user := .User }}
+							{{ range .SearchResults.Items.AsSummaryItems }}
+								{{ if eq .ItemType "conversation" }}
+									{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .Item) "showForum" false "user" $user) }}
+
+								{{ else if eq .ItemType "event" }}
+									{{ template "block_event" (dict "event" (.AsEventSummary .Item) "showForum" false "user" $user) }}
+
+								{{ else if eq .ItemType "huddle" }}
+									{{ template "block_huddle" (dict "huddle" (.AsHuddleSummary .Item) "site" $site "user" $user)}}
+
+								{{ else if eq .ItemType "microcosm" }}
+									{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" false "user" $user) }}
+
+								{{ else if eq .ItemType "profile" }}
+									{{ template "block_profile" (dict "profile" (.AsProfileSummary .Item) "sendMessage" true "showAvatar" true "site" $site "user" $user) }}
+
+								{{ else }}
+									<li>{{ .ItemType }}</li>
+								{{ end }}
+							{{ end }}
+							</ul>
+						{{ end }}
+						</div>
+						<!-- END :: SEARCH -->
+					</div>
+
+{{ end }}

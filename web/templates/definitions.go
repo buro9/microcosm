@@ -21,6 +21,16 @@ var profiles = []string{
 	"content_profiles",
 }
 
+var profile = []string{
+	"block_conversation",
+	"block_event",
+	"block_huddle",
+	"block_list_comment",
+	"block_microcosm",
+	"block_profile",
+	"content_profile",
+}
+
 var searchResults = []string{
 	"block_conversation",
 	"block_event",
@@ -44,6 +54,11 @@ func loadDefinitions() {
 					Base:     "base",
 					Page:     "profiles",
 					Includes: Collate("sidebar_profiles", page, profiles),
+				},
+				Template{
+					Base:     "base",
+					Page:     "profile",
+					Includes: Collate("sidebar_profile", page, profile),
 				},
 				Template{
 					Base:     "base",

@@ -5,16 +5,18 @@ import "time"
 // Profile describes a profile
 type Profile struct {
 	// Updateable
-	ID          int64  `json:"id"`
-	SiteID      int64  `json:"siteId,omitempty"`
-	UserID      int64  `json:"userId"`
-	Email       string `json:"email,omitempty"`
-	ProfileName string `json:"profileName"`
-	Member      bool   `json:"member,omitempty"`
-	Gender      string `json:"gender,omitempty"`
-	Visible     bool   `json:"visible"`
-	StyleID     int64  `json:"styleId"`
-	AvatarURL   string `json:"avatar"`
+	ID          int64     `json:"id"`
+	SiteID      int64     `json:"siteId,omitempty"`
+	UserID      int64     `json:"userId"`
+	Email       string    `json:"email,omitempty"`
+	ProfileName string    `json:"profileName"`
+	Member      bool      `json:"member,omitempty"`
+	Gender      string    `json:"gender,omitempty"`
+	Visible     bool      `json:"visible"`
+	StyleID     int64     `json:"styleId"`
+	AvatarURL   string    `json:"avatar"`
+	Created     time.Time `json:"created"`
+	LastActive  time.Time `json:"lastActive"`
 
 	// Read only
 	ItemCount      int64          `json:"itemCount"`
@@ -22,9 +24,7 @@ type Profile struct {
 	ProfileComment CommentSummary `json:"profileComment,omitempty"`
 
 	Meta struct {
-		Created    time.Time `json:"created"`
-		LastActive time.Time `json:"lastActive"`
-		Flags      struct {
+		Flags struct {
 			Watched   bool `json:"watched,omitempty"`
 			Ignored   bool `json:"ignored,omitempty"`
 			SendEmail bool `json:"sendEmail,omitempty"`

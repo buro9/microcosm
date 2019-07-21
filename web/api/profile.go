@@ -100,3 +100,21 @@ func GetProfiles(ctx context.Context, query url.Values) (*models.Profiles, error
 
 	return &apiResp.Data, nil
 }
+
+// GetProfile returns a single profile for a given search.
+func GetProfile(ctx context.Context, id int64) (*models.Profile, error) {
+	resp, err := apiGet(Params{Ctx: ctx, Endpoint: "profiles", ID: id})
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	var apiResp models.ProfileResponse
+	err = json.NewDecoder(resp.Body).Decode(&apiResp)
+	if err != nil {
+		log.Print(err)
+		return nil, err
+	}
+
+	return &apiResp.Data, nil
+}

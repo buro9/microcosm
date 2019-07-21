@@ -1,0 +1,29 @@
+
+{{ define "title" }}
+<title>@{{ .Profile.ProfileName | safeHTML }} | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="@{{ .Profile.ProfileName | safeHTML }} on {{ .Site.Title | safeHTML }}" />
+{{ end }}
+
+{{ define "content" }}
+    {{ template "content_profile" . }}
+{{ end }}
+
+{{ define "sidebar" }}
+    {{ template "sidebar_profile" . }}
+{{ end }}
+
+{{ define "js" }}
+<script type="text/javascript">
+	{{ if not (eq .Profile.ID .User.ID) }}
+	var subscribe = new Subscribe({
+		el        : '.subscribe',
+		url       : '{{ microcosm_url `watcher` }}',
+		updateType: 1,
+		type      : 'profile',
+		id        : {{ .Profile.ID }},
+//		token     : '{ { csrf_token } }',
+		is_subscribed : {{ if .Profile.Meta.Flags.Watched }}"true"{{ else }}"false"{{ end }}
+	});
+	{{ end }}
+</script>
+{{ end }}

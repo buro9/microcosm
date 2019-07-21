@@ -38,6 +38,7 @@ type Data struct {
 	Array         *models.Array
 	Microcosm     *models.Microcosm
 	Profiles      *models.Profiles
+	Profile       *models.Profile
 	SearchResults *models.SearchResults
 }
 

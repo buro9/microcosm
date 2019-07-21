@@ -64,6 +64,8 @@ func url(key string, args ...interface{}) string {
 			return "/updates/"
 		case "update-settings":
 			return "/updates/settings/"
+		case "watcher":
+			return "/watchers/"
 		}
 	case 1:
 		switch v := args[0].(type) {
