@@ -27,7 +27,6 @@ var profile = []string{
 	"block_huddle",
 	"block_list_comment",
 	"block_microcosm",
-	"block_profile",
 	"content_profile",
 }
 
