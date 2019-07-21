@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/url"
+	"sync"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/api"
@@ -39,17 +41,29 @@ func ProfilesGet(w http.ResponseWriter, req *http.Request) {
 
 // ProfileGet will return a page displaying a single profile
 func ProfileGet(w http.ResponseWriter, req *http.Request) {
+	var wg sync.WaitGroup
+
 	// Query the profile
+	var (
+		profile    *models.Profile
+		profileErr error
+	)
+
 	profileID := asInt64(req, "profileID")
-	profile, err := api.GetProfile(req.Context(), profileID)
-	if err != nil {
-		w.Write([]byte(err.Error()))
-		return
-	}
+
+	wg.Add(1)
+	go func(ctx context.Context, profileID int64) {
+		defer wg.Done()
+		profile, profileErr = api.GetProfile(req.Context(), profileID)
+	}(req.Context(), profileID)
 
 	// Query the items that they've created
+	var (
+		searchResults *models.SearchResults
+		searchErr     error
+	)
+
 	q := url.Values{}
-	q.Add("since", "-1")
 	q.Add("type", "conversation")
 	q.Add("type", "event")
 	q.Add("type", "profile")
@@ -59,14 +73,22 @@ func ProfileGet(w http.ResponseWriter, req *http.Request) {
 	q.Add("limit", "10")
 	q.Add("sort", "date")
 
-	offset := req.URL.Query().Get("offset")
-	if offset != "" {
-		q.Add("offset", offset)
+	wg.Add(1)
+	go func(ctx context.Context, q url.Values) {
+		defer wg.Done()
+		searchResults, searchErr = api.DoSearch(req.Context(), q)
+	}(req.Context(), q)
+
+	// Wait for all queries and check for errors
+	wg.Wait()
+
+	if profileErr != nil {
+		w.Write([]byte(profileErr.Error()))
+		return
 	}
 
-	searchResults, err := api.DoSearch(req.Context(), q)
-	if err != nil {
-		w.Write([]byte(err.Error()))
+	if searchErr != nil {
+		w.Write([]byte(searchErr.Error()))
 		return
 	}
 
@@ -81,7 +103,7 @@ func ProfileGet(w http.ResponseWriter, req *http.Request) {
 		SearchResults: searchResults,
 	}
 
-	err = templates.RenderHTML(w, "profile", data)
+	err := templates.RenderHTML(w, "profile", data)
 	if err != nil {
 		fmt.Println("could not render profile")
 		w.Write([]byte(err.Error()))
