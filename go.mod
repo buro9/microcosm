@@ -3,7 +3,7 @@ module github.com/buro9/microcosm
 go 1.12
 
 require (
-	github.com/bradfitz/gomemcache v0.0.0-20190329200359-551aad21a668 // indirect
+	github.com/bradfitz/gomemcache a41fca850d0b // indirect
 	github.com/buro9/funcs v0.0.0-20170305152809-19d36aaebab5
 	github.com/dustin/go-humanize v1.0.0 // indirect
 	github.com/go-chi/chi v4.0.2+incompatible // indirect
