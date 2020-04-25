@@ -3,7 +3,7 @@
 	<li><a href="{{ microcosm_url `home` }}">Home</a></li>
 
 	{{ if not .skipParents }}
-		{{ if (isSet .content "Breadcrumb") and gt (len .content.Breadcrumb) 0 }}
+		{{ if and (isSet .content "Breadcrumb") (gt (len .content.Breadcrumb) 0) }}
 			{{ range .content.Breadcrumb }}
 				<li><a href="{{ .Href }}">{{ .Title | safeHTML }}</a></li>
 			{{ end }}

@@ -168,7 +168,7 @@
 												class="form-control"
 												name="q"
 												placeholder="Search"
-												{{ if (.Query) and (ne .Section `today`) }}{{ if ne .Query.Query "" }}value="{{ .Query.Query }}"{{ end }}{{ end }}
+												{{ if and (.Query) (ne .Section `today`) }}{{ if ne .Query.Query "" }}value="{{ .Query.Query }}"{{ end }}{{ end }}
 												tabindex="1"
 											/>
 											{{ if or (isNil .Query) (eq .Section `today`) }}
