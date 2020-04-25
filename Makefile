@@ -15,6 +15,12 @@ all: microcosm-web
 microcosm-web: .GOPATH/.ok
 	$Q go install -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
 
+.PHONY: deps
+deps:
+	$Q go list -m -u all
+	$Q go mod vendor
+	$Q go mod tidy
+
 run: microcosm-web
 	$Q docker-compose up
 
