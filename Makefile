@@ -18,8 +18,9 @@ microcosm-web: .GOPATH/.ok
 .PHONY: deps
 deps:
 	$Q go list -m -u all
-	$Q go mod vendor
 	$Q go mod tidy
+	$Q go get -u
+	$Q go mod vendor
 
 run: microcosm-web
 	$Q docker-compose up
