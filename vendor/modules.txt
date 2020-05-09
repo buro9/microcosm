@@ -12,8 +12,9 @@ github.com/buro9/funcs/transform
 github.com/davecgh/go-spew/spew
 # github.com/dustin/go-humanize v1.0.0
 github.com/dustin/go-humanize
-# github.com/go-chi/chi v4.0.2+incompatible
+# github.com/go-chi/chi v4.1.1+incompatible
 github.com/go-chi/chi
+github.com/go-chi/chi/middleware
 # github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 github.com/gregjones/httpcache
 github.com/gregjones/httpcache/memcache
@@ -23,14 +24,11 @@ github.com/microcosm-cc/bluemonday
 github.com/oxtoacart/bpool
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
-# github.com/pressly/chi v4.1.1+incompatible
-github.com/pressly/chi
-github.com/pressly/chi/middleware
 # github.com/spf13/cast v1.3.0
 github.com/spf13/cast
 # github.com/stretchr/testify v1.4.0
 github.com/stretchr/testify/assert
-# golang.org/x/net v0.0.0-20190923162816-aa69164e4478
+# golang.org/x/net v0.0.0-20200506145744-7e3656a0809f
 golang.org/x/net/html
 golang.org/x/net/html/atom
 # gopkg.in/oleiade/reflections.v1 v1.0.0

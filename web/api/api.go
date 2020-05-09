@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/gregjones/httpcache"
-	"github.com/pressly/chi/middleware"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/bag"

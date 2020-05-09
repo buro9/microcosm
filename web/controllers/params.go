@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/pressly/chi"
+	"github.com/go-chi/chi"
 )
 
 func asInt64(req *http.Request, name string) int64 {
