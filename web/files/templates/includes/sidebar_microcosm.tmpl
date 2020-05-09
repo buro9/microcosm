@@ -1,9 +1,9 @@
-{{ define "sidebar_home" }}
+{{ define "sidebar_microcosm" }}
 	{{ if .Microcosm }}
 		{{ $microcosmID := .Microcosm.ID }}
 		{{ if .Microcosm.Meta.Flags.Open }}
-			{{ if or (.Microcosm.Meta.Permissions.IsSiteOwner) (.Microcosm.Meta.Permissions.IsOwner) (.Microcosm.Meta.Permissions.IsModerator) }}
-				<div class="metabar-module">
+			<div class="metabar-module">
+				{{ if .User }}
 					<div class="metabar-module-primary-buttons">
 						{{ range .Microcosm.ItemTypes }}
 							{{ if eq . "conversation" }}
@@ -12,84 +12,111 @@
 						{{ end }}
 						{{ range .Microcosm.ItemTypes }}
 							{{ if eq . "event" }}
-								<a id="create_event" href="{{ microcosm_url `event-create` $microcosmID }}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-speech-bubble"></span> Post an event</a>
+								<a id="create_event" href="{{ microcosm_url `event-create` $microcosmID }}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-calendar"></span> Post an event</a>
 							{{ end }}
 						{{ end }}
 					</div>
-					<div class="metabar-module-primary-buttons" style="margin-top: 10px;">
+					{{ if or .Microcosm.Meta.Permissions.IsAdmin (or .Microcosm.Meta.Permissions.IsOwner .Microcosm.Meta.Permissions.IsModerator ) }}
+						<div class="metabar-module-primary-buttons" style="margin-top: 10px;">
+							{{ range .Microcosm.ItemTypes }}
+								{{ if eq . "microcosm" }}
+									<a id="create_conversation" href="{{ microcosm_url `microcosm-create-child` $microcosmID }}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-microcosm"></span> Create a forum</a>
+								{{ end }}
+							{{ end }}
+						</div>
+					{{ end }}
+				{{ else }}
+					<div class="metabar-module-primary-buttons">
+						{{ range .Microcosm.ItemTypes }}
+							{{ if eq . "conversation" }}
+								<a href="#" class="btn btn-large btn-block btn-primary" data-toggle="modal" data-target="#modal-signin"><span class="sprite sprite-speech-bubble"></span> Post a conversation</a>
+							{{ end }}
+						{{ end }}
 						{{ range .Microcosm.ItemTypes }}
 							{{ if eq . "event" }}
-								<a id="create_conversation" href="{{ microcosm_url `microcosm-create` $microcosmID }}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-microcosm"></span> Create a forum</a>
+								<a href="#" class="btn btn-large btn-block btn-primary" data-toggle="modal" data-target="#modal-signin"><span class="sprite sprite-calendar"></span> Post an event</a>
 							{{ end }}
 						{{ end }}
 					</div>
-				</div>
-			{{ end }}
+				{{ end }}
+			</div>
+		{{ else }}
+			<div class="metabar-module">
+				This forum is closed and is not accepting new posts.
+			</div>
 		{{ end }}
+
 		<div class="metabar-module">
 			<h5>About</h5>
-			<div class="metabar-module-title">
-				<h3>{{ .Site.Title | safeHTML }}</h3>
-				<p>{{ .Site.Description | safeHTML }}</p>
+			<div class="metabar-module-title" {{ if .Microcosm.LogoURL }}style="text-align:center;"{{ end }}>
+				{{ if .Microcosm.LogoURL }}<img src="{{ .Microcosm.LogoURL | safeHTML }}" style="max-width:25%;"/>{{ end }}
+				<h3>{{ .Microcosm.Title | safeHTML }}</h3>
 			</div>
-		</div> <!-- / about -->
-		<div class="metabar-module">
-			<h5>Population</h5>
-			<ul class="list-group">
-				<li class="list-group-item">
-					<span class="badge-alt">{{ microcosm_stat .Site.Meta.Stats "totalProfiles" | default 0 | numcomma }}</span>
-					<a href="/profiles/?top=true">People</a>
-				</li>
-				{{ if gt (microcosm_stat .Site.Meta.Stats "onlineProfiles") 0 }}
-				<li class="list-group-item">
-					<span class="badge-alt">{{ microcosm_stat .Site.Meta.Stats "onlineProfiles" | default 0 | numcomma }}</span>
-					<a href="/profiles/?top=true&amp;online=true">Online now</a>
-				</li>
-				{{ end }}
-			</ul>
-		</div> <!-- Population -->
-		<div class="metabar-module">
-			{{ if or (gt (microcosm_stat .Site.Meta.Stats "totalConversations") 0) (gt (microcosm_stat .Site.Meta.Stats "totalEvents") 0) }}
-			<h5>Content</h5>
-			<ul class="list-group">
-				{{ if gt (microcosm_stat .Site.Meta.Stats "totalConversations") 0 }}
-				<li class="list-group-item">
-					<span class="badge-alt">{{ microcosm_stat .Site.Meta.Stats "totalConversations" | default 0 | numcomma }}</span>
-					<a href="/search/?type=conversation" title="Find recently updated conversations">Conversations</a>
-				</li>
-				{{ end }}
-				{{ if gt (microcosm_stat .Site.Meta.Stats "totalEvents") 0 }}
-				<li class="list-group-item">
-					<span class="badge-alt">{{ microcosm_stat .Site.Meta.Stats "totalEvents" | default 0 | numcomma }}</span>
-					<a href="/search/?type=event" title="Find recently updated events">Events</a>
-					<ul>
-						<li style="list-style:none;"><a href="/search?type=event&amp;eventAfter=0&amp;sort=oldest">upcoming events</a></li>
-						<li style="list-style:none;"><a href="/search?type=event&amp;eventBefore=0&amp;sort=newest">past events</a></li>
-					</ul>
-				</li>
-				{{ end }}
-				{{ if gt (microcosm_stat .Site.Meta.Stats "totalComments") 0 }}
-				<li class="list-group-item">
-					<span class="badge-alt">{{ microcosm_stat .Site.Meta.Stats "totalComments" | default 0 | numcomma }}</span>
-					Comments
-				</li>
-				{{ end }}
-			</ul>
-			{{ end }}
-		</div> <!-- Content -->
-
-		{{ if .User }}
+			<div class="metabar-module-body">
+				<p>{{ .Microcosm.Description | safeHTML }}</p>
+				<p class="metabar-module-author">
+					Created by <a href="{{ microcosm_url `profile-single` .Microcosm.Meta.CreatedBy.ID }}" id="created_by"><img src="{{ if contains `gravatar` .Microcosm.Meta.CreatedBy.AvatarURL }}{{ .Microcosm.Meta.CreatedBy.AvatarURL }}{{ else }}{{ if contains `files` .Microcosm.Meta.CreatedBy.AvatarURL }}https://{{ .Site.SubdomainKey }}.microco.sm{{ .Microcosm.Meta.CreatedBy.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}{{ end }}" alt="Avatar for {{ .Microcosm.Meta.CreatedBy.ProfileName | safeHTML }}" /> @{{ trunc .Microcosm.Meta.CreatedBy.ProfileName 25 | safeHTML }}</a> <time datetime="{{ .Microcosm.Meta.Created | naturalTime }}"></time>
+				</p>
+				<p><a href="{{ microcosm_url `memberships-list` $microcosmID }}">Who has access to this forum?</a></p>
+			</div>
+		</div>
 		<div class="metabar-module">
 			<h5>Actions</h5>
+			<form class="metabar-search-form" role="search" action="{{ microcosm_url `search-single` }}">
+				<div class="input-group">
+					<input
+						type="text"
+						id="navbar-search-input"
+						class="form-control metabar-search-input"
+						name="q"
+						placeholder="Search forum"
+						tabindex="1"
+					/>
+					<input type="hidden" name="forumId" value="{{ $microcosmID }}" />
+					<input type="hidden" name="defaults" value="true" />
+					<span class="input-group-btn">
+						<button class="btn btn-default metabar-search-icon"><span class="sprite sprite-search-small"></span></button>
+					</span>
+				</div>
+			</form>
+
 			<div class="metabar-module-body">
-				<!-- TODO {% include 'forms/mark-read.html' %} -->
+				<p>{% include 'forms/subscribe.html' %}</p>
 			</div>
-			{{ if or (.Microcosm.Meta.Permissions.IsSiteOwner) (.Microcosm.Meta.Permissions.IsOwner) (.Microcosm.Meta.Permissions.IsModerator) }}
-				<div class="metabar-module-body">
-					<a href="{{ microcosm_url `memberships-list` .Microcosm.ID }}">Manage site permissions</a>
+		</div>
+		{{ if .User }}
+		<div class="metabar-module">
+		<h5>Controls</h5>
+			<div class="metabar-module-body">
+				{% include 'forms/mark-read.html' %}
+			</div>
+
+			{% include 'forms/metabar-moderation.html' %}
+
+			<!-- TODO: Put forum moderation here -->
+
+			{{ if not .Microcosm.Meta.Permissions.IsOwner }}
+			<div class="metabar-module-body">
+				<form action="/ignore/" method="POST" id="ignore_form">
+					<!-- TODO: CSRF Token -->
+					<input type="hidden" name="item_type" value="microcosm" />
+					<input type="hidden" name="item_id" value="{{ $microcosmID }}" />
+					{{ if .Microcosm.Meta.Flags.Ignored }}
+					<input type="hidden" name="delete" value="true" />
+					<input type="submit" value="Unignore" class="btn btn-default btn-xs" />
+					{{ else }}
+					<input type="submit" value="Ignore" class="btn btn-default btn-xs" />
+					{{ end }}
+				</form>
+			</div>
+			{{ end }}
+
+			{{ if .Microcosm.Meta.Permissions.IsAdmin }}
+				<div class="metabar-module-primary-buttons">
+					<a id="edit-microcosm" href="{{ microcosm_url `microcosm-edit` $microcosmID }}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-pencil-small"></span> Edit Forum</a>
 				</div>
 			{{ end }}
-		</div>
+		</div> <!-- / controls -->
 		{{ end }}
 	{{ end }}
 {{ end }}

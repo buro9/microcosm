@@ -8,5 +8,19 @@
 {{ end }}
 
 {{ define "sidebar" }}
-    {{ template "sidebar_home" . }}
+    {{ template "sidebar_microcosm" . }}
+{{ end }}
+
+{{ define "js" }}
+<script type="text/javascript">
+	var subscribe = new Subscribe({
+		el        : '.subscribe',
+		url       : '{{ microcosm_url `watcher-single` }}',
+		updateType: 8,
+		type      : 'microcosm',
+		id        : {{ .Microcosm.ID }},
+		//token     : '{% csrf_token %}',
+		is_subscribed : {{ .Microcosm.Meta.Flags.Watched | default `false` | lower }}
+	});
+</script>
 {{ end }}
