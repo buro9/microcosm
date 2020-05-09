@@ -12,7 +12,7 @@ require (
 	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 	github.com/spf13/cast v1.3.0 // indirect
-	github.com/stretchr/testify v1.4.0
+	github.com/stretchr/testify v1.5.1
 	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f // indirect
 	gopkg.in/oleiade/reflections.v1 v1.0.0 // indirect
 )
