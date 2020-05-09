@@ -58,13 +58,13 @@ func (m *SummaryItem) AsItemSummary(raw json.RawMessage) *ItemSummary {
 	return &summary
 }
 
-// AsCommentSummary will return the raw input as a CommentSummary
-func (m *SummaryItem) AsCommentSummary(raw json.RawMessage) *CommentSummary {
+// AsComment will return the raw input as a Comment
+func (m *SummaryItem) AsCommentSummary(raw json.RawMessage) *Comment {
 	if raw == nil {
 		return nil
 	}
 
-	var summary CommentSummary
+	var summary Comment
 	if err := json.Unmarshal(raw, &summary); err != nil {
 		return nil
 	}

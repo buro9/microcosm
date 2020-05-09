@@ -8,6 +8,7 @@ import (
 	"github.com/buro9/funcs/inspect"
 	"github.com/buro9/funcs/math"
 	"github.com/buro9/funcs/safe"
+	"github.com/buro9/funcs/sanitize"
 	"github.com/buro9/funcs/transform"
 )
 
@@ -40,6 +41,11 @@ func init() {
 		"safeHTMLAttr": safe.HTMLAttr,
 		"safeJS":       safe.JS,
 		"safeURL":      safe.URL,
+
+		// Untrusted content
+		"stripTags":         sanitize.StripTags,
+		"stripTagsSentence": sanitize.StripTagsSentence,
+		"sanitize":          sanitize.Sanitize,
 
 		// Inspect your data
 		"contains": strings.Contains,

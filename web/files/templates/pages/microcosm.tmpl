@@ -1,0 +1,12 @@
+{{ define "title" }}
+<title>{{ .Microcosm.Title | safeHTML }}{{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="{{ .Microcosm.Description | stripTags }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }}" />
+{{ end }}
+
+{{ define "content" }}
+    {{ template "content_microcosm" . }}
+{{ end }}
+
+{{ define "sidebar" }}
+    {{ template "sidebar_home" . }}
+{{ end }}

@@ -19,9 +19,9 @@ type Profile struct {
 	LastActive  time.Time `json:"lastActive"`
 
 	// Read only
-	ItemCount      int64          `json:"itemCount"`
-	CommentCount   int64          `json:"commentCount"`
-	ProfileComment CommentSummary `json:"profileComment,omitempty"`
+	ItemCount      int64   `json:"itemCount"`
+	CommentCount   int64   `json:"commentCount"`
+	ProfileComment Comment `json:"profileComment,omitempty"`
 
 	Meta struct {
 		Flags struct {

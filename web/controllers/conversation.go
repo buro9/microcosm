@@ -10,10 +10,10 @@ import (
 	"github.com/buro9/microcosm/web/templates"
 )
 
-// MicrocosmGet will fetch the home page
-func MicrocosmGet(w http.ResponseWriter, req *http.Request) {
-	microcosmID := asInt64(req, "microcosmID")
-	microcosm, err := api.GetMicrocosm(req.Context(), microcosmID)
+// ConversationGet will fetch the home page
+func ConversationGet(w http.ResponseWriter, req *http.Request) {
+	conversationID := asInt64(req, "conversationID")
+	conversation, err := api.GetConversation(req.Context(), conversationID)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
@@ -24,14 +24,14 @@ func MicrocosmGet(w http.ResponseWriter, req *http.Request) {
 		Site:       bag.GetSite(req.Context()),
 		User:       bag.GetProfile(req.Context()),
 		Section:    `home`,
-		Pagination: models.ParsePagination(microcosm.Items),
+		Pagination: models.ParsePagination(conversation.Items),
 
-		Microcosm: microcosm,
+		Conversation: conversation,
 	}
 
-	err = templates.RenderHTML(w, "microcosm", data)
+	err = templates.RenderHTML(w, "home", data)
 	if err != nil {
-		fmt.Println("could not render microcosm")
+		fmt.Println("could not render home")
 		w.Write([]byte(err.Error()))
 	}
 }

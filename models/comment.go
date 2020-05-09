@@ -2,8 +2,8 @@ package models
 
 import "time"
 
-// CommentSummary describes a comment summary returned by the API
-type CommentSummary struct {
+// Comment describes a comment summary returned by the API
+type Comment struct {
 	ID          int64        `json:"id"`
 	ItemType    string       `json:"itemType"`
 	ItemID      int64        `json:"itemId"`

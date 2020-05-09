@@ -15,18 +15,18 @@ type Array struct {
 	Items     json.RawMessage `json:"items"`
 }
 
-// AsSummaryItems will return the array items as summaries (of mixed types)
-func (m *Array) AsSummaryItems() *[]SummaryItem {
+// AsComments will return the array items as comments
+func (m *Array) AsComments() *[]Comment {
 	if m.Items == nil {
 		return nil
 	}
 
-	var summaries []SummaryItem
-	if err := json.Unmarshal(m.Items, &summaries); err != nil {
+	var comments []Comment
+	if err := json.Unmarshal(m.Items, &comments); err != nil {
 		return nil
 	}
 
-	return &summaries
+	return &comments
 }
 
 // AsProfileSummaries will return the array items as summaries (of profile type)
@@ -36,6 +36,20 @@ func (m *Array) AsProfileSummaries() *[]ProfileSummary {
 	}
 
 	var summaries []ProfileSummary
+	if err := json.Unmarshal(m.Items, &summaries); err != nil {
+		return nil
+	}
+
+	return &summaries
+}
+
+// AsSummaryItems will return the array items as summaries (of mixed types)
+func (m *Array) AsSummaryItems() *[]SummaryItem {
+	if m.Items == nil {
+		return nil
+	}
+
+	var summaries []SummaryItem
 	if err := json.Unmarshal(m.Items, &summaries); err != nil {
 		return nil
 	}

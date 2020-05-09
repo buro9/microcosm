@@ -51,6 +51,11 @@ func loadDefinitions() {
 				},
 				Template{
 					Base:     "base",
+					Page:     "microcosm",
+					Includes: Collate("sidebar_microcosm", page, microcosms),
+				},
+				Template{
+					Base:     "base",
 					Page:     "profiles",
 					Includes: Collate("sidebar_profiles", page, profiles),
 				},
