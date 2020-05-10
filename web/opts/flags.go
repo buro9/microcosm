@@ -6,19 +6,23 @@ import (
 	"os"
 	"strings"
 	"sync"
+
+	"github.com/gorilla/securecookie"
 )
 
 const (
 	envPrefix = "MICROCOSM_WEB_"
 
-	defaultFilesPath    = "/srv/microcosm-web"
-	defaultListen       = ":80"
-	defaultTLSListen    = ":443"
-	defaultCertFile     = "/etc/ssl/certs/microco.sm.crt"
-	defaultKeyFile      = "/etc/ssl/private/microco.sm.key"
-	defaultAPIDomain    = "microco.sm"
-	defaultClientSecret = ""
-	defaultMemcacheAddr = "localhost:11211"
+	defaultFilesPath      = "/srv/microcosm-web"
+	defaultListen         = ":80"
+	defaultTLSListen      = ":443"
+	defaultCertFile       = "/etc/ssl/certs/microco.sm.crt"
+	defaultKeyFile        = "/etc/ssl/private/microco.sm.key"
+	defaultAPIDomain      = "microco.sm"
+	defaultClientSecret   = ""
+	defaultMemcacheAddr   = "localhost:11211"
+	defaultCookieHashKey  = "70ce1fb50f865ef4f984fcb6fcabf1e8"
+	defaultCookieBlockKey = "ed6f16535958f69087ccdd1556b6335de7a86453e2b513e4598cb9cc8f1a8cd0"
 )
 
 var parseFlags sync.Once
@@ -51,6 +55,18 @@ var (
 	// MemcacheAddr contains the connection information for memcached, typically
 	// the address localhost:11211
 	MemcacheAddr *string
+
+	// CookieHashKey is a 64 char string that is used to produce the HMAC of the
+	// secure cookie used in the web app
+	CookieHashKey *string
+
+	// CookieBlockKey is a 32 char string that is used to encrypted the secure
+	// cookie used in the web app
+	CookieBlockKey *string
+
+	// SecureCookie is an instance of gorilla securecookie that will be used
+	// by the web app and underlines CSRF tokens
+	SecureCookie *securecookie.SecureCookie
 )
 
 // RegisterFlags adds the flags needed by the UI if they have not already been
@@ -125,7 +141,23 @@ func RegisterFlags() {
 				"",
 				`the API client secret
 	alternatively $`+envPrefix+`MEMCACHE_ADDR
-	(default "`+defaultClientSecret+`")`,
+	(default "`+defaultMemcacheAddr+`")`,
+			)
+
+			CookieHashKey = flag.String(
+				"CookieHashKey",
+				"",
+				`the cookie HMAC is produced from this hash key (32 chars)
+	alternatively $`+envPrefix+`COOKIE_HASH_KEY
+	(default "`+defaultCookieHashKey+`")`,
+			)
+
+			CookieBlockKey = flag.String(
+				"cookieBlockKey",
+				"",
+				`the cookie values are encrypted by this block key (64 chars)
+	alternatively $`+envPrefix+`COOKIE_BLOCK_KEY
+	(default "`+defaultCookieBlockKey+`")`,
 			)
 		},
 	)
@@ -224,6 +256,31 @@ func ValidateFlags() error {
 		memcacheAddr := defaultMemcacheAddr
 		MemcacheAddr = &memcacheAddr
 	}
+
+	// CookieHashKey
+	if CookieHashKey == nil || *CookieHashKey == "" {
+		cookieHashKey := os.Getenv(envPrefix + "COOKIE_HASH_KEY")
+		CookieHashKey = &cookieHashKey
+	}
+	if *CookieHashKey == "" {
+		cookieHashKey := defaultCookieHashKey
+		CookieHashKey = &cookieHashKey
+	}
+
+	// CookieBlockKey
+	if CookieBlockKey == nil || *CookieBlockKey == "" {
+		cookieBlockKey := os.Getenv(envPrefix + "COOKIE_BLOCK_KEY")
+		CookieBlockKey = &cookieBlockKey
+	}
+	if *CookieBlockKey == "" {
+		cookieBlockKey := defaultCookieBlockKey
+		CookieBlockKey = &cookieBlockKey
+	}
+
+	// Create the instance of Secure Cookie that will be used during the life of
+	// this program.
+	SecureCookie = securecookie.New([]byte(*CookieHashKey), []byte(*CookieBlockKey))
+	SecureCookie.MaxAge(60 * 60 * 24 * 365)
 
 	return nil
 }

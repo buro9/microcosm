@@ -1,10 +1,12 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/buro9/microcosm/web/api"
+	"github.com/buro9/microcosm/web/opts"
 )
 
 // Auth0LoginGet will attempt to log the user in using Auth0 and then set
@@ -34,17 +36,28 @@ func Auth0LoginGet(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	var cookie http.Cookie
-	cookie.Name = "session"
-	cookie.Value = accessToken
-	cookie.Expires = time.Now().Add(time.Hour * 24 * 365)
-	cookie.Domain = req.Host
-	cookie.Path = "/"
-	cookie.HttpOnly = true
-	if req.URL.Scheme == "https" {
-		cookie.Secure = true
+	value := map[string]string{
+		"accessToken": accessToken,
 	}
+	if opts.SecureCookie == nil {
+		renderError(w, req, fmt.Errorf("SecureCookie must exist"))
+		return
+	}
+	encoded, err := (*opts.SecureCookie).Encode("session", value)
+	if err != nil {
+		renderError(w, req, err)
+		return
+	}
+	cookie := &http.Cookie{
+		Name:     "session",
+		Value:    encoded,
+		Expires:  time.Now().Add(time.Hour * 24 * 365),
+		Domain:   req.Host,
+		Path:     "/",
+		Secure:   true,
+		HttpOnly: true,
+	}
+	http.SetCookie(w, cookie)
 
-	http.SetCookie(w, &cookie)
 	http.Redirect(w, req, targetURL, http.StatusFound)
 }
