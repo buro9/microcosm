@@ -15,7 +15,7 @@
 <script type="text/javascript">
 	var subscribe = new Subscribe({
 		el        : '.subscribe',
-		url       : '{{ microcosm_url `watcher-single` }}',
+		url       : {{ microcosm_url `watcher-single` }},
 		updateType: 8,
 		type      : 'microcosm',
 		id        : {{ .Microcosm.ID }},

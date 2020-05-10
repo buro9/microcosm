@@ -13,14 +13,15 @@ import (
 const (
 	envPrefix = "MICROCOSM_WEB_"
 
-	defaultFilesPath      = "/srv/microcosm-web"
-	defaultListen         = ":80"
-	defaultTLSListen      = ":443"
-	defaultCertFile       = "/etc/ssl/certs/microco.sm.crt"
-	defaultKeyFile        = "/etc/ssl/private/microco.sm.key"
-	defaultAPIDomain      = "microco.sm"
-	defaultClientSecret   = ""
-	defaultMemcacheAddr   = "localhost:11211"
+	defaultFilesPath    = "/srv/microcosm-web"
+	defaultListen       = ":80"
+	defaultTLSListen    = ":443"
+	defaultCertFile     = "/etc/ssl/certs/microco.sm.crt"
+	defaultKeyFile      = "/etc/ssl/private/microco.sm.key"
+	defaultAPIDomain    = "microco.sm"
+	defaultClientSecret = ""
+	defaultMemcacheAddr = "localhost:11211"
+	// TODO: Rotate and move to environment vars
 	defaultCookieHashKey  = "70ce1fb50f865ef4f984fcb6fcabf1e8"
 	defaultCookieBlockKey = "ed6f16535958f69087ccdd1556b6335de7a86453e2b513e4598cb9cc8f1a8cd0"
 )
@@ -145,7 +146,7 @@ func RegisterFlags() {
 			)
 
 			CookieHashKey = flag.String(
-				"CookieHashKey",
+				"cookieHashKey",
 				"",
 				`the cookie HMAC is produced from this hash key (32 chars)
 	alternatively $`+envPrefix+`COOKIE_HASH_KEY

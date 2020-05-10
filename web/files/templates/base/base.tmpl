@@ -260,7 +260,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header navbar-header-wrapper tiling-bg">
-                        <img src="{{ .Site.LogoURL }}" alt="{{ .Site.Title | safeHTML}}" id="logo" />
+                        <img src="{{ .Site.LogoURL | safeURL }}" alt="{{ .Site.Title | safeHTML}}" id="logo" />
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     </div>
                     <div class="modal-body">
@@ -295,24 +295,24 @@
 				<script src="/static/3rd/auth0/lock-passwordless/2.2.3/lock-passwordless.min.js"></script>
 				<script type="text/javascript">
 				function auth0signin() {
-					var domain = '{{ .Site.Auth0Domain }}';
-					var clientID = '{{ .Site.Auth0ClientID }}';
+					var domain = {{ .Site.Auth0Domain }};
+					var clientID = {{ .Site.Auth0ClientID }};
 					var opt = {
 						autoclose: true,
 						{{ if eq .Site.Auth0Domain "rapha.auth0.com" }}{{ else }}connections: [{{ if eq .Site.Auth0Domain "espruino.eu.auth0.com" }}'google-oauth2','github'{{ else }}'google-oauth2','windowslive'{{ end }}],{{ end }}
 						dict: {
 							title: 'Sign in'
 						},
-						icon: '{{ .Site.LogoURL }}',
+						icon: {{ .Site.LogoURL }},
 						defaultLocation: 'GB',
 						focusInput: false,
 						popup: false,
-						primaryColor: '{{ .Site.LinkColor }}',
+						primaryColor: {{ .Site.LinkColor }},
 						socialBigButtons: true,
 						authParams: {
-							state: '{{ .Request.RequestURI }}'
+							state: {{ .Request.RequestURI }}
 						},
-						callbackURL: '{{ .Site.SiteURL }}/auth0login/',
+						callbackURL: {{ .Site.SiteURL }} + "/auth0login/",
 						responseType: 'code'
 					};
 					var lock = new Auth0LockPasswordless(clientID, domain);
