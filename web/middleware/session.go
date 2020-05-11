@@ -7,6 +7,7 @@ import (
 
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/opts"
 )
 
 // Session is a middleware that populates the context with the necessary data
@@ -88,10 +89,17 @@ func accessTokenFromRequest(req *http.Request) string {
 	}
 
 	// finally the cookie
-	cookie, _ := req.Cookie("session")
-	if cookie != nil && cookie.Value != "" {
-		return cookie.Value
+	if cookie, err := req.Cookie("session"); err == nil {
+		value := make(map[string]string)
+		if err = opts.SecureCookie.Decode("session", cookie.Value, &value); err == nil {
+			return value["accessToken"]
+		}
 	}
+
+	// cookie, _ := req.Cookie("session")
+	// if cookie != nil && cookie.Value != "" {
+	// 	return cookie.Value
+	// }
 
 	return ""
 }

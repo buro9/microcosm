@@ -24,5 +24,10 @@ func SiteFromAPIContext(ctx context.Context) (*models.Site, error) {
 		return nil, err
 	}
 
+	// TODO: Remove this
+	apiResp.Data.Domain = "www.gfora.com"
+	apiResp.Data.SiteURL = "https://www.gfora.com"
+	apiResp.Data.SubdomainKey = "gfora"
+
 	return &apiResp.Data, nil
 }

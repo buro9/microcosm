@@ -22,8 +22,8 @@ const (
 	defaultClientSecret = ""
 	defaultMemcacheAddr = "localhost:11211"
 	// TODO: Rotate and move to environment vars
-	defaultCookieHashKey  = "70ce1fb50f865ef4f984fcb6fcabf1e8"
-	defaultCookieBlockKey = "ed6f16535958f69087ccdd1556b6335de7a86453e2b513e4598cb9cc8f1a8cd0"
+	defaultCookieHashKey  = "70ce1fb50f865ef4f984fcb6fcabf1e870ce1fb50f865ef4f984fcb6fcabf1e8"
+	defaultCookieBlockKey = "ed6f16535958f69087ccdd1556b6335d"
 )
 
 var parseFlags sync.Once

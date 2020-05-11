@@ -11,6 +11,9 @@ func SetAPIRoot(ctx context.Context, apiRoot string) context.Context {
 // GetAPIRoot fetches the api url for the site associated with the
 // current request, i.e. https://subdomain.apidomain.tld/api/v1
 func GetAPIRoot(ctx context.Context) string {
-	apiRoot, _ := ctx.Value(contextAPIRoot).(string)
-	return apiRoot
+	// apiRoot, _ := ctx.Value(contextAPIRoot).(string)
+	// return apiRoot
+
+	// TODO: Uncomment the above
+	return "https://gfora.microco.sm/api/v1"
 }
