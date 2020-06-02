@@ -12,7 +12,7 @@ github.com/buro9/funcs/transform
 github.com/davecgh/go-spew/spew
 # github.com/dustin/go-humanize v1.0.0
 github.com/dustin/go-humanize
-# github.com/go-chi/chi v4.1.1+incompatible
+# github.com/go-chi/chi v4.1.2+incompatible
 github.com/go-chi/chi
 github.com/go-chi/chi/middleware
 # github.com/gorilla/securecookie v1.1.1
