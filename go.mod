@@ -6,7 +6,7 @@ require (
 	github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b // indirect
 	github.com/buro9/funcs v0.0.0-20200509155829-0a117fc83732
 	github.com/dustin/go-humanize v1.0.0 // indirect
-	github.com/go-chi/chi v4.1.1+incompatible
+	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/microcosm-cc/bluemonday v1.0.2 // indirect
