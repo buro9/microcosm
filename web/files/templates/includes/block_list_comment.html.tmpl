@@ -1,0 +1,75 @@
+{{ define "block_list_comment" }}
+{{ $action := .action }}
+{{ $comment := .comment }}
+{{ $parent := .parent }}
+{{ $result := .result }}
+{{ $site := .site }}
+<li class="list-collection-row">
+{{$action}}
+{{ if eq $action "reply_to_comment" }}
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="list-collection-row-icon"></div>
+			<div class="list-collection-row-offset row-meta">
+				<a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}">@{{ $comment.Meta.CreatedBy.ProfileName | safeHTML }}</a> replied to your comment
+			</div>
+		</div>
+	</div>
+{{ else if eq $action "mentioned" }}
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="list-collection-row-icon"></div>
+			<div class="list-collection-row-offset row-meta">
+				<a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}">@{{ $comment.Meta.CreatedBy.ProfileName | safeHTML }}</a> mentioned you
+			</div>
+		</div>
+	</div>
+{{ end }}
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="list-collection-row-icon">
+			{{ if eq $result.ParentItemType "huddle" }}
+				<a class="sprite sprite-envelope" title="Message"></a>
+			{{ else if eq $result.ParentItemType "profile" }}
+				<a class="sprite sprite-user" title="Profile"></a>
+			{{ else }}
+				<a class="sprite sprite-speech-bubble-single" title="Comment"></a>
+			{{ end }}
+			</div>
+			<div class="list-collection-row-offset">
+				<div class="row-title">
+					{{ if eq $result.ParentItemType "profile" }}
+						<a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}"><h3 class="row-title">@{{ $parent.ProfileName | safeHTML }}</h3></a>
+					{{ else }}
+						<a href="{{ (microcosm_link $comment.Meta.Links "self").Href }}incontext/"><h3 class="row-title">{{ $parent.Title | safeHTML }}</h3></a>
+					{{ end }}
+				</div>
+
+				<div class="row-meta">
+					in
+					{{ if eq $result.ParentItemType "huddle" }}
+						<a href="{{ microcosm_url "huddle-list" }}">Messages</a>
+					{{ else if eq $result.ParentItemType "profile" }}
+						<a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}">Profiles</a>
+					{{ else }}
+						<a href="{{ (microcosm_link $parent.Meta.Links "microcosm").Href }}">{{ (microcosm_link $parent.Meta.Links "microcosm").Title | safeHTML }}</a>
+					{{ end }}
+					&bull;
+					<time datetime="{{ $comment.Meta.Created | rfcTime }}">{{ $comment.Meta.Created | naturalTime }}</time>
+				</div>
+
+                <div class="row-excerpt">
+                    <a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}"><img src="{{ microcosm_avatar_url $comment.Meta.CreatedBy.AvatarURL $site.SubdomainKey }}" alt="Avatar for {{ $comment.Meta.CreatedBy.ProfileName | safeHTML }}" align="left" class="img-badge"/></a>
+                    <div class="comment-item-body row-excerpt-text">
+                        {{ if $result.Highlight }}
+                            {{ $result.Highlight | safeHTML }}
+                        {{ else }}
+                            {{ $comment.HTML | safeHTML }}
+                        {{ end }}
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+</li>
+{{ end }}

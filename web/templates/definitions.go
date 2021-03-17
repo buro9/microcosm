@@ -4,9 +4,9 @@ import "sync"
 
 var loadDefinitionsOnce sync.Once
 
-var page = []string{
-	"breadcrumb",
-	"pagination",
+var conversation = []string{
+	"block_comment",
+	"content_conversation",
 }
 
 var microcosms = []string{
@@ -16,9 +16,9 @@ var microcosms = []string{
 	"content_microcosm",
 }
 
-var profiles = []string{
-	"block_profile",
-	"content_profiles",
+var page = []string{
+	"breadcrumb",
+	"pagination",
 }
 
 var profile = []string{
@@ -28,6 +28,11 @@ var profile = []string{
 	"block_list_comment",
 	"block_microcosm",
 	"content_profile",
+}
+
+var profiles = []string{
+	"block_profile",
+	"content_profiles",
 }
 
 var searchResults = []string{
@@ -46,6 +51,11 @@ func loadDefinitions() {
 			Templates = []Template{
 				Template{
 					Base:     "base",
+					Page:     "conversation",
+					Includes: Collate("sidebar_conversation", page, conversation),
+				},
+				Template{
+					Base:     "base",
 					Page:     "home",
 					Includes: Collate("sidebar_home", page, microcosms),
 				},
@@ -56,13 +66,13 @@ func loadDefinitions() {
 				},
 				Template{
 					Base:     "base",
-					Page:     "profiles",
-					Includes: Collate("sidebar_profiles", page, profiles),
+					Page:     "profile",
+					Includes: Collate("sidebar_profile", page, profile),
 				},
 				Template{
 					Base:     "base",
-					Page:     "profile",
-					Includes: Collate("sidebar_profile", page, profile),
+					Page:     "profiles",
+					Includes: Collate("sidebar_profiles", page, profiles),
 				},
 				Template{
 					Base:     "base",

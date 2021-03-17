@@ -30,7 +30,7 @@ func ListenAndServe() chan error {
 
 		router.Get("/", controllers.HomeGet)
 		router.Get("/auth0login/", controllers.Auth0LoginGet)
-		router.Get("/coversations/{conversationID:[1-9][0-9]+}/", controllers.ConversationGet)
+		router.Get("/conversations/{conversationID:[1-9][0-9]+}/", controllers.ConversationGet)
 		router.Get("/microcosms/{microcosmID:[1-9][0-9]+}/", controllers.MicrocosmGet)
 		router.Get("/profiles/{profileID:[1-9][0-9]+}/", controllers.ProfileGet)
 		router.Get("/profiles/", controllers.ProfilesGet)

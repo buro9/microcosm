@@ -29,7 +29,7 @@ func ConversationGet(w http.ResponseWriter, req *http.Request) {
 		Conversation: conversation,
 	}
 
-	err = templates.RenderHTML(w, "home", data)
+	err = templates.RenderHTML(w, "conversation", data)
 	if err != nil {
 		fmt.Println("could not render home")
 		w.Write([]byte(err.Error()))

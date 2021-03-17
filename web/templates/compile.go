@@ -26,7 +26,7 @@ func Compile() {
 				templates = make(map[string]*template.Template)
 			}
 
-			pathFormat := *opts.FilesPath + "/templates/%s/%s.tmpl"
+			pathFormat := *opts.FilesPath + "/templates/%s/%s.html.tmpl"
 
 			for _, t := range Templates {
 				// Gather a list of all files required by this template

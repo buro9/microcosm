@@ -1,0 +1,48 @@
+{{ define "content_conversation" }}
+<div class="content-header padded">
+	<div class="row">
+		<div class="col-sm-6">
+			{{ template "breadcrumb" (dict "content" .Conversation "skipParents" false "skipSelf" true "section" .Section) }}
+		</div>
+		<div class="col-sm-6">
+			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
+		</div>
+	</div>
+</div>
+
+<div class="content-body">
+	<!-- TODO {% include "forms/content-moderation.html" %} -->
+	<div class="list-items">
+		<ul class="list-collection bordered padded">
+		{{ $user := .User }}
+		{{ range .Microcosm.Items.AsSummaryItems}}
+			{{ if eq .ItemType "conversation" }}
+				{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .Item) "showForum" false "user" $user) }}
+
+			{{ else if eq .ItemType "event" }}
+				{{ template "block_event" (dict "event" (.AsEventSummary .Item) "showForum" false "user" $user) }}
+
+			{{ else if eq .ItemType "microcosm" }}
+				{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" false "user" $user) }}
+
+			{{ else if eq .ItemType "event" }}
+				{{ template "block_event" (dict "event" (.AsEventSummary .Item) "showForum" false "user" $user) }}
+
+			{{ else }}
+				<li>{% .ItemType item %}</li>
+			{{ end }}
+		{{ end }}
+		</ul>
+	</div>
+	<!-- TODO {% include "forms/content-moderation.html" %} -->
+</div>
+
+<div class="content-footer padded">
+	<div class="row">
+		<div class="col-sm-6"></div>
+		<div class="col-sm-6">
+			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
+		</div>
+	</div>
+</div>
+{{ end }}

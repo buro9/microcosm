@@ -1,4 +1,4 @@
-{{ define "sidebar_microcosm" }}
+{{ define "sidebar_conversation" }}
 	{{ if .Microcosm }}
 		{{ $microcosmID := .Microcosm.ID }}
 		{{ if .Microcosm.Meta.Flags.Open }}
@@ -16,7 +16,7 @@
 							{{ end }}
 						{{ end }}
 					</div>
-					{{ if or .Microcosm.Meta.Permissions.IsAdmin (or .Microcosm.Meta.Permissions.IsOwner .Microcosm.Meta.Permissions.IsModerator ) }}
+					{{ if or .Microcosm.Meta.Permissions.IsSiteOwner (or .Microcosm.Meta.Permissions.IsOwner .Microcosm.Meta.Permissions.IsModerator ) }}
 						<div class="metabar-module-primary-buttons" style="margin-top: 10px;">
 							{{ range .Microcosm.ItemTypes }}
 								{{ if eq . "microcosm" }}
@@ -111,7 +111,7 @@
 			</div>
 			{{ end }}
 
-			{{ if .Microcosm.Meta.Permissions.IsAdmin }}
+			{{ if .Microcosm.Meta.Permissions.IsSiteOwner }}
 				<div class="metabar-module-primary-buttons">
 					<a id="edit-microcosm" href="{{ microcosm_url `microcosm-edit` $microcosmID }}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-pencil-small"></span> Edit Forum</a>
 				</div>

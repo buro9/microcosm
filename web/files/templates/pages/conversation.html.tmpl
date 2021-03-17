@@ -1,0 +1,56 @@
+{{ define "title" }}
+<title>{{ .Conversation.Title | safeHTML }}{{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="{{ (.Conversation.Items 0).HTML | stripTags }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }}" />
+{{ end }}
+
+{{ define "content" }}
+    {{ template "content_conversation" . }}
+{{ end }}
+
+{{ define "sidebar" }}
+    {{ template "sidebar_conversation" . }}
+{{ end }}
+
+{{ define "js" }}
+<script type="text/javascript" src="/statis/js/jquery.textcomplete.min.js"></script>
+<script type="text/javascript" src="/statis/js/comments.js?v=201607027"></script>
+<script type="text/javascript" src="/statis/js/formValidator.js"></script>
+<script type="text/javascript" src="/statis/js/attachments.js"></script>
+
+<script type="text/javascript" src="/statis/js/Markdown.Converter.js"></script>
+<script type="text/javascript" src="/statis/js/Markdown.Editor.js?v20160728"></script>
+<script type="text/javascript" src="/statis/js/simpleEditor.js?v=201607027"></script>
+<script type="text/javascript">
+(function(){
+
+	var comments = new Comments({
+		el               : '.content-body',
+		defaultContainer : '.reply-container',
+		template         : $('.reply-container .comment-item-body').html().trim()
+	});
+
+	var replyBox = new simpleEditor({
+		el : '.reply-box'
+	});
+
+	$('#post-a-reply-handle').on('click',function(e){
+		var selectedText = Comments.prototype.getWindowSelectedText();
+		if (selectedText) {
+			replyBox.textarea.value = selectedText;
+			replyBox.quoteAll();
+		}
+	});
+
+	var subscribe = new Subscribe({
+		el        : '.subscribe',
+		url       : '{% url 'single-watcher' %}',
+		updateType: 1,
+		type      : 'conversation',
+		id        : {{ .Conversation.ID }},
+//		token     : '{ { csrf_token } }', // TODO: Add CSRF token
+		is_subscribed : {{ .Conversation.Meta.Flags.Watched  | default `false` | lower  }}
+	});
+
+})();
+</script>
+{{ end }}
