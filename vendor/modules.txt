@@ -28,7 +28,7 @@ github.com/oxtoacart/bpool
 github.com/pmezard/go-difflib/difflib
 # github.com/spf13/cast v1.3.1
 github.com/spf13/cast
-# github.com/stretchr/testify v1.7.0
+# github.com/stretchr/testify v1.7.1
 github.com/stretchr/testify/assert
 # golang.org/x/net v0.0.0-20200506145744-7e3656a0809f
 golang.org/x/net/html
