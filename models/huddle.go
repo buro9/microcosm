@@ -46,3 +46,20 @@ type HuddleSummary struct {
 		Permissions *Permission `json:"permissions,omitempty"`
 	} `json:"meta"`
 }
+
+// Huddles describes an array of huddles
+type Huddles struct {
+	Items Array `json:"huddles"`
+	Meta  struct {
+		Stats       []Stat     `json:"stats,omitempty"`
+		Links       []Link     `json:"links,omitempty"`
+		Permissions Permission `json:"permissions,omitempty"`
+	} `json:"meta"`
+}
+
+// HuddlesResponse describes the API response that contains an array of
+// huddles
+type HuddlesResponse struct {
+	BoilerPlate
+	Data Huddles `json:"data"`
+}

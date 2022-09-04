@@ -29,6 +29,21 @@ func (m *Array) AsComments() *[]Comment {
 	return &comments
 }
 
+// AsHuddleSummaries will return the array items as summaries (of huddle type)
+func (m *Array) AsHuddleSummaries() *[]HuddleSummary {
+	if m.Items == nil {
+		return nil
+	}
+
+	var summaries []HuddleSummary
+	if err := json.Unmarshal(m.Items, &summaries); err != nil {
+		return nil
+	}
+
+	return &summaries
+}
+
+
 // AsProfileSummaries will return the array items as summaries (of profile type)
 func (m *Array) AsProfileSummaries() *[]ProfileSummary {
 	if m.Items == nil {

@@ -9,6 +9,11 @@ var conversation = []string{
 	"content_conversation",
 }
 
+var huddles = []string{
+	"block_huddle",
+	"content_huddles",
+}
+
 var microcosms = []string{
 	"block_conversation",
 	"block_event",
@@ -58,6 +63,11 @@ func loadDefinitions() {
 					Base:     "base",
 					Page:     "home",
 					Includes: Collate("sidebar_home", page, microcosms),
+				},
+				Template{
+					Base:     "base",
+					Page:     "huddles",
+					Includes: Collate("sidebar_huddles", page, huddles),
 				},
 				Template{
 					Base:     "base",

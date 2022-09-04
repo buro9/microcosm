@@ -29,6 +29,7 @@ type Data struct {
 	// filled in
 	Array         *models.Array
 	Conversation  *models.Conversation
+	Huddles       *models.Huddles
 	Microcosm     *models.Microcosm
 	Profiles      *models.Profiles
 	Profile       *models.Profile
