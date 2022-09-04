@@ -3,7 +3,7 @@ package server
 import (
 	"log"
 	"net/http"
-	"regexp"
+	"strings"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -28,16 +28,16 @@ func ListenAndServe() chan error {
 		router.Use(mm.ForceSSL)
 		router.Use(mm.Session)
 
-		router.Get("/", controllers.HomeGet)
-		router.Get("/auth0login/", controllers.Auth0LoginGet)
-		router.Get("/conversations/{conversationID:[1-9][0-9]+}/", controllers.ConversationGet)
-		router.Get("/microcosms/{microcosmID:[1-9][0-9]+}/", controllers.MicrocosmGet)
-		router.Get("/profiles/{profileID:[1-9][0-9]+}/", controllers.ProfileGet)
-		router.Get("/profiles/", controllers.ProfilesGet)
-		router.Get("/today/", controllers.TodayGet)
-		router.Get("/updates/", controllers.UpdatesGet)
+		router.Get(`/`, controllers.HomeGet)
+		router.Get(`/auth0login/`, controllers.Auth0LoginGet)
+		router.Get(`/conversations/{conversationID:[1-9][0-9]+}/`, controllers.ConversationGet)
+		router.Get(`/microcosms/{microcosmID:[1-9][0-9]+}/`, controllers.MicrocosmGet)
+		router.Get(`/profiles/{profileID:[1-9][0-9]+}/`, controllers.ProfileGet)
+		router.Get(`/profiles/`, controllers.ProfilesGet)
+		router.Get(`/today/`, controllers.TodayGet)
+		router.Get(`/updates/`, controllers.UpdatesGet)
 
-		router.Post("/logout/", controllers.LogoutPost)
+		router.Post(`/logout/`, controllers.LogoutPost)
 
 		router.NotFound(controllers.NotFound)
 
@@ -53,13 +53,13 @@ func ListenAndServe() chan error {
 		// router.Use(apiRoot)
 		router.Use(mm.ForceSSL)
 
-		router.Mount("/static", staticFiles())
+		router.Mount(`/static`, staticFiles())
+		
 		// TODO: clear these stubs
-		ok := func(w http.ResponseWriter, req *http.Request) { w.Write([]byte("OK")) }
-
-		router.Get("/isogram", ok)
-		router.Get("/favicon.ico", ok)
-		router.Get("/robots.txt", ok)
+		ok := func(w http.ResponseWriter, req *http.Request) { w.Write([]byte(`OK`)) }
+		router.Get(`/isogram`, ok)
+		router.Get(`/favicon.ico`, ok)
+		router.Get(`/robots.txt`, ok)
 
 		router.NotFound(controllers.NotFoundStatic)
 	})
@@ -110,33 +110,35 @@ func ListenAndServe() chan error {
 func staticFiles() http.Handler {
 	router := chi.NewRouter()
 
-	var css = regexp.MustCompile("\\.css$")
-	var gif = regexp.MustCompile("\\.gif$")
-	var js = regexp.MustCompile("\\.js$")
-	var png = regexp.MustCompile("\\.png$")
-
 	// Do nothing, but implement http.Handler
 	router.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, router *http.Request) {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			switch {
-			case css.MatchString(router.RequestURI):
-				w.Header().Set("Content-Type", "text/css")
-			case gif.MatchString(router.RequestURI):
-				w.Header().Set("Content-Type", "image/gif")
-			case js.MatchString(router.RequestURI):
-				w.Header().Set("Content-Type", "text/javascript")
-			case png.MatchString(router.RequestURI):
-				w.Header().Set("Content-Type", "image/png")
+			case strings.HasSuffix(r.URL.Path, `.css`):
+				w.Header().Set(`Content-Type`, `text/css`)
+
+			case strings.HasSuffix(r.URL.Path, `.gif`):
+				w.Header().Set(`Content-Type`, `image/gif`)
+
+			case strings.HasSuffix(r.URL.Path, `.js`):
+				w.Header().Set(`Content-Type`, `text/javascript`)
+
+			case strings.HasSuffix(r.URL.Path, `.png`):
+				w.Header().Set(`Content-Type`, `image/png`)
+
+			case strings.HasSuffix(r.URL.Path, `.svg`):
+				w.Header().Set(`Content-Type`, `image/svg+xml`)
 			}
-			next.ServeHTTP(w, router)
+
+			next.ServeHTTP(w, r)
 		})
 	})
 
 	// Serve static files
-	router.Mount("/",
+	router.Mount(`/`,
 		http.StripPrefix(
-			"/static/",
-			http.FileServer(http.Dir(*opts.FilesPath+"/static/")),
+			`/static/`,
+			http.FileServer(http.Dir(*opts.FilesPath+`/static/`)),
 		),
 	)
 
