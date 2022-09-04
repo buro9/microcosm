@@ -20,7 +20,7 @@ microcosm-web: .GOPATH/.ok
 deps:
 	$Q $(GOCMD) list -m -u -mod=mod all
 	$Q $(GOCMD) mod tidy
-	$Q $(GOCMD) get -u
+	$Q $(GOCMD) get -d -u ./...
 	$Q $(GOCMD) mod vendor
 
 run: microcosm-web
