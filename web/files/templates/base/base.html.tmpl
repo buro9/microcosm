@@ -5,8 +5,6 @@
 		<meta charset="utf-8" />
 
 		<link rel="preconnect" href="https://{{ .Site.SubdomainKey }}.microco.sm">
-		<link rel="preconnect" href="https://login.persona.org">
-		<link rel="preconnect" href="https://static.login.persona.org">
 		<link rel="preconnect" href="https://fonts.googleapis">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -16,10 +14,7 @@
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-		<!--[if lt IE 9]>
-		  <script src="/static/3rd/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="/static/3rd/respond.js/1.4.2/respond.min.js"></script>
-		<![endif]-->
+
 		<link href="/static/themes/{{ .Site.ThemeID | default 1 }}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
 		<link rel="shortcut icon" href="{{ .Site.FaviconURL | default "/static/img/favico.png" }}" />
@@ -52,6 +47,10 @@
 					background-position: {{ .Site.BackgroundPosition }} top;
 				{{ end }}
 			{{ end }}
+		}
+
+		.subforumLogo {
+			height:1em; vertical-align: -0.15em;
 		}
 
 		#auth0signin, #auth0signin:focus, #auth0signin:active {
