@@ -1,0 +1,56 @@
+{{ define "sidebar_huddles" }}
+<div class="metabar-module">
+	<div class="metabar-module-primary-buttons">
+		<a href="{% url 'create-huddle' %}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-envelope-small"></span> Send a Message</a>
+	</div>
+</div> <!-- primary actions -->
+
+
+<div class="metabar-module">
+	<h5>About</h5>
+	<div class="metabar-module-title">
+		<h3>Messages</h3>
+		<p>Messages are discreet conversations shared with a small group of people.</p>
+		<p>When every person with access to a message has deleted it, the shared conversation and all comments will be physically deleted from the server.</p>
+	</div>
+</div> <!-- / about -->
+
+<div class="metabar-module metabar-filters">
+	<h5>Filters</h5>
+	<div class="metabar-module-title">
+		<h3>
+			Show me ...
+		</h3>
+	</div>
+	<div class="metabar-module-body">
+		<ul class="list-group">
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-unread">
+						<input id="filter-unread" type="checkbox" name="unread" value="true" {% if unread %}checked="checked"{% endif %}/>
+						Unread
+					</label>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<h5>Actions</h5>
+	<form class="metabar-search-form" role="search" action="{% url 'single-search' %}">
+		<div class="input-group">
+			<input
+				type="text"
+				id="navbar-search-input"
+				class="form-control metabar-search-input"
+				name="q"
+				placeholder="Search messages"
+				tabindex="1"
+			/>
+			<input type="hidden" name="type" value="huddle" />
+			<input type="hidden" name="defaults" value="true" />
+			<span class="input-group-btn">
+				<button class="btn btn-default metabar-search-icon"><span class="sprite sprite-search-small"></span></button>
+			</span>
+		</div>
+	</form>
+</div>
+{{ end }}
