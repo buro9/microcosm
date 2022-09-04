@@ -1,6 +1,12 @@
+# github.com/aymerick/douceur v0.2.0
+## explicit
+github.com/aymerick/douceur/css
+github.com/aymerick/douceur/parser
 # github.com/bradfitz/gomemcache v0.0.0-20190913173617-a41fca850d0b
+## explicit; go 1.12
 github.com/bradfitz/gomemcache/memcache
 # github.com/buro9/funcs v0.0.0-20200509155829-0a117fc83732
+## explicit
 github.com/buro9/funcs
 github.com/buro9/funcs/general
 github.com/buro9/funcs/inspect
@@ -9,31 +15,54 @@ github.com/buro9/funcs/safe
 github.com/buro9/funcs/sanitize
 github.com/buro9/funcs/transform
 # github.com/davecgh/go-spew v1.1.1
+## explicit
 github.com/davecgh/go-spew/spew
 # github.com/dustin/go-humanize v1.0.0
+## explicit
 github.com/dustin/go-humanize
 # github.com/go-chi/chi v1.5.4
+## explicit; go 1.16
 github.com/go-chi/chi
 github.com/go-chi/chi/middleware
+# github.com/gorilla/css v1.0.0
+## explicit
+github.com/gorilla/css/scanner
 # github.com/gorilla/securecookie v1.1.1
+## explicit
 github.com/gorilla/securecookie
 # github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
+## explicit
 github.com/gregjones/httpcache
 github.com/gregjones/httpcache/memcache
-# github.com/microcosm-cc/bluemonday v1.0.2
+# github.com/microcosm-cc/bluemonday v1.0.20
+## explicit; go 1.19
 github.com/microcosm-cc/bluemonday
+github.com/microcosm-cc/bluemonday/css
+# github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e
+## explicit; go 1.12
+# github.com/oleiade/reflections v1.0.0
+## explicit
 # github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
+## explicit; go 1.12
 github.com/oxtoacart/bpool
 # github.com/pmezard/go-difflib v1.0.0
+## explicit
 github.com/pmezard/go-difflib/difflib
 # github.com/spf13/cast v1.3.1
+## explicit
 github.com/spf13/cast
 # github.com/stretchr/testify v1.8.0
+## explicit; go 1.13
 github.com/stretchr/testify/assert
-# golang.org/x/net v0.0.0-20200506145744-7e3656a0809f
+# golang.org/x/net v0.0.0-20220826154423-83b083e8dc8b
+## explicit; go 1.17
 golang.org/x/net/html
 golang.org/x/net/html/atom
+# gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f
+## explicit
 # gopkg.in/oleiade/reflections.v1 v1.0.0
+## explicit
 gopkg.in/oleiade/reflections.v1
 # gopkg.in/yaml.v3 v3.0.1
+## explicit
 gopkg.in/yaml.v3

@@ -2,6 +2,7 @@
 # To import subpackages, always prepend the full import path.
 # If you change this, run `make clean`. Read more: https://git.io/vM7zV
 IMPORT_PATH := github.com/buro9/microcosm
+GOCMD := go1.19
 
 V := 1
 
@@ -13,14 +14,14 @@ all: microcosm-web
 
 .PHONY: microcosm-web
 microcosm-web: .GOPATH/.ok
-	$Q go install -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
+	$Q $(GOCMD) install -mod=mod -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
 
 .PHONY: deps
 deps:
-	$Q go list -m -u all
-	$Q go mod tidy
-	$Q go get -u
-	$Q go mod vendor
+	$Q $(GOCMD) list -m -u -mod=mod all
+	$Q $(GOCMD) mod tidy
+	$Q $(GOCMD) get -u
+	$Q $(GOCMD) mod vendor
 
 run: microcosm-web
 	$Q docker-compose up
@@ -40,14 +41,14 @@ clean:
 	$Q rm -rf bin .GOPATH
 
 test: .GOPATH/.ok
-	$Q go test $(if $V,-v) -i -race $(allpackages) # install -race libs to speed up next run
+	$Q $(GOCMD) test $(if $V,-v) -i -race $(allpackages) # install -race libs to speed up next run
 ifndef CI
-	$Q go vet $(allpackages)
-	$Q GODEBUG=cgocheck=2 go test -race $(allpackages)
+	$Q $(GOCMD) vet $(allpackages)
+	$Q GODEBUG=cgocheck=2 $(GOCMD) test -race $(allpackages)
 else
-	$Q ( go vet $(allpackages); echo $$? ) | \
+	$Q ( $(GOCMD) vet $(allpackages); echo $$? ) | \
 	    tee .GOPATH/test/vet.txt | sed '$$ d'; exit $$(tail -1 .GOPATH/test/vet.txt)
-	$Q ( GODEBUG=cgocheck=2 go test -v -race $(allpackages); echo $$? ) | \
+	$Q ( GODEBUG=cgocheck=2 $(GOCMD) test -v -race $(allpackages); echo $$? ) | \
 	    tee .GOPATH/test/output.txt | sed '$$ d'; exit $$(tail -1 .GOPATH/test/output.txt)
 endif
 
@@ -59,20 +60,20 @@ cover: bin/gocovmerge .GOPATH/.ok
 	$Q rm -f .GOPATH/cover/*.out .GOPATH/cover/all.merged
 	$(if $V,@echo "-- go test -coverpkg=./... -coverprofile=.GOPATH/cover/... ./...")
 	@for MOD in $(allpackages); do \
-		go test -coverpkg=`echo $(allpackages)|tr " " ","` \
+		$(GOCMD) test -coverpkg=`echo $(allpackages)|tr " " ","` \
 			-coverprofile=.GOPATH/cover/unit-`echo $$MOD|tr "/" "_"`.out \
 			$$MOD 2>&1 | grep -v "no packages being tested depend on"; \
 	done
 	$Q ./bin/gocovmerge .GOPATH/cover/*.out > .GOPATH/cover/all.merged
 ifndef CI
-	$Q go tool cover -html .GOPATH/cover/all.merged
+	$Q $(GOCMD) tool cover -html .GOPATH/cover/all.merged
 else
-	$Q go tool cover -html .GOPATH/cover/all.merged -o .GOPATH/cover/all.html
+	$Q $(GOCMD) tool cover -html .GOPATH/cover/all.merged -o .GOPATH/cover/all.html
 endif
 	@echo ""
 	@echo "=====> Total test coverage: <====="
 	@echo ""
-	$Q go tool cover -func .GOPATH/cover/all.merged
+	$Q $(GOCMD) tool cover -func .GOPATH/cover/all.merged
 
 format: bin/goimports .GOPATH/.ok
 	$Q find .GOPATH/src/$(IMPORT_PATH)/ -iname \*.go | grep -v \
@@ -86,7 +87,7 @@ setup: clean .GOPATH/.ok
 	    echo "/.GOPATH" >> .gitignore; \
 	    echo "/bin" >> .gitignore; \
 	fi
-	go get -u github.com/FiloSottile/gvt
+	$(GOCMD) get -u github.com/FiloSottile/gvt
 	- ./bin/gvt fetch golang.org/x/tools/cmd/goimports
 	- ./bin/gvt fetch github.com/wadey/gocovmerge
 
@@ -96,7 +97,7 @@ VERSION_FLAGS    := -ldflags='-X "main.Version=$(VERSION)" -X "main.BuildTime=$(
 
 # cd into the GOPATH to workaround ./... not following symlinks
 _allpackages = $(shell ( cd $(CURDIR)/.GOPATH/src/$(IMPORT_PATH) && \
-    GOPATH=$(CURDIR)/.GOPATH go list ./... 2>&1 1>&3 | \
+    GOPATH=$(CURDIR)/.GOPATH $(GOCMD) list ./... 2>&1 1>&3 | \
     grep -v -e "^$$" $(addprefix -e ,$(IGNORED_PACKAGES)) 1>&2 ) 3>&1 | \
     grep -v -e "^$$" $(addprefix -e ,$(IGNORED_PACKAGES)))
 
@@ -120,11 +121,11 @@ Q := $(if $V,,@)
 bin/gocovmerge: .GOPATH/.ok
 	@test -d ./vendor/github.com/wadey/gocovmerge || \
 	    { echo "Vendored gocovmerge not found, try running 'make setup'..."; exit 1; }
-	$Q go install $(IMPORT_PATH)/vendor/github.com/wadey/gocovmerge
+	$Q $(GOCMD) install $(IMPORT_PATH)/vendor/github.com/wadey/gocovmerge
 bin/goimports: .GOPATH/.ok
 	@test -d ./vendor/golang.org/x/tools/cmd/goimports || \
 	    { echo "Vendored goimports not found, try running 'make setup'..."; exit 1; }
-	$Q go install $(IMPORT_PATH)/vendor/golang.org/x/tools/cmd/goimports
+	$Q $(GOCMD) install $(IMPORT_PATH)/vendor/golang.org/x/tools/cmd/goimports
 
 # Based on https://github.com/cloudflare/hellogopher - v1.1 - MIT License
 #
