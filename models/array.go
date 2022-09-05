@@ -43,7 +43,6 @@ func (m *Array) AsHuddleSummaries() *[]HuddleSummary {
 	return &summaries
 }
 
-
 // AsProfileSummaries will return the array items as summaries (of profile type)
 func (m *Array) AsProfileSummaries() *[]ProfileSummary {
 	if m.Items == nil {

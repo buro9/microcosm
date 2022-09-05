@@ -1,10 +1,10 @@
 package templates
 
 import (
+	"embed"
 	"fmt"
 	"html/template"
 	"sync"
-	"embed"
 
 	"github.com/buro9/microcosm/web/templates/funcs"
 )

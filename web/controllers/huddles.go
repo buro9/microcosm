@@ -14,7 +14,7 @@ import (
 // HuddlesGet will fetch the home page
 func HuddlesGet(w http.ResponseWriter, req *http.Request) {
 	// Set the query options
-	q := url.Values{}	
+	q := url.Values{}
 	offset := req.URL.Query().Get("offset")
 	if offset != "" {
 		q.Add("offset", offset)

@@ -57,14 +57,14 @@ type HuddleSummary struct {
 
 	Participants []ProfileSummary `json:"participants"`
 
-	LastCommentID        int64         `json:"lastCommentId,omitempty"`
-	LastCommentCreatedBy ProfileSummary   `json:"lastCommentCreatedBy,omitempty"`
-	LastCommentCreated   time.Time        `json:"lastCommentCreated,omitempty"`
+	LastCommentID        int64          `json:"lastCommentId,omitempty"`
+	LastCommentCreatedBy ProfileSummary `json:"lastCommentCreatedBy,omitempty"`
+	LastCommentCreated   time.Time      `json:"lastCommentCreated,omitempty"`
 
-	Meta struct { 
-		Created     time.Time      `json:"created"`
-		CreatedBy   ProfileSummary `json:"createdBy"`
-		Flags struct {
+	Meta struct {
+		Created   time.Time      `json:"created"`
+		CreatedBy ProfileSummary `json:"createdBy"`
+		Flags     struct {
 			Sticky    bool `json:"sticky,omitempty"`
 			Open      bool `json:"open,omitempty"`
 			Deleted   bool `json:"deleted,omitempty"`
@@ -77,8 +77,8 @@ type HuddleSummary struct {
 			SendSMS   bool `json:"sendSMS,omitempty"`
 			Attending bool `json:"attending,omitempty"`
 		} `json:"flags,omitempty"`
-		Stats       []Stat  `json:"stats,omitempty"`
-		Links       []Link  `json:"links,omitempty"`
+		Stats       []Stat      `json:"stats,omitempty"`
+		Links       []Link      `json:"links,omitempty"`
 		Permissions *Permission `json:"permissions,omitempty"`
 	} `json:"meta"`
 }

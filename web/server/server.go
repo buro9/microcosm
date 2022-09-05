@@ -78,7 +78,7 @@ func ListenAndServe() chan error {
 
 			return
 		})
-		
+
 		router.Get(`/robots.txt`, func(w http.ResponseWriter, r *http.Request) {
 			file, err := inlinedFiles.ReadFile("static/robots.txt")
 			if err != nil {
@@ -100,7 +100,6 @@ func ListenAndServe() chan error {
 			w.Write(file)
 			return
 		})
-
 
 		router.NotFound(controllers.NotFoundStatic)
 	})
