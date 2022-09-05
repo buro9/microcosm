@@ -2,6 +2,7 @@ package server
 
 import (
 	"embed"
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -43,26 +44,63 @@ func ListenAndServe() chan error {
 		router.Post(`/logout/`, controllers.LogoutPost)
 
 		router.NotFound(controllers.NotFound)
-
 	})
 
 	// Static file group, defines minimal middleware
 	router.Group(func(router chi.Router) {
 		// TODO: Log the static, disabled during dev
 		router.Use(mm.RealIP)
-		//router.Use(middleware.RequestID)
+		router.Use(middleware.RequestID)
 		router.Use(middleware.Logger)
-		// router.Use(middleware.Recoverer)
-		// router.Use(apiRoot)
 		router.Use(mm.ForceSSL)
 
 		router.Mount(`/static`, staticFiles())
 
-		// TODO: clear these stubs
-		ok := func(w http.ResponseWriter, req *http.Request) { w.Write([]byte(`OK`)) }
-		router.Get(`/isogram`, ok)
-		router.Get(`/favicon.ico`, ok)
-		router.Get(`/robots.txt`, ok)
+		router.Get(`/favicon.ico`, func(w http.ResponseWriter, r *http.Request) {
+			file, err := inlinedFiles.ReadFile("static/favicon.ico")
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write(
+					[]byte(fmt.Sprintf("500 server error: %s", err.Error())),
+				)
+				return
+			}
+
+			if t, err := time.Parse(http.TimeFormat, r.Header.Get("If-Modified-Since")); err == nil && lastModified.Before(t.Add(1*time.Second)) {
+				w.WriteHeader(304)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set(`Content-Type`, `image/png`)
+			w.Header().Set("Last-Modified", lastModified.UTC().Format(http.TimeFormat))
+			w.Header().Set("Cache-Control", "no-cache")
+			w.Write(file)
+
+			return
+		})
+		
+		router.Get(`/robots.txt`, func(w http.ResponseWriter, r *http.Request) {
+			file, err := inlinedFiles.ReadFile("static/robots.txt")
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write(
+					[]byte(fmt.Sprintf("500 server error: %s", err.Error())),
+				)
+				return
+			}
+
+			if t, err := time.Parse(http.TimeFormat, r.Header.Get("If-Modified-Since")); err == nil && lastModified.Before(t.Add(1*time.Second)) {
+				w.WriteHeader(304)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			w.Header().Set(`Content-Type`, `text/plain`)
+			w.Header().Set("Last-Modified", lastModified.UTC().Format(http.TimeFormat))
+			w.Header().Set("Cache-Control", "no-cache")
+			w.Write(file)
+			return
+		})
+
 
 		router.NotFound(controllers.NotFoundStatic)
 	})
