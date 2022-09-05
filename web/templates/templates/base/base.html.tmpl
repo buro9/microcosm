@@ -331,31 +331,6 @@
 		{{ end }}
 
 {{ template "js" . }}
-
-<!--
-<script type="text/javascript">
-{{ if or (eq .Site.SubdomainKey `dev`) (eq .Site.SubdomainKey `dev1`) (eq .Site.SubdomainKey `dev2`) }}window['ga-disable-UA-36951023-2'] = true;{{ end }}
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','/static/3rd/isogram/201606011835/isogram.js','isogram');
-isogram('create', 'UA-36951023-2', 'auto');
-{{ if .User }}isogram('set', 'userId', {{ .User.ID }});{{ end }}
-isogram(function(tracker) {
-	tracker.set('sendHitTask', function(model) {
-		var payLoad = model.get('hitPayload');
-		var isogramRequest = new XMLHttpRequest();
-		isogramRequest.open('get','/isogram?ua='+encodeURI(window.navigator.userAgent)+'&'+payLoad,true);
-		isogramRequest.send();
-	});
-});
-isogram('send', 'pageview');
-
-{{ if .Site.GaWebPropertyID }}
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create', '{{ .Site.GaWebPropertyID }}', 'auto');
-{{ if .User }}ga('set', 'userId', {{ .User.ID }});{{ end }}
-ga('send', 'pageview');
-{{ end }}
-</script>
--->
 	</body>
 </html>
 {{ end }}

@@ -1,0 +1,105 @@
+{{ define "block_comment_single" }}
+	{{ $comment := .comment }}
+	{{ $parent := .parent }}
+	{{ $itemType := .itemType }}
+	{{ $site := .site }}
+	{{ $user := .user }}
+	
+{% load get_attachment %}
+{% load is_image %}
+<li id="comment{{ $comment.ID }}" class="comment-item padded" itemscope itemtype="http://schema.org/Comment">
+	<a id="{{ $comment.ID }}"></a>
+	<div class="comment-item-inner">
+		<div class="comment-item-header">
+			<div class="comment-item-permalink">
+				<time datetime="{{ $comment.Meta.Created | rfcTime }}" itemprop="dateCreated"></time>
+				<span style="color:#eee">&bull;</span>
+				{% if hide_permalink %}
+					<a href="{{ microcosm_url `comment` $comment.ID }}"><span class="sprite sprite-format-link" itemprop="discussionUrl"></span></a>
+				{% else %}
+				<a href="{{ microcosm_url `comment` $comment.ID }}" itemprop="discussionUrl">#{% forloop.counter|add:pagination.offset %}</a>
+				{% endif %}
+			</div>
+			<div class="comment-item-author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+				{{ if $comment.Meta.CreatedBy }}
+				<a href="{{ microcosm_url `profile` $comment.Meta.CreatedBy.ID }}" itemprop="url"><img src="{{ microcosm_avatar_url $comment.Meta.CreatedBy.AvatarURL $site.SubdomainKey }}" align="left" class="gravatar" itemprop="image" /> <strong class="comment-item-author-name" itemprop="name">{{ trunc $comment.Meta.CreatedBy.ProfileName 25 | safeHTML }}</strong></a>
+				{{ end }}
+
+				{{ if $comment.InReplyTo }}
+				<span class="comment-item-in-reply-to" itemprop="mentions" itemscope itemtype="http://schema.org/Comment">
+					<span class="sprite sprite-arrow-forward"></span>
+					<a href="{{ microcosm_url `comment-incontext` $comment.InReplyTo }}" itemprop="url">in reply to</a> <a href="{{ (microcosm_link $comment.Meta.Links "inReplyToAuthor").Href | safeHTML }}">@{{ (microcosm_link $comment.Meta.Links "inReplyToAuthor").Title | safeHTML }}</a>
+				</span>
+				{{ end }}
+			</div>
+		</div>
+		<div class="comment-item-body" itemprop="text">
+			{{ $comment.HTML | safeHTML }}
+
+{{- /* -}}
+			{{ if attachments }}
+				{% get_attachment $comment.id as comment_attachments %}
+				{% if comment_attachments %}
+					<hr />
+					<p><b>{% if comment_attachments.total > 25 %}25{% else %}{{ comment_attachments.total }}{% endif %} Attachment{{ comment_attachments.total|pluralize }}</b></p>
+					<ul class="comment-item-body-attachments clearfix">
+					{{ for attachment in comment_attachments.items }}
+						{# template_tags/is_image.py non-images first #}
+						{% if not attachment.file_ext|is_image %}
+						<li class="attachment-link">
+							<a href="https://{{site.subdomain_key}}.microco.sm{{ attachment.meta.links.0.href }}"
+							 title="{{ attachment.file_name }}">
+							{{ attachment.file_name }}
+							</a>
+						</li>
+						{{ end }}
+					{{ end }}
+					{{ for attachment in comment_attachments.items }}
+						{# template_tags/is_image.py images second #}
+						{{ if attachment.fileExt | isImage }}
+						<li class="attachment-image"{% if comment_attachments.total > 5 %} style="width: 80px; height: 80px; float:left; margin:2px;"{% endif %}>
+							{% if comment_attachments.total > 5 %}<a href="https://{{site.subdomain_key}}.microco.sm{{ attachment.meta.links.0.href }}">{% endif %}<img src="https://{{site.subdomain_key}}.microco.sm{{ attachment.meta.links.0.href }}" alt="{{ attachment.file_name }}" title="{{ attachment.file_name }}"{% if comment_attachments.total > 5 %} style="width: 80px; height: auto;"{% endif %} />{% if comment_attachments.total > 5 %}</a>{{ end }
+						</li>
+						{{ end }}
+					{{ end }
+					</ul>
+				{{ end }}
+			{{ end }}
+{{- */ -}}
+
+		</div>
+		<div class="comment-item-footer">
+
+		{{ if $user }}
+			{{ if (or $parent.Meta.Permissions.IsSiteOwner $comment.Meta.Permissions.CanDelete ) }}
+			<div class="delete-comment">
+				<form action="{{ microcosm_url `comment-delete` $comment.ID }}" method="POST">
+					{% csrf_token %}
+					<input type="submit" value="Delete" class="comment-item-footer-btn comment-item-footer-btn-last"/>
+				</form>
+			</div>
+			{{ end }}
+
+			{{ if (or $parent.Meta.Permissions.IsSiteOwner (or $comment.Meta.Permissions.CanUpdate (eq $comment.Meta.CreatedBy.ID $user.ID))) }}
+			<a class="insertReplyBox comment-item-footer-btn comment-item-footer-btn-first {{ if not $parent.Meta.Permissions.CanDelete }}comment-item-footer-btn-last{{ end }}"
+				 data-action="{{ microcosm_url `comment-edit` $comment.ID }}"
+				 data-source="{{ microcosm_url `single-comment` $comment.ID }}"
+				 data-comment-id="{{ $comment.ID }}"
+				 data-num-attachments="{{ $comment.Attachments | default 0}}"
+				 href="javascript:void 0">
+				 <span class="sprite sprite-pencil-small"></span>
+				 Edit</a>
+			{{ end }}
+
+			{{ if not (eq $comment.Meta.CreatedBy.ID $user.ID) }}
+				{{ if (or (and $parent.Meta.Flags.Open (eq $itemType `conversation`)) (or (and ($parent.Meta.Flags.Open (eq $itemType `event`))) (eq $itemType `huddle`))) }}
+					<a class="insertReplyBox comment-item-footer-btn comment-item-footer-btn-first comment-item-footer-btn-last comment-reply-button" data-action="{{ microcosm_url `comment-create` }}" data-ref="{{ $comment.ID }}" href="javascript:void 0" ><span class="sprite sprite-arrow-left"></span> Reply</a>
+				{{ end }}
+			{{ end }}
+
+		{{ end }}
+		</div>
+	</div>
+</li>
+
+{{ end }}

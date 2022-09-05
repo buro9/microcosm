@@ -15,23 +15,23 @@ This repository will eventually produce three binaries:
 2. `microcosm-api` which is the JSON API server and talks to the database
 3. `microcosm` which is a combined web application and API in one binary for single server or homogenous server installs
 
-NOTE: Right now only `microcosm-web` is being produced, when the web UI is complete the existing [https://github.com/microcosm-cc/microcosm](https://github.com/microcosm-cc/microcosm) repo that contains the API will be merged or copied in.
+NOTE: Right now only `microcosm-web` is being produced, when the web UI is complete the existing [https://github.com/microcosm-cc/microcosm](https://github.com/microcosm-cc/microcosm) repo that contains the API will be merged or copied in once `microcosm-web` is complete as a standalone client.
 
-All of the binaries can be load balanced and will scale horizontally.
+All of the binaries can be load balanced and will scale horizontally. Only the database will hold state.
 
 ## Features
 
 * Go web and API servers
-* Within the Go web server all API responses are cached if possible (for guest users)
+* Within the Go web server all API responses are cached if possible (including all requests for guest users)
 * Serves both HTTP and HTTPS (including HTTP/2) and forces SSL when required
 * It's fast
-* I can read this and make sense of it
+* I can read this and make sense of it, meaning I can maintain it in future or others could
 
 ## Dependencies
 
-* Go1.7+ (latest stable preferred)
+* Go (latest stable preferred)
 * Memcached running on localhost:11211 (the web client uses a httpcache transport for the API)
-* PostgreSQL 9.4+ (latest stable preferred) with postgresql-contrib and the ltree module installed
+* PostgreSQL (latest stable preferred) with postgresql-contrib and the ltree module installed
 
 ## Usage
 
@@ -48,8 +48,6 @@ Usage of microcosm-web:
       path to the TLS certificate file (default "/etc/ssl/certs/microco.sm.crt")
   -clientSecret string
       the API client secret (default os.Getenv("MICROCOSM_API_CLIENT_SECRET"))
-  -files string
-      directory that contains the templates and static files (default "/srv/microcosm-web")
   -keyFile string
       path to the TLS private key file (default "/etc/ssl/private/microco.sm.key")
   -listen string
@@ -58,8 +56,6 @@ Usage of microcosm-web:
       addr:port on which to serve HTTPS (default ":443")
 ```
 
-I've symlinked `/srv/microcosm-web` to point to `~/Dev/src/github.com/buro9/microcosm/web/files/` which is my local dev location for this repo. I expect to deploy to a prod environment where the static files actually are within `/srv/microcosm-web`. You don't need to do this... you can just set the `-filespath` flag to wherever you have deployed the files.
-
 The cert and key I'm pointing to represent a wildcard cert, you'll need one too if you want to serve more than a single website. Otherwise a Lets Encrypt cert is good enough.
 
-Running the daemon is as simple as `make && sudo bin/microcosm-web`. Why `sudo`? Because port 80 and 443... if you want to bind to those ports you need to sudo. Feel free to change the ports using the flags, and then place the front-end behind an nginx or similar to serve via 80 and 443. However... I intend to expose the UI directly to the world so that we take advantage of the strong default crypto in the Go web server, and for HTTP/2 out of the box.
+Running the daemon is as simple as `make && sudo microcosm-web`. Why `sudo`? Because port 80 and 443... if you want to bind to those ports you need to sudo. Feel free to change the ports using the flags, and then place the front-end behind an nginx or similar to serve via 80 and 443. However... I intend to expose the UI directly to the world so that we take advantage of the strong default crypto in the Go web server, and for HTTP/2 out of the box.

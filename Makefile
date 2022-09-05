@@ -10,7 +10,7 @@ all: microcosm-web
 
 .PHONY: microcosm-web
 microcosm-web:
-	$Q $(GOCMD) install -mod=mod -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
+	$Q $(GOCMD) build -mod=mod -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
 
 .PHONY: deps
 deps:

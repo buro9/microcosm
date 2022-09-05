@@ -8,6 +8,7 @@ type Comment struct {
 	ItemType    string       `json:"itemType"`
 	ItemID      int64        `json:"itemId"`
 	Revisions   int64        `json:"revisions"`
+	InReplyTo   int64        `json:"inReplyTo"`
 	Attachments int64        `json:"attachments"`
 	FirstLine   string       `json:"firstLine"`
 	Markdown    string       `json:"markdown"`

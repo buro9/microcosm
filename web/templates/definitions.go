@@ -5,7 +5,7 @@ import "sync"
 var loadDefinitionsOnce sync.Once
 
 var conversation = []string{
-	"block_list_comment",
+	"block_comment_single",
 	"content_conversation",
 }
 
