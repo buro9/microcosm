@@ -97,16 +97,22 @@ func RootFromRequest(req *http.Request) (string, error) {
 
 func buildAPIURL(params Params) *url.URL {
 	// ensure that we start with a trailing slash
-	if !strings.HasPrefix(params.Endpoint, "/") {
-		params.Endpoint = "/" + params.Endpoint
+	if !strings.HasPrefix(params.PathPrefix, "/") {
+		params.PathPrefix = "/" + params.PathPrefix
 	}
 
 	// not possible to generate an error at this point, as this is not called
 	// before newContext which already barfs on any failure to set the apiRoot
-	u, _ := url.Parse(bag.GetAPIRoot(params.Ctx) + params.Endpoint)
+	u, _ := url.Parse(bag.GetAPIRoot(params.Ctx) + params.PathPrefix)
 
 	if params.ID != 0 {
-		u.Path = fmt.Sprintf("%s/%d", u.Path, params.ID)
+		if params.PathSuffix == "" {
+			u.Path = fmt.Sprintf("%s/%d", u.Path, params.ID)
+		} else {
+			u.Path = fmt.Sprintf("%s/%d/%s", u.Path, params.ID, params.PathSuffix)
+		}
+	} else if params.PathSuffix != "" {
+		u.Path = fmt.Sprintf("%s/%s", u.Path, params.PathSuffix)
 	}
 
 	// Add any querystring args that were set
@@ -127,8 +133,8 @@ func apiGet(params Params) (*http.Response, error) {
 	accessToken := bag.GetAccessToken(params.Ctx)
 
 	var c *http.Client
-	if (params.Endpoint == "site" ||
-		params.Endpoint == "profiles" ||
+	if (params.PathPrefix == "site" ||
+		params.PathPrefix == "profiles" ||
 		accessToken == "") && apiCache != nil {
 		// Standard client using the cache transport for non-authenticated API
 		// requests
@@ -147,9 +153,9 @@ func apiGet(params Params) (*http.Response, error) {
 
 	// Add auth if we have it, though we never use it for the "site" endpoint as
 	// that is a perma-cache item
-	if accessToken != "" && (params.Endpoint != "site" &&
-		params.Endpoint != "profiles" &&
-		params.Endpoint != "") {
+	if accessToken != "" && (params.PathPrefix != "site" &&
+		params.PathPrefix != "profiles" &&
+		params.PathPrefix != "") {
 		req.Header.Add("Authorization", "Bearer "+accessToken)
 	}
 

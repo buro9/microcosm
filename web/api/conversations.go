@@ -10,8 +10,8 @@ import (
 
 // GetConversation returns a conversation if this user (defined by context) has
 // permission to view it
-func GetConversation(ctx context.Context, id int64) (*models.Conversation, error) {
-	resp, err := apiGet(Params{Ctx: ctx, Endpoint: "conversations", ID: id})
+func GetConversation(ctx context.Context, id int64, jumpTo string) (*models.Conversation, error) {
+	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "conversations", ID: id, PathSuffix: jumpTo})
 	if err != nil {
 		return nil, err
 	}

@@ -11,7 +11,7 @@ import (
 // SiteFromAPIContext is used to return a Site given the apiRoot that is within
 // the context.
 func SiteFromAPIContext(ctx context.Context) (*models.Site, error) {
-	resp, err := apiGet(Params{Ctx: ctx, Endpoint: "site"})
+	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "site"})
 	if err != nil {
 		return nil, err
 	}

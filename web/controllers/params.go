@@ -7,11 +7,11 @@ import (
 	"github.com/go-chi/chi"
 )
 
-func asInt64(req *http.Request, name string) int64 {
-	i, _ := strconv.ParseInt(chi.URLParam(req, name), 10, 64)
+func asInt64(r *http.Request, name string) int64 {
+	i, _ := strconv.ParseInt(chi.URLParam(r, name), 10, 64)
 	return i
 }
 
-func asString(req *http.Request, name string) string {
-	return chi.URLParam(req, name)
+func asString(r *http.Request, name string) string {
+	return chi.URLParam(r, name)
 }

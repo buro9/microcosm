@@ -6,8 +6,9 @@ import (
 )
 
 type Params struct {
-	Ctx      context.Context
-	Endpoint string
-	ID       int64
-	Q        url.Values
+	Ctx        context.Context
+	PathPrefix string
+	ID         int64
+	PathSuffix string
+	Q          url.Values
 }

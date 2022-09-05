@@ -5,7 +5,7 @@ import "sync"
 var loadDefinitionsOnce sync.Once
 
 var conversation = []string{
-	"block_comment",
+	"block_list_comment",
 	"content_conversation",
 }
 
@@ -54,42 +54,42 @@ func loadDefinitions() {
 	loadDefinitionsOnce.Do(
 		func() {
 			Templates = []Template{
-				Template{
+				{
 					Base:     "base",
 					Page:     "conversation",
 					Includes: Collate("sidebar_conversation", page, conversation),
 				},
-				Template{
+				{
 					Base:     "base",
 					Page:     "home",
 					Includes: Collate("sidebar_home", page, microcosms),
 				},
-				Template{
+				{
 					Base:     "base",
 					Page:     "huddles",
 					Includes: Collate("sidebar_huddles", page, huddles),
 				},
-				Template{
+				{
 					Base:     "base",
 					Page:     "microcosm",
 					Includes: Collate("sidebar_microcosm", page, microcosms),
 				},
-				Template{
+				{
 					Base:     "base",
 					Page:     "profile",
 					Includes: Collate("sidebar_profile", page, profile),
 				},
-				Template{
+				{
 					Base:     "base",
 					Page:     "profiles",
 					Includes: Collate("sidebar_profiles", page, profiles),
 				},
-				Template{
+				{
 					Base:     "base",
 					Page:     "today",
 					Includes: Collate("sidebar_today", page, searchResults),
 				},
-				Template{
+				{
 					Base:     "base",
 					Page:     "updates",
 					Includes: Collate("sidebar_updates", page, searchResults),

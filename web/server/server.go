@@ -33,15 +33,21 @@ func ListenAndServe() chan error {
 
 		router.Get(`/`, controllers.HomeGet)
 		router.Get(`/auth0login/`, controllers.Auth0LoginGet)
+		router.Post(`/logout/`, controllers.LogoutPost)
+
 		router.Get(`/conversations/{conversationID:[1-9][0-9]+}/`, controllers.ConversationGet)
+		router.Get(`/conversations/{conversationID:[1-9][0-9]+}/{jumpTo:newest}/`, controllers.ConversationGet)
+
 		router.Get(`/huddles/`, controllers.HuddlesGet)
+
 		router.Get(`/microcosms/{microcosmID:[1-9][0-9]+}/`, controllers.MicrocosmGet)
+
 		router.Get(`/profiles/{profileID:[1-9][0-9]+}/`, controllers.ProfileGet)
 		router.Get(`/profiles/`, controllers.ProfilesGet)
-		router.Get(`/today/`, controllers.TodayGet)
-		router.Get(`/updates/`, controllers.UpdatesGet)
 
-		router.Post(`/logout/`, controllers.LogoutPost)
+		router.Get(`/today/`, controllers.TodayGet)
+
+		router.Get(`/updates/`, controllers.UpdatesGet)
 
 		router.NotFound(controllers.NotFound)
 	})

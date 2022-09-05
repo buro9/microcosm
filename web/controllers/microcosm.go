@@ -11,18 +11,18 @@ import (
 )
 
 // MicrocosmGet will fetch the home page
-func MicrocosmGet(w http.ResponseWriter, req *http.Request) {
-	microcosmID := asInt64(req, "microcosmID")
-	microcosm, err := api.GetMicrocosm(req.Context(), microcosmID)
+func MicrocosmGet(w http.ResponseWriter, r *http.Request) {
+	microcosmID := asInt64(r, "microcosmID")
+	microcosm, err := api.GetMicrocosm(r.Context(), microcosmID)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	data := templates.Data{
-		Request:    req,
-		Site:       bag.GetSite(req.Context()),
-		User:       bag.GetProfile(req.Context()),
+		Request:    r,
+		Site:       bag.GetSite(r.Context()),
+		User:       bag.GetProfile(r.Context()),
 		Section:    `home`,
 		Pagination: models.ParsePagination(microcosm.Items),
 
@@ -31,7 +31,7 @@ func MicrocosmGet(w http.ResponseWriter, req *http.Request) {
 
 	err = templates.RenderHTML(w, "microcosm", data)
 	if err != nil {
-		fmt.Println("could not render microcosm")
+		fmt.Printf("could not render %s\n", r.URL)
 		w.Write([]byte(err.Error()))
 	}
 }

@@ -31,7 +31,7 @@ func Auth0Login(ctx context.Context, code string, state string) (string, error) 
 		ClientSecret: *opts.ClientSecret,
 	}
 
-	resp, err := apiPost(Params{Ctx: ctx, Endpoint: "auth0"}, auth0)
+	resp, err := apiPost(Params{Ctx: ctx, PathPrefix: "auth0"}, auth0)
 	if err != nil {
 		log.Printf("apiPost(`auth0`): %s", err.Error())
 		return "", err

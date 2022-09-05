@@ -1,6 +1,6 @@
 {{ define "title" }}
 <title>{{ .Conversation.Title | safeHTML }}{{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
-<meta name="Description" content="{{ (.Conversation.Items 0).HTML | stripTags }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }}" />
+<meta name="Description" content="{{ (index (.Conversation.Items.AsComments) 0).HTML | stripTags }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }}" />
 {{ end }}
 
 {{ define "content" }}
@@ -12,14 +12,14 @@
 {{ end }}
 
 {{ define "js" }}
-<script type="text/javascript" src="/statis/js/jquery.textcomplete.min.js"></script>
-<script type="text/javascript" src="/statis/js/comments.js?v=201607027"></script>
-<script type="text/javascript" src="/statis/js/formValidator.js"></script>
-<script type="text/javascript" src="/statis/js/attachments.js"></script>
+<script type="text/javascript" src="/static/js/jquery.textcomplete.min.js"></script>
+<script type="text/javascript" src="/static/js/comments.js?v=201607027"></script>
+<script type="text/javascript" src="/static/js/formValidator.js"></script>
+<script type="text/javascript" src="/static/js/attachments.js"></script>
 
-<script type="text/javascript" src="/statis/js/Markdown.Converter.js"></script>
-<script type="text/javascript" src="/statis/js/Markdown.Editor.js?v20160728"></script>
-<script type="text/javascript" src="/statis/js/simpleEditor.js?v=201607027"></script>
+<script type="text/javascript" src="/static/js/Markdown.Converter.js"></script>
+<script type="text/javascript" src="/static/js/Markdown.Editor.js?v20160728"></script>
+<script type="text/javascript" src="/static/js/simpleEditor.js?v=201607027"></script>
 <script type="text/javascript">
 (function(){
 
@@ -48,7 +48,7 @@
 		type      : 'conversation',
 		id        : {{ .Conversation.ID }},
 //		token     : '{ { csrf_token } }', // TODO: Add CSRF token
-		is_subscribed : {{ .Conversation.Meta.Flags.Watched  | default `false` | lower  }}
+		is_subscribed : {{ if .Conversation.Meta.Flags.Watched }}true{{else}}false{{end}};
 	});
 
 })();

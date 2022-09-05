@@ -12,7 +12,7 @@ import (
 )
 
 // TodayGet will return the today page
-func TodayGet(w http.ResponseWriter, req *http.Request) {
+func TodayGet(w http.ResponseWriter, r *http.Request) {
 	q := url.Values{}
 	q.Add("since", "-1")
 	q.Add("type", "conversation")
@@ -20,21 +20,21 @@ func TodayGet(w http.ResponseWriter, req *http.Request) {
 	q.Add("type", "profile")
 	q.Add("type", "huddle")
 
-	offset := req.URL.Query().Get("offset")
+	offset := r.URL.Query().Get("offset")
 	if offset != "" {
 		q.Add("offset", offset)
 	}
 
-	searchResults, err := api.DoSearch(req.Context(), q)
+	searchResults, err := api.DoSearch(r.Context(), q)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	data := templates.Data{
-		Request:    req,
-		Site:       bag.GetSite(req.Context()),
-		User:       bag.GetProfile(req.Context()),
+		Request:    r,
+		Site:       bag.GetSite(r.Context()),
+		User:       bag.GetProfile(r.Context()),
 		Section:    `today`,
 		Pagination: models.ParsePagination(searchResults.Items),
 
@@ -43,7 +43,7 @@ func TodayGet(w http.ResponseWriter, req *http.Request) {
 
 	err = templates.RenderHTML(w, "today", data)
 	if err != nil {
-		fmt.Println("could not render today")
+		fmt.Printf("could not render %s\n", r.URL)
 		w.Write([]byte(err.Error()))
 	}
 }

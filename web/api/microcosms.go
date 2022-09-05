@@ -11,7 +11,7 @@ import (
 // GetMicrocosm returns a microcosm if this user (defined by context) has
 // permission to view it
 func GetMicrocosm(ctx context.Context, id int64) (*models.Microcosm, error) {
-	resp, err := apiGet(Params{Ctx: ctx, Endpoint: "microcosms", ID: id})
+	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "microcosms", ID: id})
 	if err != nil {
 		return nil, err
 	}

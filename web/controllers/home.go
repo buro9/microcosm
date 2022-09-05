@@ -11,17 +11,17 @@ import (
 )
 
 // HomeGet will fetch the home page
-func HomeGet(w http.ResponseWriter, req *http.Request) {
-	rootMicrocosm, err := api.GetMicrocosm(req.Context(), 0)
+func HomeGet(w http.ResponseWriter, r *http.Request) {
+	rootMicrocosm, err := api.GetMicrocosm(r.Context(), 0)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	data := templates.Data{
-		Request:    req,
-		Site:       bag.GetSite(req.Context()),
-		User:       bag.GetProfile(req.Context()),
+		Request:    r,
+		Site:       bag.GetSite(r.Context()),
+		User:       bag.GetProfile(r.Context()),
 		Section:    `home`,
 		Pagination: models.ParsePagination(rootMicrocosm.Items),
 
@@ -30,7 +30,7 @@ func HomeGet(w http.ResponseWriter, req *http.Request) {
 
 	err = templates.RenderHTML(w, "home", data)
 	if err != nil {
-		fmt.Println("could not render home")
+		fmt.Printf("could not render %s\n", r.URL)
 		w.Write([]byte(err.Error()))
 	}
 }

@@ -14,18 +14,18 @@ import (
 )
 
 // ProfilesGet will return a page listing profiles
-func ProfilesGet(w http.ResponseWriter, req *http.Request) {
+func ProfilesGet(w http.ResponseWriter, r *http.Request) {
 	// Query the profiles
-	profiles, err := api.GetProfiles(req.Context(), req.URL.Query())
+	profiles, err := api.GetProfiles(r.Context(), r.URL.Query())
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	data := templates.Data{
-		Request:    req,
-		Site:       bag.GetSite(req.Context()),
-		User:       bag.GetProfile(req.Context()),
+		Request:    r,
+		Site:       bag.GetSite(r.Context()),
+		User:       bag.GetProfile(r.Context()),
 		Section:    `profiles`,
 		Pagination: models.ParsePagination(profiles.Items),
 
@@ -34,13 +34,13 @@ func ProfilesGet(w http.ResponseWriter, req *http.Request) {
 
 	err = templates.RenderHTML(w, "profiles", data)
 	if err != nil {
-		fmt.Println("could not render profiles")
+		fmt.Printf("could not render %s\n", r.URL)
 		w.Write([]byte(err.Error()))
 	}
 }
 
 // ProfileGet will return a page displaying a single profile
-func ProfileGet(w http.ResponseWriter, req *http.Request) {
+func ProfileGet(w http.ResponseWriter, r *http.Request) {
 	var wg sync.WaitGroup
 
 	// Query the profile
@@ -49,13 +49,13 @@ func ProfileGet(w http.ResponseWriter, req *http.Request) {
 		profileErr error
 	)
 
-	profileID := asInt64(req, "profileID")
+	profileID := asInt64(r, "profileID")
 
 	wg.Add(1)
 	go func(ctx context.Context, profileID int64) {
 		defer wg.Done()
-		profile, profileErr = api.GetProfile(req.Context(), profileID)
-	}(req.Context(), profileID)
+		profile, profileErr = api.GetProfile(r.Context(), profileID)
+	}(r.Context(), profileID)
 
 	// Query the items that they've created
 	var (
@@ -69,15 +69,15 @@ func ProfileGet(w http.ResponseWriter, req *http.Request) {
 	q.Add("type", "profile")
 	q.Add("type", "huddle")
 	q.Add("type", "comment")
-	q.Add("authorId", asString(req, "profileID"))
+	q.Add("authorId", asString(r, "profileID"))
 	q.Add("limit", "10")
 	q.Add("sort", "date")
 
 	wg.Add(1)
 	go func(ctx context.Context, q url.Values) {
 		defer wg.Done()
-		searchResults, searchErr = api.DoSearch(req.Context(), q)
-	}(req.Context(), q)
+		searchResults, searchErr = api.DoSearch(r.Context(), q)
+	}(r.Context(), q)
 
 	// Wait for all queries and check for errors
 	wg.Wait()
@@ -94,9 +94,9 @@ func ProfileGet(w http.ResponseWriter, req *http.Request) {
 
 	// Stitch it together for the template
 	data := templates.Data{
-		Request: req,
-		Site:    bag.GetSite(req.Context()),
-		User:    bag.GetProfile(req.Context()),
+		Request: r,
+		Site:    bag.GetSite(r.Context()),
+		User:    bag.GetProfile(r.Context()),
 		Section: `profiles`,
 
 		Profile:       profile,
@@ -105,7 +105,7 @@ func ProfileGet(w http.ResponseWriter, req *http.Request) {
 
 	err := templates.RenderHTML(w, "profile", data)
 	if err != nil {
-		fmt.Println("could not render profile")
+		fmt.Printf("could not render %s\n", r.URL)
 		w.Write([]byte(err.Error()))
 	}
 }

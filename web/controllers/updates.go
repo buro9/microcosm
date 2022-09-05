@@ -12,23 +12,23 @@ import (
 )
 
 // UpdatesGet will return the updates page
-func UpdatesGet(w http.ResponseWriter, req *http.Request) {
+func UpdatesGet(w http.ResponseWriter, r *http.Request) {
 	q := url.Values{}
-	offset := req.URL.Query().Get("offset")
+	offset := r.URL.Query().Get("offset")
 	if offset != "" {
 		q.Add("offset", offset)
 	}
 
-	updatesResults, err := api.GetUpdates(req.Context(), q)
+	updatesResults, err := api.GetUpdates(r.Context(), q)
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
 	}
 
 	data := templates.Data{
-		Request:    req,
-		Site:       bag.GetSite(req.Context()),
-		User:       bag.GetProfile(req.Context()),
+		Request:    r,
+		Site:       bag.GetSite(r.Context()),
+		User:       bag.GetProfile(r.Context()),
 		Section:    `updates`,
 		Pagination: models.ParsePagination(updatesResults.Items),
 
@@ -37,7 +37,7 @@ func UpdatesGet(w http.ResponseWriter, req *http.Request) {
 
 	err = templates.RenderHTML(w, "updates", data)
 	if err != nil {
-		fmt.Println("could not render updates")
+		fmt.Printf("could not render %s\n", r.URL)
 		w.Write([]byte(err.Error()))
 	}
 }
