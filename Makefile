@@ -1,6 +1,3 @@
-# The import path is where your repository can be found.
-# To import subpackages, always prepend the full import path.
-# If you change this, run `make clean`. Read more: https://git.io/vM7zV
 IMPORT_PATH := github.com/buro9/microcosm
 GOCMD := go1.19
 
@@ -12,7 +9,7 @@ VERSION_FLAGS    := -ldflags='-X "main.Version=$(VERSION)" -X "main.BuildTime=$(
 all: microcosm-web
 
 .PHONY: microcosm-web
-microcosm-web: .GOPATH/.ok
+microcosm-web:
 	$Q $(GOCMD) install -mod=mod -v $(VERSION_FLAGS) $(IMPORT_PATH)/cmd/microcosm-web
 
 .PHONY: deps
