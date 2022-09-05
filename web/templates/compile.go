@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"html/template"
 	"sync"
+	"embed"
 
-	"github.com/buro9/microcosm/web/opts"
 	"github.com/buro9/microcosm/web/templates/funcs"
 )
 
@@ -15,6 +15,9 @@ var compileTemplatesOnce sync.Once
 // from the definitions held in definitions.go, the definitions themselves use
 // the Templates slice
 var templates map[string]*template.Template
+
+//go:embed templates/*/*.html.tmpl
+var templateFS embed.FS
 
 // Compile compiles templates and is expected to be called by main.go
 // as we require that the flags are parsed first to obtain the value of
@@ -26,7 +29,7 @@ func Compile() {
 				templates = make(map[string]*template.Template)
 			}
 
-			pathFormat := *opts.FilesPath + "/templates/%s/%s.html.tmpl"
+			pathFormat := "templates/%s/%s.html.tmpl"
 
 			for _, t := range Templates {
 				// Gather a list of all files required by this template
@@ -50,7 +53,8 @@ func Compile() {
 				// runtime error
 				templates[t.Page] =
 					template.Must(
-						template.New(t.Base).Funcs(funcs.FuncMap).ParseFiles(
+						template.New(t.Base).Funcs(funcs.FuncMap).ParseFS(
+							templateFS,
 							paths...,
 						),
 					)
