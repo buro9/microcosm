@@ -62,4 +62,4 @@ I've symlinked `/srv/microcosm-web` to point to `~/Dev/src/github.com/buro9/micr
 
 The cert and key I'm pointing to represent a wildcard cert, you'll need one too if you want to serve more than a single website. Otherwise a Lets Encrypt cert is good enough.
 
-Running the daemon is as simple as `amke && sudo bin/microcosm-web`. Why `sudo`? Because port 80 and 443... if you want to bind to those ports you need to sudo. Feel free to change the ports using the flags, and then place the front-end behind an nginx or similar to serve via 80 and 443. However... I intend to expose the UI directly to the world so that we take advantage of the strong default crypto in the Go web server, and for HTTP/2 out of the box.
+Running the daemon is as simple as `make && sudo bin/microcosm-web`. Why `sudo`? Because port 80 and 443... if you want to bind to those ports you need to sudo. Feel free to change the ports using the flags, and then place the front-end behind an nginx or similar to serve via 80 and 443. However... I intend to expose the UI directly to the world so that we take advantage of the strong default crypto in the Go web server, and for HTTP/2 out of the box.

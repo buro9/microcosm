@@ -7,20 +7,20 @@ var Templates []Template
 // Template is a description of a HTML page as a collection of template files.
 type Template struct {
 	// Base represents the template file at
-	// {*opts.FilesPath}/base/{template.Base}.tmpl
+	// base/{template.Base}.tmpl
 	//
 	// This is expected to contain the HTML header, navigation and footer as
 	// well as the core structure of the HTML page.
 	Base string
 
 	// Page represents the template file at
-	// {*opts.FilesPath}/pages/{template.Page}.tmpl
+	// pages/{template.Page}.tmpl
 	//
 	// This is expected to be the content that populates the Base template
 	Page string
 
 	// Includes is an optional list of template files at
-	// {*opts.FilesPath}/includes/{template.Includes[i]}.tmpl
+	// includes/{template.Includes[i]}.tmpl
 	//
 	// These are expected to be common blocks that multiple pages may use
 	Includes []string

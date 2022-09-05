@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"embed"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -55,7 +56,7 @@ func ListenAndServe() chan error {
 		router.Use(mm.ForceSSL)
 
 		router.Mount(`/static`, staticFiles())
-		
+
 		// TODO: clear these stubs
 		ok := func(w http.ResponseWriter, req *http.Request) { w.Write([]byte(`OK`)) }
 		router.Get(`/isogram`, ok)
@@ -108,6 +109,9 @@ func ListenAndServe() chan error {
 	return errs
 }
 
+//go:embed static/*
+var inlinedFiles embed.FS
+
 func staticFiles() http.Handler {
 	router := chi.NewRouter()
 
@@ -137,10 +141,7 @@ func staticFiles() http.Handler {
 
 	// Serve static files
 	router.Mount(`/`,
-		http.StripPrefix(
-			`/static/`,
-			http.FileServer(http.Dir(*opts.FilesPath+`/static/`)),
-		),
+		http.FileServer(http.FS(inlinedFiles)),
 	)
 
 	return router

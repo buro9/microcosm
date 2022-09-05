@@ -2,9 +2,7 @@ package opts
 
 import (
 	"flag"
-	"fmt"
 	"os"
-	"strings"
 	"sync"
 
 	"github.com/gorilla/securecookie"
@@ -13,7 +11,6 @@ import (
 const (
 	envPrefix = "MICROCOSM_WEB_"
 
-	defaultFilesPath    = "/srv/microcosm-web"
 	defaultListen       = ":80"
 	defaultTLSListen    = ":443"
 	defaultCertFile     = "/etc/ssl/certs/microco.sm.crt"
@@ -29,10 +26,6 @@ const (
 var parseFlags sync.Once
 
 var (
-	// FilesPath is the path to the directory on the file system that contains
-	// the static file and template directories
-	FilesPath *string
-
 	// Listen is the addr:port that the HTTP server will listen on
 	Listen *string
 
@@ -78,16 +71,6 @@ var (
 func RegisterFlags() {
 	parseFlags.Do(
 		func() {
-			FilesPath = flag.String(
-				"microcosmWebFiles",
-				"",
-				`directory that contains the templates and static files
-	alternatively $`+envPrefix+`FILES
-	(default "`+defaultFilesPath+`")`,
-			)
-			if *FilesPath != "" {
-				*FilesPath = strings.TrimRight(*FilesPath, "/")
-			}
 
 			Listen = flag.String(
 				"microcosmWebListen",
@@ -172,23 +155,6 @@ func RegisterFlags() {
 // Some attempt is also made to ensure that the values are correct, i.e. that
 // paths are readable.
 func ValidateFlags() error {
-	// FilesPath
-	if FilesPath == nil || *FilesPath == "" {
-		path := os.Getenv(envPrefix + "FILES")
-		FilesPath = &path
-	}
-	if *FilesPath == "" {
-		path := defaultFilesPath
-		FilesPath = &path
-	}
-	if strings.HasSuffix(*FilesPath, `/`) {
-		*FilesPath = strings.TrimSuffix(*FilesPath, `/`)
-	}
-	if _, err := os.Stat(*FilesPath); err != nil {
-		fmt.Println(err.Error())
-		return ErrFilesPathNotReadable
-	}
-
 	// Listen
 	if Listen == nil || *Listen == "" {
 		listen := os.Getenv(envPrefix + "LISTEN")
