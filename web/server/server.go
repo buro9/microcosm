@@ -1,10 +1,11 @@
 package server
 
 import (
+	"embed"
 	"log"
 	"net/http"
 	"strings"
-	"embed"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -111,6 +112,7 @@ func ListenAndServe() chan error {
 
 //go:embed static/*
 var inlinedFiles embed.FS
+var lastModified time.Time = time.Now()
 
 func staticFiles() http.Handler {
 	router := chi.NewRouter()
@@ -118,6 +120,11 @@ func staticFiles() http.Handler {
 	// Do nothing, but implement http.Handler
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if t, err := time.Parse(http.TimeFormat, r.Header.Get("If-Modified-Since")); err == nil && lastModified.Before(t.Add(1*time.Second)) {
+				w.WriteHeader(304)
+				return
+			}
+
 			switch {
 			case strings.HasSuffix(r.URL.Path, `.css`):
 				w.Header().Set(`Content-Type`, `text/css`)
@@ -134,6 +141,9 @@ func staticFiles() http.Handler {
 			case strings.HasSuffix(r.URL.Path, `.svg`):
 				w.Header().Set(`Content-Type`, `image/svg+xml`)
 			}
+
+			w.Header().Set("Last-Modified", lastModified.UTC().Format(http.TimeFormat))
+			w.Header().Set("Cache-Control", "no-cache")
 
 			next.ServeHTTP(w, r)
 		})
