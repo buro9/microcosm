@@ -15,18 +15,18 @@ import (
 // signed-in user will have Site and User along with whatever fields are
 // relevant for the current page.
 type Data struct {
-	// Every request
+	// Every request has these
 	Request    *http.Request
 	Site       *models.Site
-	Section    string
+	Section    string // Which part of the navbar to highlight
 	Query      *models.SearchQuery
 	Pagination *models.Pagination
 
-	// If signed-in
+	// If signed-in, this represents the signed-in user
 	User *models.Profile
 
-	// Depending on context, templates may expect the applicable one to be
-	// filled in
+	// Depending on page and context, templates may expect the applicable one
+	// to be filled in
 	Array         *models.Array
 	Conversation  *models.Conversation
 	Huddles       *models.Huddles

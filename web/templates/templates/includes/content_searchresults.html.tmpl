@@ -24,7 +24,7 @@
 				{{ template "block_event" (dict "event" (.AsEventSummary .Item) "showForum" false "user" $user) }}
 
 			{{ else if eq .ItemType "huddle" }}
-				{{ template "block_huddle" (dict "huddle" (.AsHuddleSummary .Item) "site" $site "user" $user)}}
+				{{ template "block_huddle" (dict "huddle" (.AsHuddleSummary .Item) "site" $site "user" $user "unread" .Meta.Flags.Unread )}}
 
 			{{ else if eq .ItemType "microcosm" }}
 				{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" false "user" $user) }}

@@ -50,8 +50,8 @@
 				</ul>
 			</div>
 			<div class="cell-recent">
-				{{ if gt $huddle.LastComment.ID 0 }}
-					<a href="{{ microcosm_url "profile" $huddle.LastComment.CreatedBy.ID }}">@{{ trunc $huddle.LastComment.CreatedBy.ProfileName 25 | safeHTML }}</a> <a href="{{ microcosm_url "comment-incontext" $huddle.LastComment.ID }}">replied</a> <time datetime="{{ $huddle.LastComment.Created | rfcTime }}">{{ $huddle.LastComment.Created | naturalTime }}</time>
+				{{ if gt $huddle.LastCommentID 0 }}
+					<a href="{{ microcosm_url "profile" $huddle.LastCommentCreatedBy.ID }}">@{{ trunc $huddle.LastCommentCreatedBy.ProfileName 25 | safeHTML }}</a> <a href="{{ microcosm_url "comment-incontext" $huddle.LastCommentID }}">replied</a> <time datetime="{{ $huddle.LastCommentCreated | rfcTime }}">{{ $huddle.LastCommentCreated | naturalTime }}</time>
 				{{ else }}
 					<a href="{{ microcosm_url "profile" $huddle.Meta.CreatedBy.ID }}">@{{ trunc $huddle.Meta.CreatedBy.ProfileName 25 | safeHTML }}</a> replied <time datetime="{{ $huddle.Meta.Created | rfcTime }}">{{ $huddle.Meta.Created | naturalTime }}</time>
 				{{ end }}

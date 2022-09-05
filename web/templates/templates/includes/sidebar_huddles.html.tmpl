@@ -27,7 +27,7 @@
 			<li class="list-group-item">
 				<div class="checkbox">
 					<label for="filter-unread">
-						<input id="filter-unread" type="checkbox" name="unread" value="true" {% if unread %}checked="checked"{% endif %}/>
+						<input id="filter-unread" type="checkbox" name="unread" value="true" {{ if isSet .Request.URL.Query "unread" }}checked="checked"{{ end }}/>
 						Unread
 					</label>
 				</div>

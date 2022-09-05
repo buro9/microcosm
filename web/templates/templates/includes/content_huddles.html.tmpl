@@ -17,7 +17,7 @@
 		{{ $site := .Site }}
 		{{ $user := .User }}
 		{{ range .Huddles.Items.AsHuddleSummaries }}
-			{{ template "block_huddle" (dict "huddle" . "site" $site "user" $user)}}
+			{{ template "block_huddle" (dict "huddle" . "site" $site "user" $user "unread" .Meta.Flags.Unread )}}
 		{{ end }}
 		</ul>
 	</div>
