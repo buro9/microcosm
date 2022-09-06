@@ -1,29 +1,39 @@
 {{ define "content_conversation" }}
 <div class="content-header padded">
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			{{ template "breadcrumb" (dict "content" .Conversation "skipParents" false "skipSelf" true "section" .Section) }}
-		</div>
-		<div class="col-sm-6">
-			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
 		</div>
 	</div>
 </div>
 
-<div class="content-body">
-	<!-- TODO {% include "forms/content-moderation.html" %} -->
-	<div class="list-items">
-		<ul class="list-collection bordered padded">
+<div class="content-body" itemscope itemtype="http://schema.org/Article">
+	<div class="item">
+		<div class="item-header padded">
+			<h1 itemprop="name"><a id="title" href="{{ (microcosm_link .Conversation.Meta.Links `self`).Href | microcosm_api2ui }}">{{ .Conversation.Title | safeHTML }}</a></h1>
+			<div class="row">
+				<div class="item-meta col-sm-6">
+					Posted on <strong><time class="plain" itemprop="dateCreated" datetime="{{ .Conversation.Meta.Created | rfcTime }}">{{ .Conversation.Meta.Created | naturalTime }}</time></strong>
+					{# {% include "forms/content-moderation.html" %} #}
+				</div>
+				<div class="col-sm-6">
+					{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<ul class="list-comments">
 		{{ $user := .User }}
 		{{ $parent := .Conversation }}
 		{{ $site := .Site }}
 		{{ range $index, $comment := .Comments}}
 			{{ template "block_comment_single" (dict "comment" $comment "hidePermalink" false "index" $index "itemType" "conversation" "parent" $parent "site" $site "user" $user) }}
 		{{ end }}
-		</ul>
-	</div>
-	<!-- TODO {% include "forms/content-moderation.html" %} -->
+	</ul>
+	{# {% include "forms/content-moderation.html" %} #}
 </div>
+
 
 <div class="content-footer padded">
 	<div class="row">

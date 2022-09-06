@@ -3,41 +3,40 @@
 	<li><a href="{{ microcosm_url `home` }}">Home</a></li>
 
 	{{ if not .skipParents }}
-		{{ if and (isSet .content "Breadcrumb") (gt (len .content.Breadcrumb) 0) }}
+		{{ if and (hasField .content `Breadcrumb`) (gt (len .content.Breadcrumb) 0) }}
 			{{ range .content.Breadcrumb }}
-				<li><a href="{{ .Href }}">{{ .Title | safeHTML }}</a></li>
+				<li><a href="{{ .Href | microcosm_api2ui }}">{{ .Title | safeHTML }}</a></li>
 			{{ end }}
 		{{ else }}
 			{{ range (microcosm_reverseLinks .content.Meta.Links) }}
-				{{ if and (ne .Text "") (ne .Rel "up") }}
+				{{ if and (ne .Text ``) (ne .Rel `up`) }}
 					<li><a href="{{ .Href | microcosm_api2ui }}">{{ .Text | safeHTML }}</a></li>
 				{{ end }}
 			{{ end }}
 		{{ end }}
 	{{ end }}
 
-	{{ if hasField .content "IsConfidential" }}
+	{{ if isSet .content `isConfidential` }}
 		<li><a href="{{ microcosm_url `huddle-list` }}">Messages</a></li>
 	{{ end }}
 
-	{{ if hasField .content "UserID" }}
+	{{ if (eq .Section `profiles`) }}
 		<li><a href="{{ microcosm_url `profile-list` }}">People</a></li>
 	{{ end }}
 
 	{{ if not .skipSelf }}
-		{{ if .content.ProfileName | safeHTML }}
-			<li><a href="{{ (microcosm_link .content.Meta.Links "self").Href | microcosm_api2ui }}">{{ .content.ProfileName | safeHTML }}</a></li>
-			{{ if in (microcosm_link .content.Meta.Links "self").Href "huddles" }}
-				<li><a href="{{ (microcosm_link .content.Meta.Links "self").Href | microcosm_api2ui }}">Messages</a></li>
-			{{ else if eq .section "legal" }}
-				<li><a href="{{ microcosm_url "legal-list" }}">About</a></li>
-			{{ else if not isNil .content.Title }}
-				<li><a href="{{ (microcosm_link .content.Meta.Links "self").Href | microcosm_api2ui }}">{{ .content.Text }}</a></li>
-			{{ end }}
+		{{ if (isSet .content `ProfileName`) }}
+			<li><a href="{{ (microcosm_link .content.Meta.Links `self`).Href | microcosm_api2ui }}">{{ .content.ProfileName | safeHTML }}</a></li>
+		{{ else if in (microcosm_link .content.Meta.Links `self`).Href "huddles" }}
+			<li><a href="{{ (microcosm_link .content.Meta.Links `self`).Href | microcosm_api2ui }}">Messages</a></li>
+		{{ else if eq .section "legal" }}
+			<li><a href="{{ microcosm_url "legal-list" }}">About</a></li>
+		{{ else if (and (hasField .content `Title`) (ne .content.Title ``)) }}
+			<li><a href="{{ (microcosm_link .content.Meta.Links `self`).Href | microcosm_api2ui }}">Title{{ .content.Title }}</a></li>
 		{{ end }}
 	{{ end }}
 
-	{{ if eq .section "memberships" }}
+	{{ if eq .section `memberships` }}
 		<li><a id="groupslink" href="{{ microcosm_url `memberships-list` .content.ID }}">Membership Groups</a></li>
 	{{ end }}
 </ol>
