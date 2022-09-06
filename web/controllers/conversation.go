@@ -20,7 +20,7 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 	default:
 	}
 
-	conversation, err := api.GetConversation(r.Context(), conversationID, jumpTo)
+	conversation, err := api.GetConversation(r.Context(), conversationID, jumpTo, r.URL.Query())
 	if err != nil {
 		w.Write([]byte(err.Error()))
 		return
