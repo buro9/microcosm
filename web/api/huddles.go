@@ -23,7 +23,7 @@ func GetHuddles(ctx context.Context, query url.Values) (*models.Huddles, error) 
 		q.Add("offset", offset)
 	}
 
-	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "huddles", Q: q})
+	resp, err := apiGet(Params{Ctx: ctx, Type: "huddles", Q: q})
 	if err != nil {
 		return nil, err
 	}

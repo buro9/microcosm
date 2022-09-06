@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"strconv"
 
 	"github.com/buro9/microcosm/models"
 )
 
 // GetMicrocosm returns a microcosm if this user (defined by context) has
 // permission to view it
-func GetMicrocosm(ctx context.Context, id int64) (*models.Microcosm, error) {
-	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "microcosms", ID: id})
+func GetMicrocosm(ctx context.Context, microcosmID int64) (*models.Microcosm, error) {
+	resp, err := apiGet(Params{Ctx: ctx, Type: "microcosms", TypeID: strconv.FormatInt(microcosmID, 10)})
 	if err != nil {
 		return nil, err
 	}

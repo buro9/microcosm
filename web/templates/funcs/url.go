@@ -76,6 +76,8 @@ func url(key string, args ...interface{}) string {
 			}
 		case int64:
 			switch key {
+			case "comment":
+				return fmt.Sprintf("/comments/%d/", v)
 			case "comment-incontext":
 				return fmt.Sprintf("/comments/%d/incontext/", v)
 			case "conversation-create":

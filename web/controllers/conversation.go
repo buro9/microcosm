@@ -26,6 +26,20 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Horrible cludge of code to fetch attachments for any comments that has attachments
+	var comments []models.Comment
+	for _, comment := range *conversation.Items.AsComments() {
+		if comment.Attachments > 0 {
+			commentAttachments, err := api.GetCommentAttachments(r.Context(), comment.ID)
+			if err != nil {
+				w.Write([]byte(err.Error()))
+				return
+			}
+			comment.Files = *commentAttachments.Attachments.AsAttachments()
+		}
+		comments = append(comments,comment)
+	}
+
 	data := templates.Data{
 		Request:    r,
 		Site:       bag.GetSite(r.Context()),
@@ -33,6 +47,7 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 		Section:    `home`,
 		Pagination: models.ParsePagination(conversation.Items),
 
+		Comments: &comments,
 		Conversation: conversation,
 	}
 

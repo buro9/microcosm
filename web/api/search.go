@@ -11,7 +11,7 @@ import (
 
 // DoSearch will perform a search against the search API for a given query
 func DoSearch(ctx context.Context, q url.Values) (*models.SearchResults, error) {
-	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "search", Q: q})
+	resp, err := apiGet(Params{Ctx: ctx, Type: "search", Q: q})
 	if err != nil {
 		return nil, err
 	}

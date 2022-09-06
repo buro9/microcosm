@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/buro9/microcosm/models"
@@ -22,7 +23,7 @@ func ProfileFromAPIContext(ctx context.Context) (*models.Profile, error) {
 		return nil, nil
 	}
 
-	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "whoami"})
+	resp, err := apiGet(Params{Ctx: ctx, Type: "whoami"})
 	if err != nil {
 		switch resp.StatusCode {
 		case http.StatusUnauthorized: // 401
@@ -80,7 +81,7 @@ func GetProfiles(ctx context.Context, query url.Values) (*models.Profiles, error
 		q.Add("offset", offset)
 	}
 
-	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "profiles", Q: q})
+	resp, err := apiGet(Params{Ctx: ctx, Type: "profiles", Q: q})
 	if err != nil {
 		return nil, err
 	}
@@ -102,8 +103,8 @@ func GetProfiles(ctx context.Context, query url.Values) (*models.Profiles, error
 }
 
 // GetProfile returns a single profile for a given search.
-func GetProfile(ctx context.Context, id int64) (*models.Profile, error) {
-	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "profiles", ID: id})
+func GetProfile(ctx context.Context, profileID int64) (*models.Profile, error) {
+	resp, err := apiGet(Params{Ctx: ctx, Type: "profiles", TypeID: strconv.FormatInt(profileID, 10)})
 	if err != nil {
 		return nil, err
 	}

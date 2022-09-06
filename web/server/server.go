@@ -169,11 +169,32 @@ func staticFiles() http.Handler {
 			}
 
 			switch {
+			case strings.HasSuffix(r.URL.Path, `.apng`):
+				w.Header().Set(`Content-Type`, `image/apng`)
+
+			case strings.HasSuffix(r.URL.Path, `.avif`):
+				w.Header().Set(`Content-Type`, `image/avif`)
+
 			case strings.HasSuffix(r.URL.Path, `.css`):
 				w.Header().Set(`Content-Type`, `text/css`)
 
 			case strings.HasSuffix(r.URL.Path, `.gif`):
 				w.Header().Set(`Content-Type`, `image/gif`)
+
+			case strings.HasSuffix(r.URL.Path, `.jpg`):
+				w.Header().Set(`Content-Type`, `image/jpeg`)
+
+			case strings.HasSuffix(r.URL.Path, `.jpeg`):
+				w.Header().Set(`Content-Type`, `image/jpeg`)
+
+			case strings.HasSuffix(r.URL.Path, `.jpe`):
+				w.Header().Set(`Content-Type`, `image/jpeg`)
+
+			case strings.HasSuffix(r.URL.Path, `.jif`):
+				w.Header().Set(`Content-Type`, `image/jpeg`)
+
+			case strings.HasSuffix(r.URL.Path, `.jfif`):
+				w.Header().Set(`Content-Type`, `image/jpeg`)
 
 			case strings.HasSuffix(r.URL.Path, `.js`):
 				w.Header().Set(`Content-Type`, `text/javascript`)
@@ -183,6 +204,9 @@ func staticFiles() http.Handler {
 
 			case strings.HasSuffix(r.URL.Path, `.svg`):
 				w.Header().Set(`Content-Type`, `image/svg+xml`)
+
+			case strings.HasSuffix(r.URL.Path, `.webp`):
+				w.Header().Set(`Content-Type`, `image/webp`)
 			}
 
 			w.Header().Set("Last-Modified", lastModified.UTC().Format(http.TimeFormat))

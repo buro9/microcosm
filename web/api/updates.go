@@ -12,7 +12,7 @@ import (
 // GetUpdates returns the personalised list of items that have been updated for
 // the given user (defined by context)
 func GetUpdates(ctx context.Context, q url.Values) (*models.UpdatesResults, error) {
-	resp, err := apiGet(Params{Ctx: ctx, PathPrefix: "updates", Q: q})
+	resp, err := apiGet(Params{Ctx: ctx, Type: "updates", Q: q})
 	if err != nil {
 		return nil, err
 	}

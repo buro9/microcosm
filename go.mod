@@ -3,7 +3,7 @@ module github.com/buro9/microcosm
 go 1.19
 
 require (
-	github.com/buro9/funcs v0.0.0-20200509155829-0a117fc83732
+	github.com/buro9/funcs v1.0.1
 	github.com/go-chi/chi v1.5.4
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
@@ -19,7 +19,6 @@ require (
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.20 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/oleiade/reflections v1.0.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	golang.org/x/net v0.0.0-20220826154423-83b083e8dc8b // indirect

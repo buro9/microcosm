@@ -95,46 +95,18 @@ func RootFromRequest(req *http.Request) (string, error) {
 	return "", fmt.Errorf("%s is not a valid host", host)
 }
 
-func buildAPIURL(params Params) *url.URL {
-	// ensure that we start with a trailing slash
-	if !strings.HasPrefix(params.PathPrefix, "/") {
-		params.PathPrefix = "/" + params.PathPrefix
-	}
-
-	// not possible to generate an error at this point, as this is not called
-	// before newContext which already barfs on any failure to set the apiRoot
-	u, _ := url.Parse(bag.GetAPIRoot(params.Ctx) + params.PathPrefix)
-
-	if params.ID != 0 {
-		if params.PathSuffix == "" {
-			u.Path = fmt.Sprintf("%s/%d", u.Path, params.ID)
-		} else {
-			u.Path = fmt.Sprintf("%s/%d/%s", u.Path, params.ID, params.PathSuffix)
-		}
-	} else if params.PathSuffix != "" {
-		u.Path = fmt.Sprintf("%s/%s", u.Path, params.PathSuffix)
-	}
-
-	// Add any querystring args that were set
-	if params.Q != nil {
-		u.RawQuery = params.Q.Encode()
-	}
-
-	return u
-}
-
 // apiGet will perform an API call and if an error has occurred the body will
 // have been read. If no error occurred the callee must read the body and ensure
 // it is closed.
 func apiGet(params Params) (*http.Response, error) {
 
-	u := buildAPIURL(params)
+	u := params.buildAPIURL()
 
 	accessToken := bag.GetAccessToken(params.Ctx)
 
 	var c *http.Client
-	if (params.PathPrefix == "site" ||
-		params.PathPrefix == "profiles" ||
+	if (params.Type == "site" ||
+		params.Type == "profiles" ||
 		accessToken == "") && apiCache != nil {
 		// Standard client using the cache transport for non-authenticated API
 		// requests
@@ -153,9 +125,9 @@ func apiGet(params Params) (*http.Response, error) {
 
 	// Add auth if we have it, though we never use it for the "site" endpoint as
 	// that is a perma-cache item
-	if accessToken != "" && (params.PathPrefix != "site" &&
-		params.PathPrefix != "profiles" &&
-		params.PathPrefix != "") {
+	if accessToken != "" && (params.Type != "site" &&
+		params.Type != "profiles" &&
+		params.Type != "") {
 		req.Header.Add("Authorization", "Bearer "+accessToken)
 	}
 
@@ -180,7 +152,7 @@ func apiGet(params Params) (*http.Response, error) {
 // it is closed.
 func apiPost(params Params, data interface{}) (*http.Response, error) {
 
-	u := buildAPIURL(params)
+	u := params.buildAPIURL()
 
 	c := &http.Client{}
 

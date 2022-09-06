@@ -33,6 +33,7 @@ func init() {
 		"upper":       strings.ToUpper,
 
 		// Math functions
+		"add": math.Add,
 		"subtract": math.Subtract,
 
 		// Trusting content

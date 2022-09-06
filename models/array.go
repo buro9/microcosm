@@ -15,6 +15,20 @@ type Array struct {
 	Items     json.RawMessage `json:"items"`
 }
 
+// AsAttachments will return the array items as comments
+func (m *Array) AsAttachments() *[]Attachment {
+	if m.Items == nil {
+		return nil
+	}
+
+	var attachments []Attachment
+	if err := json.Unmarshal(m.Items, &attachments); err != nil {
+		return nil
+	}
+
+	return &attachments
+}
+
 // AsComments will return the array items as comments
 func (m *Array) AsComments() *[]Comment {
 	if m.Items == nil {

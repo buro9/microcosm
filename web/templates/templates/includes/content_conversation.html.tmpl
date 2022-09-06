@@ -17,8 +17,8 @@
 		{{ $user := .User }}
 		{{ $parent := .Conversation }}
 		{{ $site := .Site }}
-		{{ range .Conversation.Items.AsComments}}
-			{{ template "block_comment_single" (dict "comment" . "itemType" "conversation" "parent" $parent "site" $site "user" $user) }}
+		{{ range $index, $comment := .Comments}}
+			{{ template "block_comment_single" (dict "comment" $comment "hidePermalink" false "index" $index "itemType" "conversation" "parent" $parent "site" $site "user" $user) }}
 		{{ end }}
 		</ul>
 	</div>

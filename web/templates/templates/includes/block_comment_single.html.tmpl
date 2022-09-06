@@ -1,12 +1,13 @@
 {{ define "block_comment_single" }}
+	{{ $attachments := .attachments }}
 	{{ $comment := .comment }}
 	{{ $parent := .parent }}
+	{{ $hidePermalink := .hidePermalink }}
+	{{ $index := .index }}
 	{{ $itemType := .itemType }}
 	{{ $site := .site }}
 	{{ $user := .user }}
 	
-{% load get_attachment %}
-{% load is_image %}
 <li id="comment{{ $comment.ID }}" class="comment-item padded" itemscope itemtype="http://schema.org/Comment">
 	<a id="{{ $comment.ID }}"></a>
 	<div class="comment-item-inner">
@@ -14,11 +15,11 @@
 			<div class="comment-item-permalink">
 				<time datetime="{{ $comment.Meta.Created | rfcTime }}" itemprop="dateCreated"></time>
 				<span style="color:#eee">&bull;</span>
-				{% if hide_permalink %}
+				{{ if $hidePermalink }}
 					<a href="{{ microcosm_url `comment` $comment.ID }}"><span class="sprite sprite-format-link" itemprop="discussionUrl"></span></a>
-				{% else %}
-				<a href="{{ microcosm_url `comment` $comment.ID }}" itemprop="discussionUrl">#{% forloop.counter|add:pagination.offset %}</a>
-				{% endif %}
+				{{ else }}
+				<a href="{{ microcosm_url `comment` $comment.ID }}" itemprop="discussionUrl">#{{ add (add $index 1) $parent.Items.Offset }}</a>
+				{{ end }}
 			</div>
 			<div class="comment-item-author" itemprop="author" itemscope itemtype="http://schema.org/Person">
 				{{ if $comment.Meta.CreatedBy }}
@@ -36,36 +37,26 @@
 		<div class="comment-item-body" itemprop="text">
 			{{ $comment.HTML | safeHTML }}
 
-{{- /* -}}
-			{{ if attachments }}
-				{% get_attachment $comment.id as comment_attachments %}
-				{% if comment_attachments %}
-					<hr />
-					<p><b>{% if comment_attachments.total > 25 %}25{% else %}{{ comment_attachments.total }}{% endif %} Attachment{{ comment_attachments.total|pluralize }}</b></p>
-					<ul class="comment-item-body-attachments clearfix">
-					{{ for attachment in comment_attachments.items }}
-						{# template_tags/is_image.py non-images first #}
-						{% if not attachment.file_ext|is_image %}
-						<li class="attachment-link">
-							<a href="https://{{site.subdomain_key}}.microco.sm{{ attachment.meta.links.0.href }}"
-							 title="{{ attachment.file_name }}">
-							{{ attachment.file_name }}
-							</a>
+			{{ if (gt $comment.Attachments 0) }}
+				<hr />
+				<p><b>Attachments: {{ if (gt $comment.Attachments 25) }}25{{ else }}{{ $comment.Attachments }}{{ end }}</b></p>
+				<ul class="comment-item-body-attachments clearfix">
+				{{ range $attachment := $comment.Files }}
+			  		{{ if not (microcosm_isImage (microcosm_link $attachment.Meta.Links "related").Href) }}
+			  			<li class="attachment-link">
+							<a href="https://{{ $site.SubdomainKey }}.microco.sm{{ (microcosm_link $attachment.Meta.Links "related").Href }}" title="{{ $attachment.FileName }}">{{ $attachment.FileName }}</a>
 						</li>
-						{{ end }}
 					{{ end }}
-					{{ for attachment in comment_attachments.items }}
-						{# template_tags/is_image.py images second #}
-						{{ if attachment.fileExt | isImage }}
-						<li class="attachment-image"{% if comment_attachments.total > 5 %} style="width: 80px; height: 80px; float:left; margin:2px;"{% endif %}>
-							{% if comment_attachments.total > 5 %}<a href="https://{{site.subdomain_key}}.microco.sm{{ attachment.meta.links.0.href }}">{% endif %}<img src="https://{{site.subdomain_key}}.microco.sm{{ attachment.meta.links.0.href }}" alt="{{ attachment.file_name }}" title="{{ attachment.file_name }}"{% if comment_attachments.total > 5 %} style="width: 80px; height: auto;"{% endif %} />{% if comment_attachments.total > 5 %}</a>{{ end }
-						</li>
-						{{ end }}
-					{{ end }
-					</ul>
 				{{ end }}
+				{{ range $attachment := $comment.Files }}
+			  		{{ if (microcosm_isImage (microcosm_link $attachment.Meta.Links "related").Href) }}
+						<li class="attachment-image"{{ if (gt $comment.Attachments 5) }} style="width: 80px; height: 80px; float:left; margin:2px;"{{ end }}>
+						{{ if (gt $comment.Attachments 5) }}<a href="https://{{ $site.SubdomainKey }}.microco.sm{{ (microcosm_link $attachment.Meta.Links "related").Href }}">{{ end }}<img src="https://{{ $site.SubdomainKey }}.microco.sm{{ (microcosm_link $attachment.Meta.Links "related").Href }}" alt="{{ $attachment.FileName }}" title="{{ $attachment.FileName }}"{{ if (gt $comment.Attachments 5) }} style="width: 80px; height: auto;"{{ end }} />{{ if (gt $comment.Attachments 5) }}</a>{{ end }}
+						</li>
+					{{ end }}
+				{{ end }}
+				</ul>
 			{{ end }}
-{{- */ -}}
 
 		</div>
 		<div class="comment-item-footer">

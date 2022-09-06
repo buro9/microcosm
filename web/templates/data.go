@@ -28,6 +28,7 @@ type Data struct {
 	// Depending on page and context, templates may expect the applicable one
 	// to be filled in
 	Array         *models.Array
+	Comments      *[]models.Comment
 	Conversation  *models.Conversation
 	Huddles       *models.Huddles
 	Microcosm     *models.Microcosm
