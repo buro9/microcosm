@@ -57,19 +57,19 @@ func (p Params) buildAPIURL() *url.URL {
 
 	var path strings.Builder
 	path.WriteString(u.Path)
-	if p.TypeID != "" {
+	if p.TypeID != "" && p.TypeID != "0" {
 		fmt.Fprintf(&path, "/%s", p.TypeID)
 	}
 	if p.Part != "" {
 		fmt.Fprintf(&path, "/%s", p.Part)
 	}
-	if p.PartID != "" {
+	if p.PartID != "" && p.PartID != "0" {
 		fmt.Fprintf(&path, "/%s", p.PartID)
 	}
 	if p.Part2 != "" {
 		fmt.Fprintf(&path, "/%s", p.Part2)
 	}
-	if p.Part2ID != "" {
+	if p.Part2ID != "" && p.Part2ID != "0" {
 		fmt.Fprintf(&path, "/%s", p.Part2ID)
 	}
 	u.Path = path.String()
