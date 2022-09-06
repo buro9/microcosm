@@ -21,7 +21,7 @@ require (
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
-	golang.org/x/net v0.0.0-20220826154423-83b083e8dc8b // indirect
+	golang.org/x/net v0.0.0-20220906165146-f3363e06e74c // indirect
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/oleiade/reflections.v1 v1.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
