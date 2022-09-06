@@ -12,7 +12,7 @@
 				</li>
 			{{ end }}
 			{{ with (microcosm_link .pagination.Links "self") }}
-				<li>
+				<li class="active">
 					<a href="{{ .Href | microcosm_api2ui }}">{{ .Title }}</a>
 				</li>
 			{{ end }}
