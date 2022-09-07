@@ -50,11 +50,11 @@
 				<div class="cell-forum">
 					in 
 					{{ if $event.Breadcrumb }}
-						{{ $breadcrumb := . }}
+						{{ $breadcrumb := $event.Breadcrumb }}
 						<div class="cell-forum">
 							in 
 							{{ range $index, $crumb := $breadcrumb }}
-								<a href="{{ $crumb.Href }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (subtract (len $breadcrumb) 1) }}/{{ end }}
+								<a href="{{ $crumb.Href | microcosm_api2ui }}">{{ $crumb.Title | safeHTML }}</a> {{ if ne $index (subtract (len $breadcrumb) 1) }}/{{ end }}
 							{{ end }}
 						</div>
 					{{ else }}
@@ -71,14 +71,14 @@
 				<ul class="list-stats list-stats-sm">
 					{{ if gt $event.CommentCount 0 }}
 					<li>
-						<span>{{ $event.CommentCount | numcomma }}</span>
-						comment{{ if gt $event.CommentCount 1 }}s{{ end }}
+						<span stat="{{ $event.CommentCount }}" title="{{ $event.CommentCount | numcomma }} {{ pluralWord $event.CommentCount "comment" "" }}">{{ $event.CommentCount | siSuffix }}</span>
+						{{ pluralWord $event.CommentCount "comment" "" }}
 					</li>
 					{{ end }}
 					{{ if gt $event.ViewCount 0 }}
 					<li>
-						<span>{{ $event.ViewCount | numcomma }}</span>
-						view{{ if gt $event.ViewCount 1 }}s{{ end }}
+						<span stat="" title="{{ $event.ViewCount | numcomma }} {{ pluralWord $event.ViewCount "view" "" }}">{{ siSuffix $event.ViewCount }}</span>
+						{{ pluralWord $event.ViewCount "view" "" }}
 					</li>
 					{{ end }}
 				</ul>

@@ -50,14 +50,14 @@
 				<ul class="list-stats list-stats-sm">
 					{{ if gt $conversation.CommentCount 0 }}
 					<li>
-						<span>{{ $conversation.CommentCount | numcomma }}</span>
-						comment{{ if gt $conversation.CommentCount 1 }}s{{ end }}
+						<span stat="{{ $conversation.CommentCount }}" title="{{ $conversation.CommentCount | numcomma }} {{ pluralWord $conversation.CommentCount "comment" "" }}">{{ $conversation.CommentCount | siSuffix }}</span>
+						{{ pluralWord $conversation.CommentCount "comment" "" }}
 					</li>
 					{{ end }}
 					{{ if gt $conversation.ViewCount 0 }}
 					<li>
-						<span>{{ $conversation.ViewCount | numcomma }}</span>
-						view{{ if gt $conversation.ViewCount 1 }}s{{ end }}
+						<span stat="" title="{{ $conversation.ViewCount | numcomma }} {{ pluralWord $conversation.ViewCount "view" "" }}">{{ siSuffix $conversation.ViewCount }}</span>
+						{{ pluralWord $conversation.ViewCount "view" "" }}
 					</li>
 					{{ end }}
 				</ul>

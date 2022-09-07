@@ -44,8 +44,8 @@
 			<div class="cell-stats">
 				<ul class="list-stats list-stats-sm">
 					<li>
-						<span>{{ default $huddle.CommentCount 0 | numcomma }}</span>
-						comment{{ if gt $huddle.CommentCount 1 }}s{{ end }}
+						<span>{{ default $huddle.CommentCount 0 | siSuffix }}</span>
+						{{ pluralWord $huddle.CommentCount "comment" "" }}
 					</li>
 				</ul>
 			</div>

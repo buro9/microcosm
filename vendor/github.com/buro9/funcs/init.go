@@ -27,13 +27,16 @@ func init() {
 		"naturalTime": transform.NaturalTime,
 		"numcomma":    transform.NumComma,
 		"ord2suffix":  transform.OrdToSuffix,
+		"plural":      transform.Plural,
+		"pluralWord":  transform.PluralWord,
 		"rfcTime":     transform.RFCTime,
+		"siSuffix":    transform.SiSuffix,
 		"title":       strings.Title,
 		"trunc":       transform.Trunc,
 		"upper":       strings.ToUpper,
 
 		// Math functions
-		"add": math.Add,
+		"add":      math.Add,
 		"subtract": math.Subtract,
 
 		// Trusting content
