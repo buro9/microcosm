@@ -1,27 +1,33 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/templates"
 )
 
 // UpdatesGet will return the updates page
 func UpdatesGet(w http.ResponseWriter, r *http.Request) {
+	// user := bag.GetProfile(r.Context())
+	// if user == nil {
+	// 	w.Write([]byte("no permission"))
+	// 	return
+	// }
+
 	q := url.Values{}
 	offset := r.URL.Query().Get("offset")
 	if offset != "" {
 		q.Add("offset", offset)
 	}
 
-	updatesResults, err := api.GetUpdates(r.Context(), q)
+	updatesResults, status, err := api.GetUpdates(r.Context(), q)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 		return
 	}
 
@@ -37,7 +43,6 @@ func UpdatesGet(w http.ResponseWriter, r *http.Request) {
 
 	err = templates.RenderHTML(w, "updates", data)
 	if err != nil {
-		fmt.Printf("could not render %s\n", r.URL)
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 	}
 }

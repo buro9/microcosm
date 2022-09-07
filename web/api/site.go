@@ -10,10 +10,10 @@ import (
 
 // SiteFromAPIContext is used to return a Site given the apiRoot that is within
 // the context.
-func SiteFromAPIContext(ctx context.Context) (*models.Site, error) {
+func SiteFromAPIContext(ctx context.Context) (*models.Site, int, error) {
 	resp, err := apiGet(Params{Ctx: ctx, Type: "site"})
 	if err != nil {
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
@@ -21,7 +21,7 @@ func SiteFromAPIContext(ctx context.Context) (*models.Site, error) {
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
 		log.Print(err)
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 
 	// TODO: Remove this
@@ -29,5 +29,5 @@ func SiteFromAPIContext(ctx context.Context) (*models.Site, error) {
 	apiResp.Data.SiteURL = "https://www.gfora.com"
 	apiResp.Data.SubdomainKey = "gfora"
 
-	return &apiResp.Data, nil
+	return &apiResp.Data, resp.StatusCode, nil
 }

@@ -13,14 +13,14 @@
 
 {{ define "js" }}
 <script type="text/javascript">
-	{{ if not (eq .Profile.ID .User.ID) }}
+	{{ if and (.User) (not (eq .Profile.ID .User.ID)) }}
 	var subscribe = new Subscribe({
 		el        : '.subscribe',
 		url       : '{{ microcosm_url `watcher` }}',
 		updateType: 1,
 		type      : 'profile',
 		id        : {{ .Profile.ID }},
-//		token     : '{ { csrf_token } }',
+		token     : '{ { .csrfField } }',
 		is_subscribed : {{ if .Profile.Meta.Flags.Watched }}"true"{{ else }}"false"{{ end }}
 	});
 	{{ end }}

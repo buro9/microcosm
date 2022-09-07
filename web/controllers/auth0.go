@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/buro9/microcosm/web/api"
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/opts"
 )
 
@@ -17,14 +18,14 @@ func Auth0LoginGet(w http.ResponseWriter, req *http.Request) {
 	state := q.Get("state")
 	targetURL := q.Get("target_url")
 
-	accessToken, err := api.Auth0Login(req.Context(), code, state)
+	accessToken, status, err := api.Auth0Login(req.Context(), code, state)
 	if err != nil {
-		renderError(w, req, err)
+		errors.Render(w, req, status, err)
 		return
 	}
 
 	if accessToken == "" {
-		renderError(w, req, api.ErrAccessTokenExpected)
+		errors.Render(w, req, status, errors.ErrAccessTokenExpected)
 		return
 	}
 
@@ -40,12 +41,12 @@ func Auth0LoginGet(w http.ResponseWriter, req *http.Request) {
 		"accessToken": accessToken,
 	}
 	if opts.SecureCookie == nil {
-		renderError(w, req, fmt.Errorf("SecureCookie must exist"))
+		errors.Render(w, req, status, fmt.Errorf("SecureCookie must exist"))
 		return
 	}
 	encoded, err := (*opts.SecureCookie).Encode("session", value)
 	if err != nil {
-		renderError(w, req, err)
+		errors.Render(w, req, status, err)
 		return
 	}
 	cookie := &http.Cookie{

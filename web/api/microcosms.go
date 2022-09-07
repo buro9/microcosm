@@ -11,10 +11,10 @@ import (
 
 // GetMicrocosm returns a microcosm if this user (defined by context) has
 // permission to view it
-func GetMicrocosm(ctx context.Context, microcosmID int64) (*models.Microcosm, error) {
+func GetMicrocosm(ctx context.Context, microcosmID int64) (*models.Microcosm, int, error) {
 	resp, err := apiGet(Params{Ctx: ctx, Type: "microcosms", TypeID: strconv.FormatInt(microcosmID, 10)})
 	if err != nil {
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
@@ -22,8 +22,8 @@ func GetMicrocosm(ctx context.Context, microcosmID int64) (*models.Microcosm, er
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
 		log.Print(err)
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 
-	return &apiResp.Data, nil
+	return &apiResp.Data, resp.StatusCode, nil
 }

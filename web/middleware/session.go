@@ -7,6 +7,7 @@ import (
 
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/opts"
 )
 
@@ -27,46 +28,46 @@ import (
 // This middleware should *not* be applied to any static files as it does
 // perform some processing to fetch the *Site and *User information.
 func Session(h http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, req *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
 		// Get the access_token, if the request has one, and store it in the
 		// context
-		at := accessTokenFromRequest(req)
+		at := accessTokenFromRequest(r)
 		if at != "" {
-			req = req.WithContext(bag.SetAccessToken(req.Context(), at))
+			r = r.WithContext(bag.SetAccessToken(r.Context(), at))
 		}
 
 		// Get the Site based on our knowledge of the API
-		site, err := api.SiteFromAPIContext(req.Context())
+		site, status, err := api.SiteFromAPIContext(r.Context())
 		if err != nil {
 			fmt.Println(err.Error())
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			errors.Render(w, r, status, err)
 			return
 		}
-		req = req.WithContext(bag.SetSite(req.Context(), site))
+		r = r.WithContext(bag.SetSite(r.Context(), site))
 
 		// If this site demands SSL and we are not already forcing it, do so
 		if site != nil && site.ForceSSL {
 			forceSSLHostsLock.RLock()
-			_, ok := forceSSLHosts[req.Host]
+			_, ok := forceSSLHosts[r.Host]
 			forceSSLHostsLock.RUnlock()
 			if !ok {
 				forceSSLHostsLock.Lock()
-				forceSSLHosts[req.Host] = struct{}{}
+				forceSSLHosts[r.Host] = struct{}{}
 				forceSSLHostsLock.Unlock()
 			}
 		}
 
 		// Get the current profile based on our knowledge of the API
-		profile, err := api.ProfileFromAPIContext(req.Context())
+		profile, status, err := api.ProfileFromAPIContext(r.Context())
 		if err != nil {
 			fmt.Println(err.Error())
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			errors.Render(w, r, status, err)
 			return
 		}
-		req = req.WithContext(bag.SetProfile(req.Context(), profile))
+		r = r.WithContext(bag.SetProfile(r.Context(), profile))
 
 		// The IP is stored in the context
-		h.ServeHTTP(w, req)
+		h.ServeHTTP(w, r)
 	}
 
 	return http.HandlerFunc(fn)
@@ -74,14 +75,14 @@ func Session(h http.Handler) http.Handler {
 
 // accessTokenFromRequest returns the access token, if there is one, associated
 // with the current request
-func accessTokenFromRequest(req *http.Request) string {
+func accessTokenFromRequest(r *http.Request) string {
 	// querystring has precedence
-	if at := req.URL.Query().Get("access_token"); at != "" {
+	if at := r.URL.Query().Get("access_token"); at != "" {
 		return at
 	}
 
 	// then an auth header
-	auth := req.Header.Get("Authorisation")
+	auth := r.Header.Get("Authorisation")
 	if auth != "" {
 		if strings.HasPrefix(auth, "Bearer ") {
 			return strings.Replace(auth, "Bearer ", "", 1)
@@ -89,7 +90,7 @@ func accessTokenFromRequest(req *http.Request) string {
 	}
 
 	// finally the cookie
-	if cookie, err := req.Cookie("session"); err == nil {
+	if cookie, err := r.Cookie("session"); err == nil {
 		value := make(map[string]string)
 		if err = opts.SecureCookie.Decode("session", cookie.Value, &value); err == nil {
 			return value["accessToken"]

@@ -10,10 +10,10 @@ import (
 )
 
 // DoSearch will perform a search against the search API for a given query
-func DoSearch(ctx context.Context, q url.Values) (*models.SearchResults, error) {
+func DoSearch(ctx context.Context, q url.Values) (*models.SearchResults, int, error) {
 	resp, err := apiGet(Params{Ctx: ctx, Type: "search", Q: q})
 	if err != nil {
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
@@ -21,8 +21,8 @@ func DoSearch(ctx context.Context, q url.Values) (*models.SearchResults, error) 
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
 		log.Print(err)
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 
-	return &apiResp.Data, nil
+	return &apiResp.Data, resp.StatusCode, nil
 }

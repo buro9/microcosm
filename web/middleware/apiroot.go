@@ -1,30 +1,29 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/errors"
 )
 
 // APIRoot is a middleware that populates the context with the root path of the
 // API that serves this site. If this cannot be determined then this is not a
 // valid Microcosm site and we error out
 func APIRoot(h http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, req *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
 		// Get the URL that is the root of the API for this site and store it
 		// in the request context
-		apiRoot, err := api.RootFromRequest(req)
+		apiRoot, status, err := api.RootFromRequest(r)
 		if err != nil {
-			fmt.Println(err.Error())
-			http.Error(w, err.Error(), http.StatusInternalServerError)
+			errors.Render(w, r, status, err)
 			return
 		}
 
-		req = req.WithContext(bag.SetAPIRoot(req.Context(), apiRoot))
+		r = r.WithContext(bag.SetAPIRoot(r.Context(), apiRoot))
 
-		h.ServeHTTP(w, req)
+		h.ServeHTTP(w, r)
 	}
 
 	return http.HandlerFunc(fn)

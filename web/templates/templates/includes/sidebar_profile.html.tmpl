@@ -1,9 +1,9 @@
 {{ define "sidebar_profile" }}
 
 	<div class="metabar-module">
-	{{ if eq .Profile.ID .User.ID }}
+	{{ if and (.User) (eq .Profile.ID .User.ID) }}
 		<div class="metabar-module-primary-buttons">
-			<a id="edit_profile" href="{% url 'edit-profile' .User.ID %}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-pencil-small"></span> Edit your Profile</a>
+			<a id="edit_profile" href="{{ microcosm_url `profile-edit` .User.ID }}" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-pencil-small"></span> Edit your Profile</a>
 			<a href="/ignored/" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-format-list"></span> View Ignored</a>
 		</div>
 	{{ else }}
@@ -34,7 +34,7 @@
 		{{ if and .User (not (eq .Profile.ID .User.ID)) }}
 			<div class="metabar-module-body">
 				<form action="/ignore/" method="POST" id="ignore_form">
-					{ { csrf_token } }
+					{ { .csrfField  } }
 					<input type="hidden" name="item_type" value="profile" />
 					<input type="hidden" name="item_id" value="{{ .Profile.ID }}" />
 					{{ if .Profile.Meta.Flags.Ignored }}
@@ -48,7 +48,7 @@
 			{{ if .Profile.Meta.Permissions.IsSiteOwner }}
 				<div class="metabar-module-body">
 					<form action="/profiles/{{.Profile.ID}}/patch/" method="POST" id="patch_form">
-						{ { csrf_token } }
+						{ { .csrfField  } }
 						{{ if .Profile.IsMember }}
 							<button type="submit" name="member" value="false" class="btn btn-default btn-xs">Revoke membership</button>
 						{{ else }}

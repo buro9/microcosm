@@ -1,12 +1,12 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/templates"
 )
 
@@ -20,9 +20,9 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 	default:
 	}
 
-	conversation, err := api.GetConversation(r.Context(), conversationID, jumpTo, r.URL.Query())
+	conversation, status, err := api.GetConversation(r.Context(), conversationID, jumpTo, r.URL.Query())
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 		return
 	}
 
@@ -30,9 +30,9 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 	var comments []models.Comment
 	for _, comment := range *conversation.Items.AsComments() {
 		if comment.Attachments > 0 {
-			commentAttachments, err := api.GetCommentAttachments(r.Context(), comment.ID)
+			commentAttachments, status, err := api.GetCommentAttachments(r.Context(), comment.ID)
 			if err != nil {
-				w.Write([]byte(err.Error()))
+				errors.Render(w, r, status, err)
 				return
 			}
 			comment.Files = *commentAttachments.Attachments.AsAttachments()
@@ -53,7 +53,6 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 
 	err = templates.RenderHTML(w, "conversation", data)
 	if err != nil {
-		fmt.Printf("could not render %s\n", r.URL)
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 	}
 }

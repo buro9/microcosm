@@ -54,35 +54,35 @@ var (
 // ensure that subsequent layers (e.g., request loggers) which examine the
 // RemoteAddr will see the intended value.
 func RealIP(h http.Handler) http.Handler {
-	fn := func(w http.ResponseWriter, req *http.Request) {
-		if rip := ipFromRequest(req); rip != nil {
-			req.RemoteAddr = rip.String()
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		if rip := ipFromRequest(r); rip != nil {
+			r.RemoteAddr = rip.String()
 		}
 
 		// The IP is stored in the context as not all funcs that will be
 		// called later in the life of this request will be passed the full
 		// request
-		req = req.WithContext(bag.SetIP(req.Context(), req.RemoteAddr))
+		r = r.WithContext(bag.SetIP(r.Context(), r.RemoteAddr))
 
-		h.ServeHTTP(w, req)
+		h.ServeHTTP(w, r)
 	}
 
 	return http.HandlerFunc(fn)
 }
 
 // ipFromRequest returns the IP address for the client that accessed the site
-func ipFromRequest(req *http.Request) net.IP {
+func ipFromRequest(r *http.Request) net.IP {
 	var realIP net.IP
 
 	// X-Real-IP if supplied
-	if xrip := req.Header.Get(xRealIP); xrip != "" {
+	if xrip := r.Header.Get(xRealIP); xrip != "" {
 		if clientIP := net.ParseIP(xrip); clientIP != nil {
 			realIP = clientIP
 		}
 	}
 
 	if realIP == nil {
-		ip, _, _ := net.SplitHostPort(req.RemoteAddr)
+		ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 		raip := net.ParseIP(ip)
 		if raip == nil {
 			// Neither X-Real-IP or req.RemoteAddr were parsable, return nothing
@@ -95,7 +95,7 @@ func ipFromRequest(req *http.Request) net.IP {
 	if isCloudFlareIP(realIP) {
 		// We only trust this header when we're behind a CloudFlare IP, and we
 		// are... so the CF-Connecting-IP actually holds the realIP
-		cfip := req.Header.Get(cfConnectingIP)
+		cfip := r.Header.Get(cfConnectingIP)
 		if cfip == "" {
 			fmt.Printf(
 				"CF-Connecting-IP not supplied for CloudFlare IP %s\n",

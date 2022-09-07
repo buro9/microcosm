@@ -32,9 +32,9 @@ var (
 
 // RootFromRequest returns the URL of the API for the site associated with
 // the request, i.e. https://subdomain.apidomain.tld/api/v1
-func RootFromRequest(req *http.Request) (string, error) {
+func RootFromRequest(req *http.Request) (string, int, error) {
 	if strings.HasSuffix(req.Host, *opts.APIDomain) {
-		return "https://" + req.Host + apiVersion, nil
+		return "https://" + req.Host + apiVersion, 0, nil
 	}
 
 	// Check cache
@@ -42,7 +42,7 @@ func RootFromRequest(req *http.Request) (string, error) {
 	apiURL, ok := cnameToAPIRoot[req.Host]
 	cnameToAPIRootLock.RUnlock()
 	if ok {
-		return apiURL, nil
+		return apiURL, 0, nil
 	}
 
 	// Unknown host (custom name) so we need to ask the authority API service if
@@ -56,12 +56,12 @@ func RootFromRequest(req *http.Request) (string, error) {
 	)
 	if err != nil {
 		log.Print(err)
-		return "", err
+		return "", resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "",
+		return "", resp.StatusCode,
 			fmt.Errorf(
 				"%s lookup failed: %s",
 				req.Host,
@@ -72,7 +72,7 @@ func RootFromRequest(req *http.Request) (string, error) {
 	b, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Print(err)
-		return "", err
+		return "", resp.StatusCode, err
 	}
 
 	// the body should just be a text string of the host name which we can test
@@ -82,17 +82,17 @@ func RootFromRequest(req *http.Request) (string, error) {
 		u, err := url.Parse("https://" + string(b) + apiVersion)
 		if err != nil {
 			// extremely unlikely but this is insurance to check it was valid
-			return "", err
+			return "", resp.StatusCode, err
 		}
 
 		// Add to cache
 		cnameToAPIRootLock.Lock()
 		cnameToAPIRoot[req.Host] = u.String()
 		cnameToAPIRootLock.Unlock()
-		return u.String(), nil
+		return u.String(), resp.StatusCode, nil
 	}
 
-	return "", fmt.Errorf("%s is not a valid host", host)
+	return "", resp.StatusCode, fmt.Errorf("%s is not a valid host", host)
 }
 
 // apiGet will perform an API call and if an error has occurred the body will

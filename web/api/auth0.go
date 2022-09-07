@@ -6,18 +6,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/opts"
 )
 
 // Auth0Login consumes the auth0 code and will use the microcosm API to fetch
 // a microcosm access_token
-func Auth0Login(ctx context.Context, code string, state string) (string, error) {
+func Auth0Login(ctx context.Context, code string, state string) (string, int, error) {
 	if opts.ClientSecret == nil || *opts.ClientSecret == "" {
-		return "", ErrClientSecretNotConfigured
+		return "", 0, errors.ErrClientSecretNotConfigured
 	}
 
 	if code == "" {
-		return "", ErrCodeRequired
+		return "", 0, errors.ErrCodeRequired
 	}
 
 	type Auth0 struct {
@@ -34,13 +35,13 @@ func Auth0Login(ctx context.Context, code string, state string) (string, error) 
 	resp, err := apiPost(Params{Ctx: ctx, Type: "auth0"}, auth0)
 	if err != nil {
 		log.Printf("apiPost(`auth0`): %s", err.Error())
-		return "", err
+		return "", resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		log.Printf("err: not 200")
-		return "", ErrNot200
+		return "", resp.StatusCode, errors.ErrNot200
 	}
 
 	type Resp struct {
@@ -48,8 +49,8 @@ func Auth0Login(ctx context.Context, code string, state string) (string, error) 
 	}
 	var r Resp
 	if err := json.NewDecoder(resp.Body).Decode(&r); err != nil {
-		return "", err
+		return "", resp.StatusCode, err
 	}
 
-	return r.AccessToken, nil
+	return r.AccessToken, resp.StatusCode, nil
 }

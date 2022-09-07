@@ -11,7 +11,7 @@ import (
 )
 
 // GetHuddles returns a list of huddles for a given search.
-func GetHuddles(ctx context.Context, query url.Values) (*models.Huddles, error) {
+func GetHuddles(ctx context.Context, query url.Values) (*models.Huddles, int, error) {
 	// Set the query options
 	q := url.Values{}
 	unread := (query.Get("unread") == strings.ToLower("true"))
@@ -25,7 +25,7 @@ func GetHuddles(ctx context.Context, query url.Values) (*models.Huddles, error) 
 
 	resp, err := apiGet(Params{Ctx: ctx, Type: "huddles", Q: q})
 	if err != nil {
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
@@ -33,8 +33,8 @@ func GetHuddles(ctx context.Context, query url.Values) (*models.Huddles, error) 
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
 		log.Print(err)
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 
-	return &apiResp.Data, nil
+	return &apiResp.Data, resp.StatusCode, nil
 }

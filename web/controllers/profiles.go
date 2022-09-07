@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"net/url"
 	"sync"
@@ -10,15 +9,16 @@ import (
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/templates"
 )
 
 // ProfilesGet will return a page listing profiles
 func ProfilesGet(w http.ResponseWriter, r *http.Request) {
 	// Query the profiles
-	profiles, err := api.GetProfiles(r.Context(), r.URL.Query())
+	profiles, status, err := api.GetProfiles(r.Context(), r.URL.Query())
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 		return
 	}
 
@@ -34,8 +34,7 @@ func ProfilesGet(w http.ResponseWriter, r *http.Request) {
 
 	err = templates.RenderHTML(w, "profiles", data)
 	if err != nil {
-		fmt.Printf("could not render %s\n", r.URL)
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 	}
 }
 
@@ -45,8 +44,9 @@ func ProfileGet(w http.ResponseWriter, r *http.Request) {
 
 	// Query the profile
 	var (
-		profile    *models.Profile
-		profileErr error
+		profile       *models.Profile
+		profileStatus int
+		profileErr    error
 	)
 
 	profileID := asInt64(r, "profileID")
@@ -54,12 +54,13 @@ func ProfileGet(w http.ResponseWriter, r *http.Request) {
 	wg.Add(1)
 	go func(ctx context.Context, profileID int64) {
 		defer wg.Done()
-		profile, profileErr = api.GetProfile(r.Context(), profileID)
+		profile, profileStatus, profileErr = api.GetProfile(r.Context(), profileID)
 	}(r.Context(), profileID)
 
 	// Query the items that they've created
 	var (
 		searchResults *models.SearchResults
+		searchStatus  int
 		searchErr     error
 	)
 
@@ -76,19 +77,19 @@ func ProfileGet(w http.ResponseWriter, r *http.Request) {
 	wg.Add(1)
 	go func(ctx context.Context, q url.Values) {
 		defer wg.Done()
-		searchResults, searchErr = api.DoSearch(r.Context(), q)
+		searchResults, searchStatus, searchErr = api.DoSearch(r.Context(), q)
 	}(r.Context(), q)
 
 	// Wait for all queries and check for errors
 	wg.Wait()
 
 	if profileErr != nil {
-		w.Write([]byte(profileErr.Error()))
+		errors.Render(w, r, profileStatus, profileErr)
 		return
 	}
 
 	if searchErr != nil {
-		w.Write([]byte(searchErr.Error()))
+		errors.Render(w, r, searchStatus, searchErr)
 		return
 	}
 
@@ -105,7 +106,6 @@ func ProfileGet(w http.ResponseWriter, r *http.Request) {
 
 	err := templates.RenderHTML(w, "profile", data)
 	if err != nil {
-		fmt.Printf("could not render %s\n", r.URL)
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, http.StatusOK, err)
 	}
 }

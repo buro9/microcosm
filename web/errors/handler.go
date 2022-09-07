@@ -1,8 +1,8 @@
-package controllers
+package errors
 
 import "net/http"
 
-func renderError(w http.ResponseWriter, req *http.Request, err error) {
+func Render(w http.ResponseWriter, req *http.Request, statusCode int, err error) {
 	w.Header().Set("Content-Type", "text/plain")
 	w.Write([]byte("Microcosm web client error:\n"))
 	w.Write([]byte(err.Error()))

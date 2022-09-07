@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/templates"
 )
 
@@ -25,9 +25,9 @@ func TodayGet(w http.ResponseWriter, r *http.Request) {
 		q.Add("offset", offset)
 	}
 
-	searchResults, err := api.DoSearch(r.Context(), q)
+	searchResults, status, err := api.DoSearch(r.Context(), q)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 		return
 	}
 
@@ -43,7 +43,6 @@ func TodayGet(w http.ResponseWriter, r *http.Request) {
 
 	err = templates.RenderHTML(w, "today", data)
 	if err != nil {
-		fmt.Printf("could not render %s\n", r.URL)
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 	}
 }

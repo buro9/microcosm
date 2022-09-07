@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 
 	"github.com/buro9/microcosm/models"
 	"github.com/buro9/microcosm/web/api"
 	"github.com/buro9/microcosm/web/bag"
+	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/templates"
 )
 
@@ -23,9 +23,9 @@ func HuddlesGet(w http.ResponseWriter, r *http.Request) {
 		q.Add("unread", "true")
 	}
 
-	huddles, err := api.GetHuddles(r.Context(), q)
+	huddles, status, err := api.GetHuddles(r.Context(), q)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 		return
 	}
 
@@ -41,7 +41,6 @@ func HuddlesGet(w http.ResponseWriter, r *http.Request) {
 
 	err = templates.RenderHTML(w, "huddles", data)
 	if err != nil {
-		fmt.Printf("could not render %s\n", r.URL)
-		w.Write([]byte(err.Error()))
+		errors.Render(w, r, status, err)
 	}
 }

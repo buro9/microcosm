@@ -12,7 +12,7 @@ import (
 
 // GetConversation returns a conversation if this user (defined by context) has
 // permission to view it
-func GetConversation(ctx context.Context, conversationID int64, jumpTo string, query url.Values) (*models.Conversation, error) {
+func GetConversation(ctx context.Context, conversationID int64, jumpTo string, query url.Values) (*models.Conversation, int, error) {
 
 // Set the query options
 	q := url.Values{}
@@ -23,7 +23,7 @@ func GetConversation(ctx context.Context, conversationID int64, jumpTo string, q
 
 	resp, err := apiGet(Params{Ctx: ctx, Type: "conversations", TypeID: strconv.FormatInt(conversationID, 10), Part: jumpTo, Q: q})
 	if err != nil {
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
@@ -31,8 +31,8 @@ func GetConversation(ctx context.Context, conversationID int64, jumpTo string, q
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
 		log.Print(err)
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 
-	return &apiResp.Data, nil
+	return &apiResp.Data, resp.StatusCode, nil
 }

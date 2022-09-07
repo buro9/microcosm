@@ -11,10 +11,10 @@ import (
 
 // GetUpdates returns the personalised list of items that have been updated for
 // the given user (defined by context)
-func GetUpdates(ctx context.Context, q url.Values) (*models.UpdatesResults, error) {
+func GetUpdates(ctx context.Context, q url.Values) (*models.UpdatesResults, int, error) {
 	resp, err := apiGet(Params{Ctx: ctx, Type: "updates", Q: q})
 	if err != nil {
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
@@ -22,8 +22,8 @@ func GetUpdates(ctx context.Context, q url.Values) (*models.UpdatesResults, erro
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
 		log.Print(err)
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 
-	return &apiResp.Data, nil
+	return &apiResp.Data, resp.StatusCode, nil
 }

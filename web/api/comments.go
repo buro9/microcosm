@@ -10,11 +10,11 @@ import (
 )
 
 // GetCommentAttachments returns attachments for a given comment
-func GetCommentAttachments(ctx context.Context, commentID int64) (*models.Attachments, error) {
+func GetCommentAttachments(ctx context.Context, commentID int64) (*models.Attachments, int, error) {
 
 	resp, err := apiGet(Params{Ctx: ctx, Type: "comments", TypeID: strconv.FormatInt(commentID, 10), Part: "attachments"})
 	if err != nil {
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 
@@ -22,8 +22,8 @@ func GetCommentAttachments(ctx context.Context, commentID int64) (*models.Attach
 	err = json.NewDecoder(resp.Body).Decode(&apiResp)
 	if err != nil {
 		log.Print(err)
-		return nil, err
+		return nil, resp.StatusCode, err
 	}
 
-	return &apiResp.Data, nil
+	return &apiResp.Data, resp.StatusCode, nil
 }
