@@ -59,7 +59,7 @@
 						</div>
 					{{ else }}
 						{{ with (microcosm_link $event.Meta.Links "microcosm") }}
-							<a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
+							<a href="{{ .Href | microcosm_api2ui }}">{{ .Title | safeHTML }}</a>
 						{{ end }}
 					{{ end }}
 				</div>

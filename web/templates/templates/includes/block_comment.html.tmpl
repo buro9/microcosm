@@ -41,7 +41,7 @@
 					{{ if eq $result.ParentItemType "profile" }}
 						<a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}"><h3 class="row-title">@{{ $parent.ProfileName | safeHTML }}</h3></a>
 					{{ else }}
-						<a href="{{ (microcosm_link $comment.Meta.Links "self").Href }}incontext/"><h3 class="row-title">{{ $parent.Title | safeHTML }}</h3></a>
+						<a href="{{ (microcosm_link $comment.Meta.Links "self").Href | microcosm_api2ui }}incontext/"><h3 class="row-title">{{ $parent.Title | safeHTML }}</h3></a>
 					{{ end }}
 				</div>
 
@@ -52,7 +52,7 @@
 					{{ else if eq $result.ParentItemType "profile" }}
 						<a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}">Profiles</a>
 					{{ else }}
-						<a href="{{ (microcosm_link $parent.Meta.Links "microcosm").Href }}">{{ (microcosm_link $parent.Meta.Links "microcosm").Title | safeHTML }}</a>
+						<a href="{{ (microcosm_link $parent.Meta.Links "microcosm").Href | microcosm_api2ui }}">{{ (microcosm_link $parent.Meta.Links "microcosm").Title | safeHTML }}</a>
 					{{ end }}
 					&bull;
 					<time datetime="{{ $comment.Meta.Created | rfcTime }}">{{ $comment.Meta.Created | naturalTime }}</time>

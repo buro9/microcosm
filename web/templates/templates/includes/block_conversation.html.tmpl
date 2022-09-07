@@ -38,7 +38,7 @@
 						</div>
 					{{ else }}
 						{{ with (microcosm_link $conversation.Meta.Links "microcosm") }}
-							in <a href="{{ .Href }}">{{ .Title | safeHTML }}</a>
+							in <a href="{{ .Href | microcosm_api2ui }}">{{ .Title | safeHTML }}</a>
 						{{ end }}
 					{{ end }}
 				</div>

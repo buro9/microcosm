@@ -61,10 +61,10 @@
 		</div>
 		<div class="pagination-alt-xs">
 			{{ with (microcosm_link .pagination.Links "first") }}
-				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{ .Href }}">First</a>
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{ .Href | microcosm_api2ui }}">First</a>
 			{{ end }}
 			{{ with (microcosm_link .pagination.Links "prev") }}
-				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{ .Href }}">Prev</a>
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-left" href="{{ .Href | microcosm_api2ui }}">Prev</a>
 			{{ end }}
 			{{ if gt .pagination.TotalPages 1 }}
 				<form
@@ -94,10 +94,10 @@
 				</form>
 			{{ end }}
 			{{ with (microcosm_link .pagination.Links "last") }}
-				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{ .Href }}">Last</a>
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{ .Href | microcosm_api2ui }}">Last</a>
 			{{ end }}
 			{{ with (microcosm_link .pagination.Links "next") }}
-				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{ .Href }}">Next</a>
+				<a class="btn btn-primary btn-xs pagination-alt-btn pagination-alt-right" href="{{ .Href | microcosm_api2ui }}">Next</a>
 			{{ end }}
 		</div>
 	{{ end }}

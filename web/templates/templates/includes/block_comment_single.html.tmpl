@@ -29,7 +29,7 @@
 				{{ if $comment.InReplyTo }}
 				<span class="comment-item-in-reply-to" itemprop="mentions" itemscope itemtype="http://schema.org/Comment">
 					<span class="sprite sprite-arrow-forward"></span>
-					<a href="{{ microcosm_url `comment-incontext` $comment.InReplyTo }}" itemprop="url">in reply to</a> <a href="{{ (microcosm_link $comment.Meta.Links "inReplyToAuthor").Href | safeHTML }}">@{{ (microcosm_link $comment.Meta.Links "inReplyToAuthor").Title | safeHTML }}</a>
+					<a href="{{ microcosm_url `comment-incontext` $comment.InReplyTo }}" itemprop="url">in reply to</a> <a href="{{ (microcosm_link $comment.Meta.Links "inReplyToAuthor").Href | microcosm_api2ui }}">@{{ (microcosm_link $comment.Meta.Links "inReplyToAuthor").Title | safeHTML }}</a>
 				</span>
 				{{ end }}
 			</div>

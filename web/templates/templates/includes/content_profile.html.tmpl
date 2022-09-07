@@ -15,7 +15,7 @@
 							<img class="profile-header-avatar"
 									 src="{{ if contains .Profile.AvatarURL `gravatar` }}{{ .Profile.AvatarURL }}{{ else }}{{ if contains .Profile.AvatarURL `files` }}https://{{ .Site.SubdomainKey}}.microco.sm{{ .Profile.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}{{ end }}" class="gravatar" alt="Avatar for {{ .Profile.ProfileName | safeHTML }}" />
 							<div class="profile-header-text">
-								<h1><a href="{{ (microcosm_link .Profile.Meta.Links "self").Href }}">{{ .Profile.ProfileName | safeHTML }}</a></h1>
+								<h1><a href="{{ (microcosm_link .Profile.Meta.Links "self").Href | microcosm_api2ui }}">{{ .Profile.ProfileName | safeHTML }}</a></h1>
 								Member since {{ .Profile.Created.Month }} {{.Profile.Created.Year }}
 								&bull;
 								Last active {{ .Profile.LastActive.Month }} {{ .Profile.LastActive.Year }}
