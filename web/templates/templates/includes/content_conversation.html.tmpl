@@ -13,8 +13,7 @@
 			<h1 itemprop="name"><a id="title" href="{{ (microcosm_link .Conversation.Meta.Links `self`).Href | microcosm_api2ui }}">{{ .Conversation.Title | safeHTML }}</a></h1>
 			<div class="row">
 				<div class="item-meta col-sm-6">
-					Posted on <strong><time class="plain" itemprop="dateCreated" datetime="{{ .Conversation.Meta.Created | rfcTime }}">{{ .Conversation.Meta.Created | naturalTime }}</time></strong>
-					{# {% include "forms/content-moderation.html" %} #}
+					Posted <strong><time itemprop="dateCreated" datetime="{{ .Conversation.Meta.Created | rfcTime }}">{{ .Conversation.Meta.Created | naturalTime }}</time></strong>
 				</div>
 				<div class="col-sm-6">
 					{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
@@ -27,11 +26,10 @@
 		{{ $user := .User }}
 		{{ $parent := .Conversation }}
 		{{ $site := .Site }}
-		{{ range $index, $comment := .Comments}}
+		{{ range $index, $comment := .Comments }}
 			{{ template "block_comment_single" (dict "comment" $comment "hidePermalink" false "index" $index "itemType" "conversation" "parent" $parent "site" $site "user" $user) }}
 		{{ end }}
 	</ul>
-	{# {% include "forms/content-moderation.html" %} #}
 </div>
 
 

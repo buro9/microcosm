@@ -53,7 +53,7 @@
 
 var subscribe = new Subscribe({
 	el        : '.subscribe',
-	url       : '{% url 'single-watcher' %}',
+	url       : '{{ microcosm_url `single-watcher` }}',
 	updateType: 9,
 	type      : 'profile',
 	id        : 0,
