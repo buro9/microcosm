@@ -1,5 +1,5 @@
 IMPORT_PATH := github.com/buro9/microcosm
-GOCMD := go1.19
+GOCMD := go
 
 VERSION          := $(shell git describe --tags --always --dirty="-dev")
 DATE             := $(shell date -u '+%Y-%m-%d-%H%M UTC')
@@ -19,10 +19,20 @@ deps:
 	$Q $(GOCMD) get -d -u ./...
 	$Q $(GOCMD) mod vendor
 
+.PHONY: run
 run: microcosm-web
 	$Q docker-compose up
 
+.PHONY: refresh
 refresh: microcosm-web
 	$Q docker-compose stop web
 	$Q docker-compose rm -f web
 	$Q docker-compose up -d
+
+.PHONY: vuln
+vuln:
+	$Q govulncheck ./...
+
+.PHONY: requirements
+requirements:
+	$Q $(GOCMD) install golang.org/x/vuln/cmd/govulncheck@latest
