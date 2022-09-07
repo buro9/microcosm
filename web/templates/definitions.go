@@ -50,6 +50,16 @@ var searchResults = []string{
 	"content_searchresults",
 }
 
+var today = []string{
+	"block_conversation",
+	"block_event",
+	"block_huddle",
+	"block_list_comment",
+	"block_microcosm",
+	"block_profile",
+	"content_today",
+}
+
 func loadDefinitions() {
 	loadDefinitionsOnce.Do(
 		func() {
@@ -87,7 +97,7 @@ func loadDefinitions() {
 				{
 					Base:     "base",
 					Page:     "today",
-					Includes: Collate("sidebar_today", page, searchResults),
+					Includes: Collate("sidebar_today", page, today),
 				},
 				{
 					Base:     "base",

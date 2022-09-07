@@ -80,6 +80,8 @@ func url(key string, args ...interface{}) string {
 				return fmt.Sprintf("/comments/%d/", v)
 			case "comment-incontext":
 				return fmt.Sprintf("/comments/%d/incontext/", v)
+			case "conversation":
+				return fmt.Sprintf("/conversations/%d/", v)
 			case "conversation-create":
 				return fmt.Sprintf("/microcosms/%d/create/conversation/", v)
 			case "event-create":

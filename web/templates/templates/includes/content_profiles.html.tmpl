@@ -1,8 +1,13 @@
 {{ define "content_profiles" }}
 <div class="content-header padded">
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			{{ template "breadcrumb" (dict "content" .Profiles "skipParents" true "skipSelf" true "section" .Section) }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<h1><a href="{{ microcosm_url `profile-list` }}">People</a></h1>
 		</div>
 		<div class="col-sm-6">
 			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
@@ -11,17 +16,28 @@
 </div>
 
 <div class="content-body">
-	<!-- TODO {% include "forms/content-moderation.html" %} -->
-	<div class="list-items">
-		<ul class="list-collection bordered padded">
+	<div class="profile-section padded">
+		<h3>
+			{{ if (or .Profiles.Query.Following (or .Profiles.Query.Online .Profiles.Query.Top)) }}
+				<span class="pull-right">
+					{{if .Profiles.Query.Following }}following{{ if (or .Profiles.Query.Online .Profiles.Query.Top) }},{{ end }}{{ end }}
+					{{if .Profiles.Query.Online }}online now{{ if .Profiles.Query.Top }},{{ end }}{{ end }}
+					{{if .Profiles.Query.Top }}most comments{{ end }}
+				</span>
+			{{ end }}
+			Directory
+			{{ if (ne .Profiles.Query.Q "")}}
+				<span class="text-muted"> / names starting with {{ .Profiles.Query.Q }}</span>
+			{{ end }}
+		</h3>
+		<ul class="list-profiles">
 		{{ $site := .Site }}
 		{{ $user := .User }}
 		{{ range .Profiles.Items.AsProfileSummaries }}
-			{{ template "block_profile" (dict "profile" . "sendMessage" true "showAvatar" true "site" $site "user" $user) }}
+			{{ template "block_profile" (dict "noIcon" true "profile" . "sendMessage" true "showAvatar" true "site" $site "user" $user) }}
 		{{ end }}
 		</ul>
 	</div>
-	<!-- TODO {% include "forms/content-moderation.html" %} -->
 </div>
 
 <div class="content-footer padded">

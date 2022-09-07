@@ -1,8 +1,21 @@
-{{ define "content_searchresults" }}
+{{ define "content_today" }}
+
+
 <div class="content-header padded">
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col-sm-12">
 			{{ template "breadcrumb" (dict "content" .SearchResults "skipParents" true "skipSelf" true "section" .Section) }}
+		</div>
+	</div>
+	{{ if eq .SearchResults.Items.Total 0 }}
+	<h1>The forum has been quiet today.</h1>
+</div>
+<div class="content-body">
+	<p>Be the first to make a post today.</p>
+	{{ else }}
+	<div class="row">
+		<div class="col-sm-6">
+			<h1>Today on {{ .Site.Title | safeHTML }}</h1>
 		</div>
 		<div class="col-sm-6">
 			{{ template "pagination" (dict "pagination" .Pagination "query" .Query) }}
@@ -36,6 +49,7 @@
 		{{ end }}
 		</ul>
 	</div>
+	{{ end }}
 </div>
 
 <div class="content-footer padded">
