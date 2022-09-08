@@ -53,7 +53,7 @@ github.com/spf13/cast
 # github.com/stretchr/testify v1.8.0
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
-# golang.org/x/net v0.0.0-20220906165146-f3363e06e74c
+# golang.org/x/net v0.0.0-20220907135653-1e95f45603a7
 ## explicit; go 1.17
 golang.org/x/net/html
 golang.org/x/net/html/atom
