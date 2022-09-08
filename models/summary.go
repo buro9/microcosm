@@ -39,9 +39,12 @@ type SummaryItem struct {
 		} `json:"flags,omitempty"`
 	} `json:"meta"`
 
-	// Search results may come with a highlighted portion that matches the
-	// searched term
-	Highlight string `json:"highlight"`
+	// Related to search results where the Item is not yet parsed and the page
+	// needs to be able to consistently render something
+	Unread       bool      `json:"unread"`
+	Rank         float64   `json:"rank"`
+	LastModified time.Time `json:"lastModified`
+	Highlight    string    `json:"highlight"`
 }
 
 // AsItemSummary will return the raw input as a SummaryItem

@@ -1,6 +1,7 @@
 {{ define "block_event" }}
 {{ $event := .event }}
 {{ $showForum := .showForum }}
+{{ $unread := .unread }}
 {{ $user := .user }}
 <li class="list-collection-row{{ if $event.Meta.Flags.Sticky }} row-pinned{{ end }} {{ if eq $event.Meta.Flags.Deleted true }} row-deleted{{ end }}" id="event{{ $event.ID }}" itemscope itemtype="http://schema.org/Event">
 	<div class="row block">
@@ -17,9 +18,7 @@
 			<div class="cell-icon-offset">
 				<h3 class="cell-title" itemprop="name">
 					<a href="/events/{{ $event.ID }}/{{ if $user }}newest/{{ end }}" itemprop="url">{{ if isSet $event "Highlight" }}{{ $event.Highlight | safeHTML }}{{ else }}{{ $event.Title | safeHTML }}{{ end }}</a>
-					<!-- TODO: There was a .unread on this, is that if the microcosm is unread? -->
-					<!-- TODO: There was a $event.Unread on this, I think that's from a search result -->				
-					{{ if $event.Meta.Flags.Unread }}<span class="label label-warning">NEW</span>{{ end }}
+					{{ if (or $event.Meta.Flags.Unread $unread)}}<span class="label label-warning">NEW</span>{{ end }}
 				</h3>
 				{{ if $event.Meta.CreatedBy }}
 				<div class="cell-started">

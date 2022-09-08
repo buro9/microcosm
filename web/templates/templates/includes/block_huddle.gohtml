@@ -2,6 +2,7 @@
 {{ $huddle := .huddle }}
 {{ $unread := .unread }}
 {{ $site := .site }}
+{{ $unread := .unread }}
 {{ $user := .user }}
 <li class="list-collection-row">
 	<div class="row block">
@@ -12,7 +13,7 @@
 			<div class="cell-icon-offset">
 				<h3 class="cell-title">
 					<a href="{{ microcosm_url "huddle-newest" $huddle.ID }}">{{ $huddle.Title | safeHTML }}</a>
-					{{ if $unread }}
+					{{ if (or $huddle.Meta.Flags.Unread $unread) }}
 					<span class="label label-warning">NEW</span>
 					{{ end }}
 				</h3>

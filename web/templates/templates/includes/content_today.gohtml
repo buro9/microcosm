@@ -30,16 +30,16 @@
 		{{ $user := .User }}
 		{{ range .SearchResults.Items.AsSummaryItems }}
 			{{ if eq .ItemType "conversation" }}
-				{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .Item) "showForum" true "user" $user) }}
+				{{ template "block_conversation" (dict "conversation" (.AsConversationSummary .Item) "showForum" true "unread" .Unread "user" $user) }}
 
 			{{ else if eq .ItemType "event" }}
-				{{ template "block_event" (dict "event" (.AsEventSummary .Item) "showForum" true "user" $user) }}
+				{{ template "block_event" (dict "event" (.AsEventSummary .Item) "showForum" true "unread" .Unread "user" $user) }}
 
 			{{ else if eq .ItemType "huddle" }}
-				{{ template "block_huddle" (dict "huddle" (.AsHuddleSummary .Item) "site" $site "user" $user "unread" .Meta.Flags.Unread )}}
+				{{ template "block_huddle" (dict "huddle" (.AsHuddleSummary .Item) "site" $site "unread" .Unread "user" $user )}}
 
 			{{ else if eq .ItemType "microcosm" }}
-				{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" true "user" $user) }}
+				{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" true "unread" .Unread "user" $user) }}
 
 			{{ else if eq .ItemType "profile" }}
 				{{ template "block_profile" (dict "profile" (.AsProfileSummary .Item) "sendMessage" true "showAvatar" true "site" $site "user" $user) }}

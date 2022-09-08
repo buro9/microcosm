@@ -1,6 +1,7 @@
 {{ define "block_conversation" }}
 {{ $conversation := .conversation }}
 {{ $showForum := .showForum }}
+{{ $unread := .unread }}
 {{ $user := .user }}
 <li class="list-collection-row{{ if $conversation.Meta.Flags.Sticky }} row-pinned{{ end }} {{ if eq $conversation.Meta.Flags.Deleted true }} row-deleted{{ end }}" id="conversation{{ $conversation.ID }}" itemscope itemtype="http://schema.org/Article">
 	<div class="row block">
@@ -17,9 +18,7 @@
 			<div class="cell-icon-offset">
 				<h3 class="cell-title" itemprop="name">
 					<a href="/conversations/{{ $conversation.ID }}/{{ if $user }}newest/{{ end }}" itemprop="url">{{ if isSet $conversation "Highlight" }}{{ $conversation.Highlight | safeHTML }}{{ else }}{{ $conversation.Title | safeHTML }}{{ end }}</a>
-					<!-- TODO: There was a .unread on this, is that if the microcosm is unread? -->
-					<!-- TODO: There was a $conversation.Unread on this, I think that's from a search result -->
-					{{ if $conversation.Meta.Flags.Unread }}<span class="label label-warning">NEW</span>{{ end }}
+					{{ if (or $conversation.Meta.Flags.Unread $unread) }}<span class="label label-warning">NEW</span>{{ end }}
 				</h3>
 				{{ if $conversation.Meta.CreatedBy }}
 				<div class="cell-started">

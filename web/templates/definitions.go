@@ -64,6 +64,16 @@ var today = []string{
 	"content_today",
 }
 
+var updates = []string{
+	"block_conversation",
+	"block_event",
+	"block_huddle",
+	"block_list_comment",
+	"block_microcosm",
+	"block_profile",
+	"content_updates",
+}
+
 func loadDefinitions() {
 	loadDefinitionsOnce.Do(
 		func() {
@@ -121,7 +131,7 @@ func loadDefinitions() {
 				{
 					Base:     "base",
 					Page:     "updates",
-					Includes: Collate("sidebar_updates", page, searchResults),
+					Includes: Collate("sidebar_updates", page, updates),
 				},
 			}
 		},
