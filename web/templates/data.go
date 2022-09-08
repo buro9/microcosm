@@ -35,4 +35,8 @@ type Data struct {
 	Profiles      *models.Profiles
 	Profile       *models.Profile
 	SearchResults *models.SearchResults
+
+	// Used by the error handler
+	Error      error
+	StatusCode int
 }

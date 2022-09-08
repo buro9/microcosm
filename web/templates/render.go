@@ -25,7 +25,7 @@ func RenderHTML(
 	//
 	// The map exists in templates.go and is populated at init from the
 	// definitions held in definitions.go
-	tmpl := templates[name].Lookup(name + ".html.tmpl")
+	tmpl := templates[name].Lookup(name + ".gohtml")
 	if tmpl == nil {
 		return fmt.Errorf("the template named '%s' does not exist", name)
 	}

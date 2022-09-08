@@ -1,0 +1,16 @@
+{{ define "title" }}
+<title>403 Forbidden | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="404 Not Found" />
+{{ end }}
+
+{{ define "content" }}
+	<div class="content-header padded">
+	    <h1>Not Found</h1>
+	</div>
+	<p class="row-meta">Sorry, we couldn't find that. It might have been deleted.</p>
+	<p class="row-meta"><a href="/">Click here to go back to the homepage</a>.</p>
+{{ end }}
+
+{{ define "sidebar" }}{{ end }}
+
+{{ define "js" }}{{ end }}

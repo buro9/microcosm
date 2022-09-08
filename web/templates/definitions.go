@@ -4,6 +4,10 @@ import "sync"
 
 var loadDefinitionsOnce sync.Once
 
+var error403 = []string{}
+var error404 = []string{}
+var error500 = []string{}
+
 var conversation = []string{
 	"block_comment_single",
 	"content_conversation",
@@ -64,6 +68,21 @@ func loadDefinitions() {
 	loadDefinitionsOnce.Do(
 		func() {
 			Templates = []Template{
+				{
+					Base:     "base",
+					Page:     "403",
+					Includes: Collate(page, error403),
+				},
+				{
+					Base:     "base",
+					Page:     "404",
+					Includes: Collate(page, error404),
+				},
+				{
+					Base:     "base",
+					Page:     "500",
+					Includes: Collate(page, error500),
+				},
 				{
 					Base:     "base",
 					Page:     "conversation",

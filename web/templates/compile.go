@@ -16,7 +16,7 @@ var compileTemplatesOnce sync.Once
 // the Templates slice
 var templates map[string]*template.Template
 
-//go:embed templates/*/*.html.tmpl
+//go:embed templates/*/*.gohtml
 var templateFS embed.FS
 
 // Compile compiles templates and is expected to be called by main.go
@@ -29,7 +29,7 @@ func Compile() {
 				templates = make(map[string]*template.Template)
 			}
 
-			pathFormat := "templates/%s/%s.html.tmpl"
+			pathFormat := "templates/%s/%s.gohtml"
 
 			for _, t := range Templates {
 				// Gather a list of all files required by this template

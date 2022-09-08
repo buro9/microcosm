@@ -1,0 +1,24 @@
+{{ define "title" }}
+<title>500 Internal Server Error | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="404 Not Found" />
+{{ end }}
+
+{{ define "content" }}
+	<div class="content-header padded">
+		<h1>Internal Server Error</h1>
+	</div>
+	<p class="row-meta">We're sorry, there was a temporary error when we tried to process your request.</p>
+	{{ if .Error }}
+	<p class="row-meta">The reason was: <em>{{ .Error }}</em></p>
+	{{ else }}
+	<p class="row-meta">The error has been logged. Please try again later.</p>
+	{{ end }}
+	<div style="display:none;">
+	::CLOUDFLARE_ERROR_500S_BOX::
+	</div>
+	<p class="row-meta"><a href="/">Click here to go back to the homepage</a>.</p>
+{{ end }}
+
+{{ define "sidebar" }}{{ end }}
+
+{{ define "js" }}{{ end }}
