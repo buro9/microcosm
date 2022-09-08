@@ -55,7 +55,7 @@
 			<div class="metabar-module-body">
 				<p>{{ .Microcosm.Description | safeHTML }}</p>
 				<p class="metabar-module-author">
-					Created by <a href="{{ microcosm_url `profile-single` .Microcosm.Meta.CreatedBy.ID }}" id="created_by"><img src="{{ if contains `gravatar` .Microcosm.Meta.CreatedBy.AvatarURL }}{{ .Microcosm.Meta.CreatedBy.AvatarURL }}{{ else }}{{ if contains `files` .Microcosm.Meta.CreatedBy.AvatarURL }}https://{{ .Site.SubdomainKey }}.microco.sm{{ .Microcosm.Meta.CreatedBy.AvatarURL }}{{ else }}/static/img/avatar.gif{{ end }}{{ end }}" alt="Avatar for {{ .Microcosm.Meta.CreatedBy.ProfileName | safeHTML }}" /> @{{ trunc .Microcosm.Meta.CreatedBy.ProfileName 25 | safeHTML }}</a> <time datetime="{{ .Microcosm.Meta.Created | naturalTime }}"></time>
+					Created by <a href="{{ microcosm_url `profile-single` .Microcosm.Meta.CreatedBy.ID }}" id="created_by"><img src="{{ if contains `gravatar` .Microcosm.Meta.CreatedBy.AvatarURL }}{{ .Microcosm.Meta.CreatedBy.AvatarURL }}{{ else }}{{ if contains `files` .Microcosm.Meta.CreatedBy.AvatarURL }}https://{{ .Site.SubdomainKey }}.microco.sm{{ .Microcosm.Meta.CreatedBy.AvatarURL }}{{ else }}/static/{{ __VERSION__ }}/img/avatar.gif{{ end }}{{ end }}" alt="Avatar for {{ .Microcosm.Meta.CreatedBy.ProfileName | safeHTML }}" /> @{{ trunc .Microcosm.Meta.CreatedBy.ProfileName 25 | safeHTML }}</a> <time datetime="{{ .Microcosm.Meta.Created | naturalTime }}"></time>
 				</p>
 				<p><a href="{{ microcosm_url `memberships-list` $microcosmID }}">Who has access to this forum?</a></p>
 			</div>

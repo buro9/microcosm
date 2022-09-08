@@ -29,13 +29,13 @@ func main() {
 
 	// Compile all templates, these are .MustCompile and so will prevent later
 	// runtime errors relating to badly formatted templates
-	templates.Compile()
+	templates.Compile(Version)
 
 	api.NewCache(*opts.MemcacheAddr)
 
 	// Listen and wait for errors (none should ever be received, so we should
 	// run forever)
-	errs := server.ListenAndServe()
+	errs := server.ListenAndServe(Version)
 	select {
 	case err := <-errs:
 		log.Fatal(err)

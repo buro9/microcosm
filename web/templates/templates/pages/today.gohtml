@@ -4,7 +4,7 @@
 {{ end }}
 
 {{ define "content" }}
-	
+
 
     {{ template "content_today" . }}
 {{ end }}
@@ -14,7 +14,7 @@
 {{ end }}
 
 {{ define "js" }}
-<script type="text/javascript" src="/static/js/filters.js"></script>
+<script type="text/javascript" src="/static/{{ __VERSION__ }}/js/filters.js"></script>
 <script type="text/javascript">
 (function(){
 	window.search_filters = new Filters({
