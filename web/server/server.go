@@ -17,7 +17,7 @@ import (
 )
 
 // ListenAndServe will run the web server
-func ListenAndServe() chan error {
+func ListenAndServe(version string) chan error {
 	router := chi.NewRouter()
 
 	// Pages group, handles all routes for pages and defines the appropriate
@@ -60,7 +60,7 @@ func ListenAndServe() chan error {
 		router.Use(middleware.Logger)
 		router.Use(mm.ForceSSL)
 
-		router.Mount(`/static`, staticFiles())
+		router.Mount(`/static`, staticFiles(version))
 
 		router.Get(`/favicon.ico`, func(w http.ResponseWriter, r *http.Request) {
 			file, err := inlinedFiles.ReadFile("static/favicon.ico")
@@ -157,16 +157,13 @@ func ListenAndServe() chan error {
 var inlinedFiles embed.FS
 var lastModified time.Time = time.Now()
 
-func staticFiles() http.Handler {
+func staticFiles(version string) http.Handler {
 	router := chi.NewRouter()
 
 	// Do nothing, but implement http.Handler
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if t, err := time.Parse(http.TimeFormat, r.Header.Get("If-Modified-Since")); err == nil && lastModified.Before(t.Add(1*time.Second)) {
-				w.WriteHeader(304)
-				return
-			}
+			r.URL.Path = strings.Replace(r.URL.Path, version + "/", "", 1)
 
 			switch {
 			case strings.HasSuffix(r.URL.Path, `.apng`):
@@ -209,8 +206,7 @@ func staticFiles() http.Handler {
 				w.Header().Set(`Content-Type`, `image/webp`)
 			}
 
-			w.Header().Set("Last-Modified", lastModified.UTC().Format(http.TimeFormat))
-			w.Header().Set("Cache-Control", "no-cache")
+			w.Header().Set("Cache-Control", "public,max-age=604800")
 
 			next.ServeHTTP(w, r)
 		})

@@ -2,6 +2,7 @@
 	{{ if .Microcosm }}
 		{{ $microcosmID := .Microcosm.ID }}
 		{{ if .Microcosm.Meta.Flags.Open }}
+		FOO{{ .Microcosm.Meta.Flags.Open }}BAR
 			{{ if or (.Microcosm.Meta.Permissions.IsSiteOwner) (.Microcosm.Meta.Permissions.IsOwner) (.Microcosm.Meta.Permissions.IsModerator) }}
 				<div class="metabar-module">
 					<div class="metabar-module-primary-buttons">

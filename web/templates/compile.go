@@ -22,7 +22,7 @@ var templateFS embed.FS
 // Compile compiles templates and is expected to be called by main.go
 // as we require that the flags are parsed first to obtain the value of
 // *opts.FilesPath
-func Compile() {
+func Compile(version string) {
 	compileTemplatesOnce.Do(
 		func() {
 			if templates == nil {
@@ -49,11 +49,16 @@ func Compile() {
 					)
 				}
 
+				funcMap := funcs.FuncMap
+				funcMap["__VERSION__"] = func () string {
+					return version
+				}
+
 				// MustCompile all templates as a compile error is more preferable than a
 				// runtime error
 				templates[t.Page] =
 					template.Must(
-						template.New(t.Base).Funcs(funcs.FuncMap).ParseFS(
+						template.New(t.Base).Funcs(funcMap).ParseFS(
 							templateFS,
 							paths...,
 						),

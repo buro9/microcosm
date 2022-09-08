@@ -32,16 +32,16 @@ type Microcosm struct {
 		EditedBy   *ProfileSummary `json:"editedBy,omitempty"`
 		EditReason *string         `json:"editReason,omitempty"`
 		Flags      struct {
-			Sticky    *bool `json:"sticky,omitempty"`
-			Open      *bool `json:"open,omitempty"`
-			Deleted   *bool `json:"deleted,omitempty"`
-			Moderated *bool `json:"moderated,omitempty"`
-			Visible   *bool `json:"visible,omitempty"`
-			Unread    *bool `json:"unread,omitempty"`
-			Watched   *bool `json:"watched,omitempty"`
-			Ignored   *bool `json:"ignored,omitempty"`
-			SendEmail *bool `json:"sendEmail,omitempty"`
-			SendSMS   *bool `json:"sendSMS,omitempty"`
+			Sticky    bool `json:"sticky,omitempty"`
+			Open      bool `json:"open,omitempty"`
+			Deleted   bool `json:"deleted,omitempty"`
+			Moderated bool `json:"moderated,omitempty"`
+			Visible   bool `json:"visible,omitempty"`
+			Unread    bool `json:"unread,omitempty"`
+			Watched   bool `json:"watched,omitempty"`
+			Ignored   bool `json:"ignored,omitempty"`
+			SendEmail bool `json:"sendEmail,omitempty"`
+			SendSMS   bool `json:"sendSMS,omitempty"`
 		} `json:"flags,omitempty"`
 		Stats       []Stat     `json:"stats,omitempty"`
 		Links       []Link     `json:"links,omitempty"`
