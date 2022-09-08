@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 
@@ -13,6 +15,13 @@ import (
 
 // HuddlesGet will fetch the home page
 func HuddlesGet(w http.ResponseWriter, r *http.Request) {
+	user := bag.GetProfile(r.Context())
+	if user == nil {
+		errors.Render(w, r, http.StatusForbidden, fmt.Errorf(`Need to be signed in to view huddles`))
+		return
+	}
+
+
 	// Set the query options
 	q := url.Values{}
 	offset := r.URL.Query().Get("offset")
@@ -32,7 +41,7 @@ func HuddlesGet(w http.ResponseWriter, r *http.Request) {
 	data := templates.Data{
 		Request:    r,
 		Site:       bag.GetSite(r.Context()),
-		User:       bag.GetProfile(r.Context()),
+		User:       user,
 		Section:    `huddles`,
 		Pagination: models.ParsePagination(huddles.Items),
 
