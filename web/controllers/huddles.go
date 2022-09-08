@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"net/url"
 
@@ -20,7 +19,6 @@ func HuddlesGet(w http.ResponseWriter, r *http.Request) {
 		errors.Render(w, r, http.StatusForbidden, fmt.Errorf(`Need to be signed in to view huddles`))
 		return
 	}
-
 
 	// Set the query options
 	q := url.Values{}
