@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"fmt"
-	"log"
+	// "log"
 	"net/http"
 	"net/url"
 
