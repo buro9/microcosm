@@ -77,7 +77,7 @@
 
 				const ancestor = i.parentNode.parentNode;
 
-				// not sure what this does?
+				// GOTCHA: not sure what this does?
 				// probably prevents toggling something in datepicker or similar
 				if (ancestor.classList.contains('pills-event') || ancestor.classList.contains('cell-meta-event')) {
 					return;
@@ -94,12 +94,6 @@
 	}
 
 	const makeCodeLookPretty = () => {
-		const acceptedLangs = [
-			"bsh", "c", "cc", "cpp", "cs", "csh", "cyc", "cv",
-			"htm", "html", "java", "js", "m", "mxml", "perl", "pl",
-			"pm", "py", "rb", "sh", "xhtml", "xml", "xsl"
-		];
-
 		const codeBlocks = document.querySelectorAll('pre > code');
 
 		[...codeBlocks].forEach(codeElem => {
@@ -109,13 +103,6 @@
 
 			pre.classList.add('prettyprint');
 			pre.classList.add('linenums');
-
-			// GOTCHA: I don't think the templates even support setting the language of a code block
-			const lang = pre.getAttribute('lang');
-
-			if (typeof lang !== 'undefined' && lang != '' && acceptedLangs.indexOf(lang) > -1) {
-				pre.classList.add('lang-' + lang);
-			}
 		});
 
 		prettyPrint();
