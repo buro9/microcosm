@@ -3,8 +3,8 @@ package opts
 import (
 	"flag"
 	"os"
-	"sync"
 	"strconv"
+	"sync"
 
 	"github.com/gorilla/securecookie"
 )

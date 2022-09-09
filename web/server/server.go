@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
-	"time"
 	"os"
 	"path"
+	"strings"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -208,7 +208,7 @@ func staticFiles(version string) http.Handler {
 				w.Header().Set(`Content-Type`, `image/webp`)
 			}
 
-			if(*opts.IsDevelopment == false) {
+			if *opts.IsDevelopment == false {
 				w.Header().Set("Cache-Control", "public,max-age=604800")
 			} else {
 				w.Header().Set("Cache-Control", "no-cache")
@@ -221,7 +221,7 @@ func staticFiles(version string) http.Handler {
 	if *opts.IsDevelopment {
 		// Serve static files from disk
 		cwd, _ := os.Getwd()
-		fileSystem := http.Dir(path.Join(cwd,"web/server/static"))
+		fileSystem := http.Dir(path.Join(cwd, "web/server/static"))
 		router.Mount(`/`,
 			http.StripPrefix("/static/", http.FileServer(fileSystem)),
 		)
@@ -231,8 +231,6 @@ func staticFiles(version string) http.Handler {
 			http.FileServer(http.FS(inlinedFiles)),
 		)
 	}
-
-
 
 	return router
 }
