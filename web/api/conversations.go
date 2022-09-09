@@ -14,7 +14,7 @@ import (
 // permission to view it
 func GetConversation(ctx context.Context, conversationID int64, jumpTo string, query url.Values) (*models.Conversation, int, error) {
 
-// Set the query options
+	// Set the query options
 	q := url.Values{}
 	offset := query.Get("offset")
 	if offset != "" {

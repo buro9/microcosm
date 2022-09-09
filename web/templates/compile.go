@@ -50,7 +50,7 @@ func Compile(version string) {
 				}
 
 				funcMap := funcs.FuncMap
-				funcMap["__VERSION__"] = func () string {
+				funcMap["__VERSION__"] = func() string {
 					return version
 				}
 

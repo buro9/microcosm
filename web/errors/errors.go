@@ -39,5 +39,4 @@ var (
 	ErrSecureCookieMustExist = fmt.Errorf(
 		`SecureCookie must exist`,
 	)
-
 )

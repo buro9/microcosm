@@ -163,7 +163,7 @@ func staticFiles(version string) http.Handler {
 	// Do nothing, but implement http.Handler
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			r.URL.Path = strings.Replace(r.URL.Path, version + "/", "", 1)
+			r.URL.Path = strings.Replace(r.URL.Path, version+"/", "", 1)
 
 			switch {
 			case strings.HasSuffix(r.URL.Path, `.apng`):

@@ -37,7 +37,7 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 			}
 			comment.Files = *commentAttachments.Attachments.AsAttachments()
 		}
-		comments = append(comments,comment)
+		comments = append(comments, comment)
 	}
 
 	data := templates.Data{
@@ -47,7 +47,7 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 		Section:    `home`,
 		Pagination: models.ParsePagination(conversation.Items),
 
-		Comments: &comments,
+		Comments:     &comments,
 		Conversation: conversation,
 	}
 

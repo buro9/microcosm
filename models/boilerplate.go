@@ -5,7 +5,8 @@ package models
 // we do not define that here so that other structs can use this and add the
 // typed data as needed rather than us using an interface{} here, it it the
 // equivalent of:
-// 	Data    interface{} `json:"data"`
+//
+//	Data    interface{} `json:"data"`
 type BoilerPlate struct {
 	Context string   `json:"context"`
 	Status  int      `json:"status"`
