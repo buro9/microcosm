@@ -31,6 +31,7 @@ var page = []string{
 }
 
 var profile = []string{
+	"block_comment",
 	"block_conversation",
 	"block_event",
 	"block_huddle",

@@ -53,6 +53,10 @@
 
 			{{ else if eq .ItemType "profile" }}
 				{{ template "block_profile" (dict "profile" (.AsProfileSummary .Item) "sendMessage" true "showAvatar" true "site" $site "user" $user) }}
+
+			{{ else if eq .ItemType "comment" }}
+				{{ template "block_list_comment" (dict "comment" (.AsCommentSummary .Item) "parent" (.AsConversationSummary .ParentItem) "result" . "showAvatar" true "site" $site "user" $user) }}
+
 			{{ else }}
 				<li>{{ .ItemType }}</li>
 			{{ end }}
