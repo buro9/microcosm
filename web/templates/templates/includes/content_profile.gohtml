@@ -66,6 +66,9 @@
 								{{ else if eq .ItemType "microcosm" }}
 									{{ template "block_microcosm" (dict "microcosm" (.AsMicrocosmSummary .Item) "showForum" false "user" $user) }}
 
+								{{ else if eq .ItemType "comment" }}
+									{{ template "block_list_comment" (dict "comment" (.AsCommentSummary .Item) "parent" (.AsConversationSummary .ParentItem) "result" . "showAvatar" true "site" $site "user" $user) }}
+
 								{{ else }}
 									<li>{{ .ItemType }}</li>
 								{{ end }}
