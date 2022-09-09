@@ -4,6 +4,7 @@ import (
 	"flag"
 	"os"
 	"sync"
+	"strconv"
 
 	"github.com/gorilla/securecookie"
 )
@@ -21,6 +22,8 @@ const (
 	// TODO: Rotate and move to environment vars
 	defaultCookieHashKey  = "70ce1fb50f865ef4f984fcb6fcabf1e870ce1fb50f865ef4f984fcb6fcabf1e8"
 	defaultCookieBlockKey = "ed6f16535958f69087ccdd1556b6335d"
+
+	defaultIsDevelopment = false
 )
 
 var parseFlags sync.Once
@@ -61,6 +64,10 @@ var (
 	// SecureCookie is an instance of gorilla securecookie that will be used
 	// by the web app and underlines CSRF tokens
 	SecureCookie *securecookie.SecureCookie
+
+	// Enables dev mode
+	// Whether static assets are served from bundle
+	IsDevelopment *bool
 )
 
 // RegisterFlags adds the flags needed by the UI if they have not already been
@@ -142,6 +149,13 @@ func RegisterFlags() {
 				`the cookie values are encrypted by this block key (64 chars)
 	alternatively $`+envPrefix+`COOKIE_BLOCK_KEY
 	(default "`+defaultCookieBlockKey+`")`,
+			)
+
+			IsDevelopment = flag.Bool(
+				"dev",
+				false,
+				`is development
+	(default "`+strconv.FormatBool(defaultIsDevelopment)+`")`,
 			)
 		},
 	)

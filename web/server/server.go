@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"os"
+	"path"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -206,16 +208,31 @@ func staticFiles(version string) http.Handler {
 				w.Header().Set(`Content-Type`, `image/webp`)
 			}
 
-			w.Header().Set("Cache-Control", "public,max-age=604800")
+			if(*opts.IsDevelopment == false) {
+				w.Header().Set("Cache-Control", "public,max-age=604800")
+			} else {
+				w.Header().Set("Cache-Control", "no-cache")
+			}
 
 			next.ServeHTTP(w, r)
 		})
 	})
 
-	// Serve static files
-	router.Mount(`/`,
-		http.FileServer(http.FS(inlinedFiles)),
-	)
+	if *opts.IsDevelopment {
+		// Serve static files from disk
+		cwd, _ := os.Getwd()
+		fileSystem := http.Dir(path.Join(cwd,"web/server/static"))
+		router.Mount(`/`,
+			http.StripPrefix("/static/", http.FileServer(fileSystem)),
+		)
+	} else {
+		// Serve static files from embedded artefacts
+		router.Mount(`/`,
+			http.FileServer(http.FS(inlinedFiles)),
+		)
+	}
+
+
 
 	return router
 }

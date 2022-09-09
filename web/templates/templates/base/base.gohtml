@@ -15,9 +15,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 
-		<link href="/static/{{ __VERSION__ }}/themes/{{ .Site.ThemeID | default 1 }}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="/static{{ __VERSION__ }}/themes/{{ .Site.ThemeID | default 1 }}/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
-		<link rel="shortcut icon" href="{{ .Site.FaviconURL | default "/static/{{ __VERSION__ }}/img/favico.png" }}" />
+		<link rel="shortcut icon" href="{{ .Site.FaviconURL | default "/static{{ __VERSION__ }}/img/favico.png" }}" />
 
 		<meta name="subdomain" content="https://{{ .Site.SubdomainKey }}.microco.sm" />
 
@@ -279,19 +279,19 @@
         </div>
 		{{ end }}
 
-		<script src="/static/{{ __VERSION__ }}/3rd/jquery/1.10.2/jquery.min.js"></script>
-		<script src="/static/{{ __VERSION__ }}/3rd/moment.js/2.10.6/moment.min.js"></script>
-		<script src="/static/{{ __VERSION__ }}/3rd/prettify/r298/prettify.js"></script>
-		<script src="/static/{{ __VERSION__ }}/js/bootstrap.min.js"></script>
-		<script src="/static/{{ __VERSION__ }}/js/base.js"></script>
-		<script src="/static/{{ __VERSION__ }}/js/metabar.js?v=20160619"></script>
+		<script src="/static{{ __VERSION__ }}/3rd/jquery/1.10.2/jquery.min.js"></script>
+		<script src="/static{{ __VERSION__ }}/3rd/moment.js/2.10.6/moment.min.js"></script>
+		<script src="/static{{ __VERSION__ }}/3rd/prettify/r298/prettify.js"></script>
+		<script src="/static{{ __VERSION__ }}/js/bootstrap.min.js"></script>
+		<script src="/static{{ __VERSION__ }}/js/base.js"></script>
+		<script src="/static{{ __VERSION__ }}/js/metabar.js?v=20160619"></script>
 
 		<!-- Signout form is universal to all auth methods -->
 		<form id="signout-form" class="hidden" method="POST" action="{{ microcosm_url `logout` }}"></form>
 
 		{{ if (and (ne .Site.Auth0Domain "") (ne .Site.Auth0ClientID "")) }}
 			{{ if (isNil .User) }}
-				<script src="/static/{{ __VERSION__ }}/3rd/auth0/lock-passwordless/2.2.3/lock-passwordless.min.js"></script>
+				<script src="/static{{ __VERSION__ }}/3rd/auth0/lock-passwordless/2.2.3/lock-passwordless.min.js"></script>
 				<script type="text/javascript">
 				function auth0signin() {
 					var domain = {{ .Site.Auth0Domain }};
