@@ -51,7 +51,7 @@
 				i.innerHTML = td;
 			}
 
-			// Tooltip for precise date
+			// title for precise date
 			const tt = i.getAttribute('title');
 			const tip = formatPreciseDate(new Date(dt))
 			if (!tt || tt != tip) {
