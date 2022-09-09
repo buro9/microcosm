@@ -121,6 +121,40 @@
 		prettyPrint();
 	}
 
+	const paginationFormsBlurHandler = () => {
+		const paginationForms = document.querySelectorAll('form[name=paginationByOffset]');
+
+		[...paginationForms].forEach(f => {
+			f.addEventListener('submit', (e) => {
+				console.log("Page jump requested")
+
+				const initial = e.target.getAttribute('data-initial'),
+					limit = e.target.getAttribute('data-limit'),
+					max = e.target.getAttribute('data-max'),
+					value = parseInt(e.target.querySelector('input[type=text]').value),
+					hidden = e.target.querySelector('input[name=offset]');
+
+				console.log("limit = " + limit + " , max = " + max + " , value = " + value);
+
+				if (!isNaN(value) && value >= 1 && value <= max && value != initial) {
+					console.log("Jump")
+					if (limit && value) {
+						hidden.value = (limit * (value - 1));
+					}
+				} else {
+					console.log("Cancel jump")
+					e.preventDefault();
+				}
+			});
+
+			f.querySelector('input[type=text]').addEventListener('blur', (e) => {
+				f.dispatchEvent(new Event('submit', {
+					'bubbles': true,
+					'cancelable': true,
+				}));
+			});
+		});
+	};
 
 	const onDomReadyHandler = () => {
 		// times
@@ -130,42 +164,13 @@
 
 		// code blocks
 		makeCodeLookPretty();
+
+		// pagination forms blur handler
+		paginationFormsBlurHandler();
 	};
 
 
 	document.addEventListener('DOMContentLoaded', onDomReadyHandler, false);
-
-})();
-
-////////////////////
-//	pagination    //
-////////////////////
-(function () {
-	$('form[name=paginationByOffset]').submit(function (e) {
-		console.log("Page jump requested")
-
-		var self = $(this),
-			initial = self.attr('data-initial'),
-			limit = self.attr('data-limit'),
-			max = self.attr('data-max'),
-			value = parseInt(self.find('input[type=text]').val()),
-			hidden = self.find('input[name=offset]');
-
-		console.log("limit = " + limit + " , max = " + max + " , value = " + value);
-
-		if (!isNaN(value) && value >= 1 && value <= max && value != initial) {
-			console.log("Jump")
-			if (limit && value) {
-				hidden.val(limit * (value - 1));
-			}
-		} else {
-			console.log("Cancel jump")
-			e.preventDefault();
-		}
-	});
-	$('form[name=paginationByOffset] > input[type=text]').blur(function () {
-		$(this).parent().submit();
-	});
 })();
 
 ////////////////////
