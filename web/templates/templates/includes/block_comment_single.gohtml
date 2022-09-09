@@ -7,7 +7,7 @@
 	{{ $itemType := .itemType }}
 	{{ $site := .site }}
 	{{ $user := .user }}
-	
+
 <li id="comment{{ $comment.ID }}" class="comment-item padded" itemscope itemtype="http://schema.org/Comment">
 	<a id="{{ $comment.ID }}"></a>
 	<div class="comment-item-inner">
@@ -62,7 +62,7 @@
 		<div class="comment-item-footer">
 
 		{{ if $user }}
-			{{ if (or $parent.Meta.Permissions.IsSiteOwner $comment.Meta.Permissions.CanDelete ) }}
+			{{ if (or $parent.Meta.Permissions.IsSiteOwner ($comment.Meta.Permissions | default dict).CanDelete ) }}
 			<div class="delete-comment">
 				<form action="{{ microcosm_url `comment-delete` $comment.ID }}" method="POST">
 					{% csrf_token %}
@@ -71,7 +71,7 @@
 			</div>
 			{{ end }}
 
-			{{ if (or $parent.Meta.Permissions.IsSiteOwner (or $comment.Meta.Permissions.CanUpdate (eq $comment.Meta.CreatedBy.ID $user.ID))) }}
+			{{ if (or $parent.Meta.Permissions.IsSiteOwner (or ($comment.Meta.Permissions | default dict).CanUpdate (eq $comment.Meta.CreatedBy.ID $user.ID))) }}
 			<a class="insertReplyBox comment-item-footer-btn comment-item-footer-btn-first {{ if not $parent.Meta.Permissions.CanDelete }}comment-item-footer-btn-last{{ end }}"
 				 data-action="{{ microcosm_url `comment-edit` $comment.ID }}"
 				 data-source="{{ microcosm_url `single-comment` $comment.ID }}"

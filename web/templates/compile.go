@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"sync"
 
+	"github.com/buro9/microcosm/web/opts"
 	"github.com/buro9/microcosm/web/templates/funcs"
 )
 
@@ -51,7 +52,11 @@ func Compile(version string) {
 
 				funcMap := funcs.FuncMap
 				funcMap["__VERSION__"] = func() string {
-					return version
+					if *opts.IsDevelopment {
+						return ""
+					}
+
+					return "/" + version
 				}
 
 				// MustCompile all templates as a compile error is more preferable than a
