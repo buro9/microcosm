@@ -15,8 +15,18 @@ func SearchGet(w http.ResponseWriter, r *http.Request) {
 	// We're not sanitising the input here as the API does that very thoroughly:
 	// https://github.com/microcosm-cc/microcosm/blob/main/models/search_query.go
 	//
-	// Knowing this, we're just going to pass this straight through.
-	searchResults, status, err := api.DoSearch(r.Context(), r.URL.Query())
+	// Knowing this, we're just going to pass this straight through whereas
+	// everywhere else we effectively sanitise the input by checking every arg
+	// as that would improve cacheability of the underlying resource, but here
+	// we're allowing something deep inside the API to do that.
+	q := r.URL.Query()
+
+	if q.Has("defaults") {
+		q.Set("inTitle", "true")
+		q.Set("sort", "date")
+	}
+
+	searchResults, status, err := api.DoSearch(r.Context(), q)
 	if err != nil {
 		errors.Render(w, r, status, err)
 		return
