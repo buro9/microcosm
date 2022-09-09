@@ -17,6 +17,7 @@ func SiSuffix(value interface{}) string {
 	case float32:
 		f = float64(v)
 	case float64:
+		f = v
 	case int:
 		f = float64(v)
 	case int32:
@@ -154,8 +155,8 @@ func computeSI(input float64) (float64, string) {
 func si(input float64) string {
 	value, prefix := computeSI(input)
 	n := fmt.Sprintf("%v", value)
-	if strings.Index(n, ".") > -1 && len(n) -1  - strings.Index(n, ".") > 2 {
-		n = n[:strings.Index(n, ".") + 3]
+	if strings.Index(n, ".") > -1 && len(n)-1-strings.Index(n, ".") > 2 {
+		n = n[:strings.Index(n, ".")+3]
 	}
 	return stripTrailingZeros(n) + prefix
 }

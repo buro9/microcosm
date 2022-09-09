@@ -1,0 +1,249 @@
+{{ define "sidebar_search" }}
+<div class="metabar-module metabar-filters">
+	{{ if (and (in .SearchResults.Query.ItemTypesQuery "event") (eq (.SearchResults.Query.ItemTypesQuery | len) 1)) }}
+	<h5>Popular Searches</h5>
+	<div class="metabar-module">
+		<div class="metabar-module-primary-buttons">
+			<a href="/search?type=event&amp;eventAfter=0&amp;sort=oldest" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-calendar-small"></span> All Upcoming Events</a>
+			<a href="/search?type=event&amp;eventBefore=0&amp;sort=newest" class="btn btn-large btn-block btn-primary"><span class="sprite sprite-calendar-small"></span> All Past Events</a>
+		</div>
+	</div>
+	{{ end }}
+
+	<h5>Search Options</h5>
+	<div class="metabar-module-title">
+		<h3>Types to Display</h3>
+	</div>
+	<div class="metabar-module-body">
+		<ul class="list-group">
+			{{ if not .SearchResults.Query.MicrocosmIDsQuery }}
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-microcosm">
+						<input id="filter-microcosm" type="checkbox" name="type" value="microcosm" {{ if in .SearchResults.Query.ItemTypesQuery "microcosm" }}checked="checked"{{ end }}/>
+						Forums
+					</label>
+				</div>
+			</li>
+			{{ end }}
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-conversation">
+						<input id="filter-conversation" type="checkbox" name="type" value="conversation" {{ if in .SearchResults.Query.ItemTypesQuery "conversation" }}checked="checked"{{ end }}/>
+						Conversations
+					</label>
+				</div>
+			</li>
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-events">
+						<input id="filter-events" type="checkbox"  name="type" value="event" {{ if in .SearchResults.Query.ItemTypesQuery "event" }}checked="checked"{{ end }}/>
+						Events
+					</label>
+				</div>
+			</li>
+			{{ if not .SearchResults.Query.MicrocosmIDsQuery }}
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-profiles">
+						<input id="filter-profiles" type="checkbox" name="type" value="profile" {{ if in .SearchResults.Query.ItemTypesQuery "profile" }}checked="checked"{{ end }}/>
+						Profile
+					</label>
+				</div>
+			</li>
+			{{ end }}
+			{{ if and (.User) (not .SearchResults.Query.MicrocosmIDsQuery) }}
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-huddles">
+						<input id="filter-huddles" type="checkbox" name="type" value="huddle" {{ if in .SearchResults.Query.ItemTypesQuery "huddle" }}checked="checked"{{ end }}/>
+						Messages
+					</label>
+				</div>
+			</li>
+			{{ end }}
+			{{ if not .SearchResults.Query.MicrocosmIDsQuery }}
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-comments">
+						<input id="filter-comments" type="checkbox" name="type" value="comment" {{ if in .SearchResults.Query.ItemTypesQuery "comment" }}checked="checked"{{ end }}/>
+						Comments
+					</label>
+				</div>
+			</li>
+			{{ end }}
+		</ul>
+	</div>
+	{{ if or .SearchResults.Query.Query .User }}
+	<div class="metabar-module-title">
+		<h3>Filters</h3>
+	</div>
+	<div class="metabar-module-body">
+		<ul class="list-group">
+			{{- /*
+			When ordering options, the most specific and specialised should be first and the most general should be last.
+			*/ -}}
+			
+			{{ if (and (in .SearchResults.Query.ItemTypesQuery "event") (eq (.SearchResults.Query.ItemTypesQuery | len) 1)) }}
+				{{ if .SearchResults.Query.EventAfter }}
+					<li class="list-group-item">
+						<div class="checkbox">
+							<label for="filter-eventAfter">
+								<input id="filter-eventAfter" type="checkbox" name="eventAfter" value="{{.SearchResults.Query.EventAfter}}" checked="checked" />
+								eventAfter = {{.SearchResults.Query.EventAfter}}
+							</label>
+						</div>
+					</li>
+				{{ end }}
+
+				{{ if .SearchResults.Query.EventBefore }}
+					<li class="list-group-item">
+						<div class="checkbox">
+							<label for="filter-eventBefore">
+								<input id="filter-eventBefore" type="checkbox" name="eventBefore" value="{{.SearchResults.Query.EventBefore}}" checked="checked" />
+								eventBefore = {{.SearchResults.Query.EventBefore}}
+							</label>
+						</div>
+					</li>
+				{{ end }}
+
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-attendee">
+							<input id="filter-attendee" type="checkbox" name="attendee" value="true" {{ if .SearchResults.Query.Attendee }}checked="checked"{{ end }}/>
+							Attended/Attending
+						</label>
+					</div>
+				</li>
+			{{ end }}
+
+			{{ if .SearchResults.Query.ProfileID }}
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-authorId">
+							<input id="filter-authorId" type="checkbox" name="authorId" value="{{.SearchResults.Query.ProfileID}}" checked="checked" />
+							authorId = {{.SearchResults.Query.ProfileID}}
+						</label>
+					</div>
+				</li>
+			{{ end }}
+
+			{{ range .SearchResults.Query.ItemIDsQuery }}
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-id{{.}}">
+							<input id="filter-id{{.}}" type="checkbox" name="id" value="{{.}}" checked="checked" />
+							id = {{.}}
+						</label>
+					</div>
+				</li>
+			{{ end }}
+
+			{{ range .SearchResults.Query.MicrocosmIDsQuery }}
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-forumId">
+							<input id="filter-forumId" type="checkbox" name="forumId" value="{{.}}" checked="checked" />
+							forumId = {{.}}
+						</label>
+					</div>
+				</li>
+			{{ end }}
+
+			{{ if .SearchResults.Query.Since }}
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-since">
+							<input id="filter-since" type="checkbox" name="since" value="{{.SearchResults.Query.Since}}" checked="checked" />
+							since = {{.SearchResults.Query.Since}}
+						</label>
+					</div>
+				</li>
+			{{ end }}
+
+			{{ if .SearchResults.Query.Until }}
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-until">
+							<input id="filter-until" type="checkbox" name="until" value="{{.SearchResults.Query.Until}}" checked="checked" />
+							until = {{.SearchResults.Query.Until}}
+						</label>
+					</div>
+				</li>
+			{{ end }}
+
+			{{ if .User }}
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-following">
+							<input id="filter-following" type="checkbox" name="following" value="true" {{ if .SearchResults.Query.Following }}checked="checked"{{ end }}/>
+							Following
+						</label>
+					</div>
+				</li>
+			{{ end }}
+
+			<li class="list-group-item">
+				<div class="checkbox">
+					<label for="filter-hasattachment">
+							<input id="filter-hasattachment" type="checkbox" name="has" value="attachment" {{ if (gt (.SearchResults.Query.Has | len) 0) }}{{ range .SearchResults.Query.Has }}{{ if eq . "attachment" }}checked="checked"{{ end }}{{ end }}{{ end }}/>
+							Has attachment
+					</label>
+				</div>
+			</li>
+
+			{{ if .SearchResults.Query.Query }}
+				<li class="list-group-item">
+					<div class="checkbox">
+						<label for="filter-intitle">
+							<input id="filter-intitle" type="checkbox" name="inTitle" value="true" {{ if .SearchResults.Query.InTitle }}checked="checked"{{ end }}/>
+							Title matched search terms
+						</label>
+					</div>
+				</li>
+			{{ end }}
+		</ul>
+		
+	</div>
+	{{ end }}
+
+	{{ if (or (.SearchResults.Query.Query) (and (in .SearchResults.Query.ItemTypesQuery "event") (eq (.SearchResults.Query.ItemTypesQuery | len) 1))) }}
+	<div class="metabar-module-title">
+		<h3>Order By</h3>
+	</div>
+	<div class="metabar-module-body">
+		{{ if (and (in .SearchResults.Query.ItemTypesQuery "event") (eq (.SearchResults.Query.ItemTypesQuery | len) 1)) }}
+			<div class="radio">
+				<label for="filter-oldest" title="ascending">
+					<input id="filter-oldest" type="radio" name="sort" value="oldest" {{ if eq .SearchResults.Query.Sort "oldest" }}checked="checked"{{ end }}/>
+					Event date &#x25B4; (Jan &gt; Dec)
+				</label>
+			</div>
+			<div class="radio">
+				<label for="filter-newest" title="descending">
+					<input id="filter-newest" type="radio" name="sort" value="newest" {{ if eq .SearchResults.Query.Sort "newest" }}checked="checked"{{ end }}/>
+					Event date &#x25BE; (Dec &gt; Jan)
+				</label>
+			</div>
+		{{ end }}
+
+		{{ if .SearchResults.Query.Query }}
+			<div class="radio">
+				<label for="filter-relevancy">
+					<input id="filter-relevancy" type="radio" name="sort" value="" {{ if not .SearchResults.Query.Sort }}checked="checked"{{ end }}/>
+					Relevancy
+				</label>
+			</div>
+		{{ end }}
+
+		<div class="radio">
+			<label for="filter-date">
+				<input id="filter-date" type="radio" name="sort" value="date" {{ if eq .SearchResults.Query.Sort "date" }}checked="checked"{{ end }}/>
+				Recent updates
+			</label>
+		</div>
+	</div>
+	{{ end }}
+
+</div> <!-- / filters -->
+{{ end }}

@@ -1,4 +1,5 @@
 {{ define "block_list_comment" }}
+{{- /* This displays a comment within search results, the today page, the updates page, and on the profile page */ -}}
 {{ $action := .action }}
 {{ $comment := .comment }}
 {{ $parent := .parent }}
@@ -52,7 +53,9 @@
 					{{ else if eq $result.ParentItemType "profile" }}
 						<a href="{{ microcosm_url "profile" $comment.Meta.CreatedBy.ID }}">Profiles</a>
 					{{ else }}
-						<a href="{{ (microcosm_link $parent.Meta.Links "microcosm").Href | microcosm_api2ui }}">{{ (microcosm_link $parent.Meta.Links "microcosm").Title | safeHTML }}</a>
+						{{ with (microcosm_link $parent.Meta.Links "microcosm") }}
+							<a href="{{ .Href | microcosm_api2ui }}">{{ .Title | safeHTML }}</a>
+   						{{ end }}
 					{{ end }}
 					&bull;
 					<time datetime="{{ $comment.Meta.Created | rfcTime }}">{{ $comment.Meta.Created | naturalTime }}</time>
