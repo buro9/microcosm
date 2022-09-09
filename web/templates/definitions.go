@@ -44,14 +44,14 @@ var profiles = []string{
 	"content_profiles",
 }
 
-var searchResults = []string{
+var search = []string{
 	"block_conversation",
 	"block_event",
 	"block_huddle",
 	"block_list_comment",
 	"block_microcosm",
 	"block_profile",
-	"content_searchresults",
+	"content_search",
 }
 
 var today = []string{
@@ -122,6 +122,11 @@ func loadDefinitions() {
 					Base:     "base",
 					Page:     "profiles",
 					Includes: Collate("sidebar_profiles", page, profiles),
+				},
+				{
+					Base:     "base",
+					Page:     "search",
+					Includes: Collate("sidebar_search", page, search),
 				},
 				{
 					Base:     "base",

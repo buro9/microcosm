@@ -14,6 +14,7 @@ func Plural(value interface{}, singular string, plural string) string {
 	case float64:
 		quantity = int(v)
 	case int:
+		quantity = v
 	case int32:
 		quantity = int(v)
 	case int64:
@@ -36,6 +37,7 @@ func PluralWord(value interface{}, singular string, plural string) string {
 	case float64:
 		quantity = int(v)
 	case int:
+		quantity = v
 	case int32:
 		quantity = int(v)
 	case int64:

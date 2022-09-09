@@ -1,0 +1,31 @@
+{{ define "title" }}
+<title>Search for {{ .SearchResults.Query.Searched }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }} | {{ .Site.Title | safeHTML }}</title>
+<meta name="Description" content="Today on {{ .Site.Title | safeHTML }} {{ if (and .Pagination (gt .Pagination.Page 1)) }} (page {{ .Pagination.Page }}){{ end }}" />
+{{ end }}
+
+{{ define "content" }}
+    {{ template "content_search" . }}
+{{ end }}
+
+{{ define "sidebar" }}
+    {{ template "sidebar_search" . }}
+{{ end }}
+
+{{ define "js" }}
+<script type="text/javascript" src="/static{{ __VERSION__ }}/js/filters.js"></script>
+<script type="text/javascript">
+(function(){
+	window.search_filters = new Filters({
+		el     : '.metabar-filters',
+		// TODO: Does this need url encoding?
+		query  : '{{ .SearchResults.Query.Query }}',
+		url    : '?q=$1'
+	});
+
+	$('form[role=search]').on(
+		'submit',
+		$.proxy(window.search_filters.formSubmit, window.search_filters)
+	);
+})();
+</script>
+{{ end }}

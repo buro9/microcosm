@@ -24,6 +24,7 @@ func init() {
 		// Transformation and generation
 		"dict":        transform.Dictionary,
 		"lower":       strings.ToLower,
+		"msToSeconds": transform.MsToSeconds,
 		"naturalTime": transform.NaturalTime,
 		"numcomma":    transform.NumComma,
 		"ord2suffix":  transform.OrdToSuffix,
