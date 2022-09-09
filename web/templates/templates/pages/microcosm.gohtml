@@ -20,7 +20,8 @@
 		type      : 'microcosm',
 		id        : {{ .Microcosm.ID }},
 		//token     : '{% csrf_token %}',
-		is_subscribed : false
+		is_subscribed : {{ .Microcosm.Meta.Flags.Watched | default `false` | lower }}
+	});
 	});
 </script>
 {{ end }}
