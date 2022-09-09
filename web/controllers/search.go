@@ -37,6 +37,7 @@ func SearchGet(w http.ResponseWriter, r *http.Request) {
 		Site:       bag.GetSite(r.Context()),
 		User:       bag.GetProfile(r.Context()),
 		Section:    `search`,
+		Query:      &searchResults.Query,
 		Pagination: models.ParsePagination(searchResults.Items),
 
 		SearchResults: searchResults,

@@ -167,10 +167,10 @@
 												class="form-control"
 												name="q"
 												placeholder="Search"
-												{{ if and (.Query) (ne .Section `today`) }}{{ if ne .Query.Query "" }}value="{{ .Query.Query }}"{{ end }}{{ end }}
+												{{ if and (.Query) (ne .Section `today`) }}value="{{ .Query.Query }}"{{ end }}
 												tabindex="1"
 											/>
-											{{ if or (isNil .Query) (eq .Section `today`) }}
+											{{ if or (not .Query) (eq .Section `today`) }}
 											<input type="hidden" name="defaults" value="true" />
 											{{ end }}
 											<span class="input-group-btn">
