@@ -47,6 +47,8 @@ func ListenAndServe(version string) chan error {
 		router.Get(`/profiles/{profileID:[1-9][0-9]+}/`, controllers.ProfileGet)
 		router.Get(`/profiles/`, controllers.ProfilesGet)
 
+		router.Get(`/search/`, controllers.SearchGet)
+
 		router.Get(`/today/`, controllers.TodayGet)
 
 		router.Get(`/updates/`, controllers.UpdatesGet)
@@ -56,7 +58,6 @@ func ListenAndServe(version string) chan error {
 
 	// Static file group, defines minimal middleware
 	router.Group(func(router chi.Router) {
-		// TODO: Log the static, disabled during dev
 		router.Use(mm.RealIP)
 		router.Use(middleware.RequestID)
 		router.Use(middleware.Logger)

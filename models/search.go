@@ -44,6 +44,16 @@ type SearchQuery struct {
 	Has               []string `json:"has,omitempty"`
 	Sort              string   `json:"sort,omitempty"`
 
+	// Not yet implement in search
+	Lat         float64 `json:"lat,omitempty"`
+	Lon         float64 `json:"lon,omitempty"`
+	Radius      int64   `json:"radius,omitempty"`
+	North       float64 `json:"north,omitempty"`
+	East        float64 `json:"east,omitempty"`
+	South       float64 `json:"south,omitempty"`
+	West        float64 `json:"west,omitempty"`
+	ProfileName string  `json:"author,omitempty"`
+
 	Ignored  string `json:"ignored,omitempty"`
 	Searched string `json:"searched,omitempty"`
 }
