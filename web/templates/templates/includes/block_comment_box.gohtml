@@ -1,0 +1,77 @@
+{{ define "block_comment_box" }}
+<div class="reply-box" data-num-attachments="0">
+	<ul class="wmd-button-bar">
+		<li>
+			<span class="sprite sprite-bold-small"></span>
+			<strong class="wmd-button-bar-btn-text">Bold</strong>
+		</li>
+		<li>
+			<span class="sprite sprite-italic-small"></span>
+			<i class="wmd-button-bar-btn-text">Italics</i>
+		</li>
+		<li>
+			<span class="sprite sprite-format-link"></span>
+			<span class="wmd-button-bar-btn-text">Link</span>
+		</li>
+		<li>
+			<span class="sprite sprite-format-img"></span>
+			<span class="wmd-button-bar-btn-text">Image</span>
+		</li>
+		<li>
+			<span class="sprite sprite-format-list"></span>
+			<span class="wmd-button-bar-btn-text">List</span>
+		</li>
+		<li>
+			<span class="sprite sprite-quote-small"></span>
+			<span class="wmd-button-bar-btn-text">Quote</span>
+		</li>
+		<li>
+			<span class="sprite sprite-code-small"></span>
+			<span class="wmd-button-bar-btn-text">code</span>
+		</li>
+		<li class="pull-right">
+			<span class="sprite sprite-preview-small"></span>
+			<span class="wmd-button-bar-btn-text">Preview</span>
+		</li>
+	</ul>
+
+	{{ if .user }}
+		<form action="#" method="POST" enctype="multipart/form-data">
+			<textarea
+				id="reply-box-textarea"
+				class="wmd-input"
+				name="markdown"
+				maxlength="5000"
+				placeholder="Enter your text here..."
+				tabindex="1"></textarea>
+
+				<div class="reply-box-footer">
+					{{ if not .no_attachments }}
+						<div class="reply-box-attachments">
+							<div class="reply-box-attachments-gallery"></div>
+							<label for="reply-box-attachments">
+								Upload a file
+							</label> (max 30 MB per file, 5 files total)
+							<input type="file" id="reply-box-attachments" name="attachments" multiple />
+						</div>
+					{{ end }}
+
+
+					<input id="submit" type="submit" class="btn btn-primary" value="Post reply" tabindex="1" />
+					<input type="reset" class="btn btn-default" value="Cancel">
+					<a href="javascript:void 0" class="formatting-help-handle" data-toggle="modal" data-target="#formatting-help-modal"><span class="sprite sprite-help-small"></span> <span class="wmd-button-bar-btn-text">Formatting help</span></a>
+				</div>
+		</form>
+		<div class="wmd-preview-wrapper">
+		<div class="wmd-preview-title">
+			<strong>Preview</strong> &bull; click the preview button again to close
+		</div>
+		<div class="comment-item-body wmd-preview"></div>
+	</div>
+	{{ else }}
+		<div class="dummy-textarea">
+			<button class="btn btn-primary" onclick="authSignin();">Sign-in to post a reply</button>
+		</div>
+	{{ end }}
+</div>
+{{ end }}
