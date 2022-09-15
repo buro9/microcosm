@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/buro9/funcs v1.0.3
-	github.com/go-chi/chi v1.5.4
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
@@ -16,6 +15,7 @@ require (
 	github.com/bradfitz/gomemcache v0.0.0-20220106215444-fb4bf637b56d // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0 // indirect
+	github.com/go-chi/chi/v5 v5.0.7
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.20 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
