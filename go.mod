@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/buro9/funcs v1.0.3
+	github.com/go-chi/chi v1.5.4
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
