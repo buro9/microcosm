@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 
 	"github.com/buro9/microcosm/web/controllers"
 	mm "github.com/buro9/microcosm/web/middleware"

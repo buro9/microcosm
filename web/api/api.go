@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gregjones/httpcache"
 
 	"github.com/buro9/microcosm/models"
