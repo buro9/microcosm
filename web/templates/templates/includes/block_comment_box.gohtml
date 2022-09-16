@@ -36,7 +36,9 @@
 	</ul>
 
 	{{ if .user }}
-		<form action="#" method="POST" enctype="multipart/form-data">
+		<form action="/comments/create" method="POST" enctype="multipart/form-data">
+			<input type="hidden" name="csrf_token" value="{{ .CsrfToken }}" />
+
 			<textarea
 				id="reply-box-textarea"
 				class="wmd-input"

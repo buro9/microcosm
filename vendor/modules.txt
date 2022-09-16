@@ -25,6 +25,9 @@ github.com/dustin/go-humanize/english
 ## explicit; go 1.14
 github.com/go-chi/chi/v5
 github.com/go-chi/chi/v5/middleware
+# github.com/gorilla/csrf v1.7.1
+## explicit; go 1.13
+github.com/gorilla/csrf
 # github.com/gorilla/css v1.0.0
 ## explicit
 github.com/gorilla/css/scanner
@@ -44,6 +47,9 @@ github.com/microcosm-cc/bluemonday/css
 # github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 ## explicit; go 1.12
 github.com/oxtoacart/bpool
+# github.com/pkg/errors v0.9.1
+## explicit
+github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib

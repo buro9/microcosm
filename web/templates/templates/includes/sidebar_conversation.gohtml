@@ -61,7 +61,7 @@
 		{{ if not .Conversation.Meta.Permissions.IsOwner }}
 		<div class="metabar-module-body">
 			<form action="/ignore/" method="POST" id="ignore_form">
-				{% csrf_token %}
+				<input type="hidden" name="csrf_token" value="{{ .CsrfToken }}" />"
 				<input type="hidden" name="item_type" value="conversation" />
 				<input type="hidden" name="item_id" value="{{ .Conversation.ID }}" />
 				{{ if .Conversation.Meta.Flags.Ignored }}

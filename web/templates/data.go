@@ -17,6 +17,7 @@ import (
 type Data struct {
 	// Every request has these
 	Request    *http.Request
+	CsrfToken  string
 	Site       *models.Site
 	Section    string // Which part of the navbar to highlight
 	Query      *models.SearchQuery

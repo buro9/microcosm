@@ -8,6 +8,7 @@ import (
 	"github.com/buro9/microcosm/web/bag"
 	"github.com/buro9/microcosm/web/errors"
 	"github.com/buro9/microcosm/web/templates"
+	"github.com/gorilla/csrf"
 )
 
 // ConversationGet will fetch a conversation
@@ -42,6 +43,7 @@ func ConversationGet(w http.ResponseWriter, r *http.Request) {
 
 	data := templates.Data{
 		Request:    r,
+		CsrfToken:  csrf.Token(r),
 		Site:       bag.GetSite(r.Context()),
 		User:       bag.GetProfile(r.Context()),
 		Section:    `home`,

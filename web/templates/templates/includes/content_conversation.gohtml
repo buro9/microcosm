@@ -42,5 +42,5 @@
 	</div>
 </div>
 
-{{ template "block_reply_container" (dict "conversation" .Conversation "user" .User "site" .Site) }}
+{{ template "block_reply_container" (dict "conversation" .Conversation "user" .User "site" .Site "CsrfToken" .CsrfToken) }}
 {{ end }}
