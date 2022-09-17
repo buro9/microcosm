@@ -1,4 +1,4 @@
-(function (w, d, $, undefined) {
+(function (w, d) {
 
   var FileHandler = (function () {
 
@@ -7,12 +7,10 @@
       if (typeof opts.el !== 'undefined') {
         if (typeof opts.el === 'string') {
           this.el_name = opts.el;
-          this.$el = $(this.el);
-          this.el = this.$el[0];
+          this.el = d.querySelector(opts.el);
         } else if (typeof opts.el === 'object') {
 
           this.el = opts.el;
-          this.$el = $(opts.el);
           this.el_name = '.' + this.el.className;
 
         } else {
@@ -23,7 +21,7 @@
       if (typeof opts.dropzone !== 'undefined') {
         this.dropzone = opts.dropzone;
       }
-      this.input = this.$el.find('input[type=file]')[0];
+      this.input = this.el.querySelector('input[type=file]');
 
       this.event_type = false;
 
@@ -64,16 +62,23 @@
       // we only want to call our ondragged callback when all "files" have been loaded
       callback = (function (e, i) {
 
-        var modified_attachment;
-
         // instance of progressevent assumes readasDataurl was triggered
         if (e instanceof ProgressEvent) {
-          modified_attachment = Object.assign({}, this.input.files[i], { data: e.target.result });
+          const f = this.input.files[i];
+
+          const modified_attachment = {
+            lastModified: f.lastModified,
+            name: f.name,
+            size: f.size,
+            type: f.type,
+            data: e.target.result,
+            originalFile: f,
+          };
           // we use Array.unshift here to push image files to the front of the stack (ie. opposite of Array.push)
           // this makes it easier when we render to html (ie. will render all images first, then non-images)
           this.stack.unshift(modified_attachment);
         } else {
-          modified_attachment = this.input.files[i];
+          const modified_attachment = this.input.files[i];
           this.stack.push(modified_attachment);
         }
 
@@ -162,14 +167,11 @@
       for (const event of events) {
         const [eventType, srcSelector, handlerFunc] = event;
 
-        console.log(eventType, srcSelector, handlerFunc);
-
         this.el.addEventListener(eventType, (e) => {
           if (!e.target.matches(srcSelector)) {
             return false;
           }
 
-          console.log(e);
           this[handlerFunc].call(this, e);
         });
       }
@@ -183,6 +185,6 @@
 
   })();
 
-  window.FileHandler = FileHandler;
+  w.FileHandler = FileHandler;
 
-})(window, document, jQuery);
+})(window, document);
