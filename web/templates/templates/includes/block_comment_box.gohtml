@@ -37,7 +37,11 @@
 
 	{{ if .user }}
 		<form action="/comments/create" method="POST" enctype="multipart/form-data">
-			<input type="hidden" name="csrf_token" value="{{ .CsrfToken }}" />
+			<input type="hidden" name="csrfmiddlewaretoken" value="{{ .CsrfToken }}" />
+			<input id="id_id" name="id" type="hidden" value="">
+			<input id="id_inReplyTo" name="inReplyTo" type="hidden" value="">
+			<input id="id_itemId" name="itemId" type="hidden" value="{{ .ItemId }}">
+			<input id="id_itemType" name="itemType" type="hidden" value="{{ .ItemType }}">
 
 			<textarea
 				id="reply-box-textarea"

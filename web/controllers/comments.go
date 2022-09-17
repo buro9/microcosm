@@ -7,7 +7,11 @@ import (
 )
 
 type FormValues struct {
-	Markdown string
+	Markdown  string
+	ID        string
+	InReplyTo string
+	ItemId    string
+	ItemType  string
 }
 
 // LogoutPost will remove the session cookie, thus logging the user out
@@ -21,6 +25,10 @@ func CommentsPost(w http.ResponseWriter, r *http.Request) {
 
 	values := new(FormValues)
 	values.Markdown = r.Form.Get("markdown")
+	values.ID = r.Form.Get("id")
+	values.InReplyTo = r.Form.Get("inReplyTo")
+	values.ItemId = r.Form.Get("itemId")
+	values.ItemType = r.Form.Get("itemType")
 
 	b, err := json.Marshal(values)
 	if err != nil {

@@ -24,10 +24,13 @@ import (
 func ListenAndServe(version string) chan error {
 	router := chi.NewRouter()
 
+	csrfKeyString := *opts.CsrfKey
+	csrfKeyBytes := []byte(csrfKeyString)
+
 	csrfMiddleware :=
-		csrf.Protect([]byte("32-byte-long-auth-key"),
+		csrf.Protect(csrfKeyBytes,
 			csrf.Secure(false),
-			csrf.FieldName("csrf_token"))
+			csrf.FieldName("csrfmiddlewaretoken"))
 
 	// Pages group, handles all routes for pages and defines the appropriate
 	// middleware for web pages
