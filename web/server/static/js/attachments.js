@@ -1,8 +1,16 @@
-(function (w, d) {
+(function (w, d, undefined) {
 
-  var FileHandler = (function () {
+  function ArraytoFileList(files) {
+    const dt = new DataTransfer();
+    files.forEach(function (file) {
+      dt.items.add(file);
+    })
+    return dt.files;
+  }
 
-    var fileHandler = function (opts) {
+  class FileHandler {
+
+    constructor(opts) {
 
       if (typeof opts.el !== 'undefined') {
         if (typeof opts.el === 'string') {
@@ -31,63 +39,82 @@
       return this;
     };
 
-    fileHandler.prototype.removeFile = function (index) {
-      this.stack.splice(index, 1);
-      this.input.files = this.stack;
+    removeFile(index) {
+      const sf = this.stack.slice(index, index + 1)[0];
+      this.stack = this.stack.filter(function (i) {
+        return i !== sf;
+      });
+
+      const files = Array.from(this.input.files).filter(function (f) {
+        return !(sf.name === f.name && sf.size === f.size && sf.lastModified === f.lastModified);
+      });
+
+      this.input.files = ArraytoFileList(files);
 
       if (typeof this.onRemove !== 'undefined' && typeof this.onRemove === 'function') {
         this.onRemove(this.stack);
       }
-    };
+    }
 
-    fileHandler.prototype.clear = function () {
-      for (var i = 0, j = this.stack.length; i < j; i++) {
-        this.stack.pop();
-      }
-      this.input.files = this.stack;
-    };
+    clear() {
+      this.stack = [];
+      this.input.files = ArraytoFileList([]);
+    }
 
-    fileHandler.prototype.parse = function (files) {
+    parse(filesRaw) {
 
       var reader, callback;
+
+      const files = filesRaw.filter(function (f) {
+        const match = this.stack.find(function (sf) {
+          return sf.name === f.name && sf.size === f.size && sf.lastModified === f.lastModified;
+        });
+
+        return !match;
+      }.bind(this));
 
       if (files.length < 1) {
         return;
       }
 
-      this.input.files = files;
-      this.callback_counter = this.input.files.length;
+      this.callback_counter = files.length;
 
       // ugly way of keeping track of the reader.onload async events
       // we only want to call our ondragged callback when all "files" have been loaded
       callback = (function (e, i) {
 
+        const f = files[i];
+        const fileProps = {
+          lastModified: f.lastModified,
+          name: f.name,
+          size: f.size,
+          type: f.type,
+          fileRef: files[i],
+        };
+
         // instance of progressevent assumes readasDataurl was triggered
         if (e instanceof ProgressEvent) {
-          const f = this.input.files[i];
-
-          const modified_attachment = {
-            lastModified: f.lastModified,
-            name: f.name,
-            size: f.size,
-            type: f.type,
+          const modified_attachment = Object.assign(fileProps, {
             data: e.target.result,
-            originalFile: f,
-          };
+          });
           // we use Array.unshift here to push image files to the front of the stack (ie. opposite of Array.push)
           // this makes it easier when we render to html (ie. will render all images first, then non-images)
           this.stack.unshift(modified_attachment);
         } else {
-          const modified_attachment = this.input.files[i];
-          this.stack.push(modified_attachment);
+          this.stack.push(fileProps);
         }
 
         this.callback_counter--;
+
         if (this.callback_counter <= 0) {
           if (typeof this.onDragged !== 'undefined' && typeof this.onDragged === 'function') {
             this.onDragged(this.stack);
           }
+
           this.event_type = false;
+          this.input.files = ArraytoFileList(this.stack.map(function (f) {
+            return f.fileRef;
+          }));
         }
       }).bind(this);
 
@@ -114,50 +141,54 @@
 
       return this;
 
-    };
+    }
 
-    fileHandler.prototype.onDragged = function (fn) {
+    onDragged(fn) {
       if (typeof fn === 'function') {
         this.onDragged = fn;
       }
       return this;
-    };
+    }
 
-    fileHandler.prototype.onRemove = function (fn) {
+    onRemove(fn) {
       if (typeof fn === 'function') {
         this.onRemove = fn;
       }
       return this;
-    };
+    }
 
-    fileHandler.prototype.clickHandler = function (e) {
-      this.input.value = null;
-      this.stack = [];
-    };
+    clickHandler(e) {
+      // noop
+    }
 
-    fileHandler.prototype.changeHandler = function (e) {
+    changeHandler(e) {
       if (!this.event_type) {
         this.event_type = "changed";
-        this.parse(e.target.files);
+        this.parse(Array.from(e.target.files));
       }
-    };
+    }
 
-    fileHandler.prototype.dragHandler = function (e) {
+    dragHandler(e) {
       e.stopPropagation();
       e.preventDefault();
-    };
+    }
 
-    fileHandler.prototype.dropHandler = function (e) {
+    dropHandler(e) {
+      const fileList = e.dataTransfer.files;
+
       e.stopPropagation();
       e.preventDefault();
+
       if (!this.event_type) {
         this.event_type = "dropped";
-        this.parse(e.originalEvent.dataTransfer.files);
+        this.input.files = fileList
+        this.parse(Array.from(fileList));
       }
-    };
+    }
 
-    fileHandler.prototype.bind = function () {
-      var events = [
+    bind() {
+
+      const events = [
         ['change', 'input[type=file]', 'changeHandler'],
         ['click', 'input[type=file]', 'clickHandler']
         // ['drop',      this.dropzone,      'dropHandler'],
@@ -176,14 +207,13 @@
         });
       }
 
-      this.el.addEventListener('dragover', this.dragHandler.bind(this));
-      this.el.addEventListener('drop', this.dropHandler.bind(this));
+      this.el.addEventListener('dragover', e => this.dragHandler(e));
+      this.el.addEventListener('drop', e => this.dropHandler(e));
 
-    };
+    }
 
-    return fileHandler;
 
-  })();
+  }
 
   w.FileHandler = FileHandler;
 
