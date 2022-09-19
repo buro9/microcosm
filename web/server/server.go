@@ -44,27 +44,38 @@ func ListenAndServe(version string) chan error {
 		router.Use(mm.Session)
 		router.Use(csrfMiddleware)
 
+		// Login
 		router.Get(`/`, controllers.HomeGet)
 		router.Get(`/auth0login/`, controllers.Auth0LoginGet)
 		router.Post(`/logout/`, controllers.LogoutPost)
 
+		// Comments
+		//
+		// Note that these can be added to anything; Conversations, Events, Profile, etc.
+		router.Post(`/comments/create`, controllers.CommentCreate)
+
+		// Conversations, a.k.a Threads
 		router.Get(`/conversations/{conversationID:[1-9][0-9]+}/`, controllers.ConversationGet)
 		router.Get(`/conversations/{conversationID:[1-9][0-9]+}/{jumpTo:newest}/`, controllers.ConversationGet)
 
+		// Huddles, a.k.a Private Messages or Direct Messages
 		router.Get(`/huddles/`, controllers.HuddlesGet)
 
+		// Microcosms, a.k.a Forums
 		router.Get(`/microcosms/{microcosmID:[1-9][0-9]+}/`, controllers.MicrocosmGet)
 
+		// Profiles
 		router.Get(`/profiles/{profileID:[1-9][0-9]+}/`, controllers.ProfileGet)
 		router.Get(`/profiles/`, controllers.ProfilesGet)
 
+		// Search
 		router.Get(`/search/`, controllers.SearchGet)
 
+		// Today
 		router.Get(`/today/`, controllers.TodayGet)
 
+		// Updates, a.k.a Watched items, Followed items
 		router.Get(`/updates/`, controllers.UpdatesGet)
-
-		router.Post(`/comments/create`, controllers.CommentsPost)
 
 		router.NotFound(controllers.NotFound)
 	})

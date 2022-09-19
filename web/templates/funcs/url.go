@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// api2ui will convert a relative Microcosm API URL into a URL for the
+// Api2ui will convert a relative Microcosm API URL into a URL for the
 // equivalent item as viewed by the Web UI.
 //
 // For example:
@@ -19,7 +19,7 @@ import (
 //
 // If an error is encountered, no string is returned... ensure your input is a
 // URL.
-func api2ui(s string) string {
+func Api2ui(s string) string {
 	u, err := net_url.Parse(s)
 	if err != nil {
 		return ""
@@ -34,11 +34,18 @@ func api2ui(s string) string {
 	return u.String()
 }
 
-// url is not intelligent, it expects to be passed the right thing and will
+// Url is not intelligent, it expects to be passed the right thing and will
 // return nothing if the args are not correct for the given key
 //
-// This is effectively how all links in the front-end are constructed
-func url(key string, args ...interface{}) string {
+// This is effectively how all links in the front-end are constructed. The
+// links within the templates don't know where they are linking, they refer
+// to things defined in this func. It allows us to more readily check that
+// we have defined every URL correctly and have a handler for each... and in
+// doing so it helps to avoid 404s and dead links, and gives us a way to see
+// when we're going to make some. If this returns nothing... then the link
+// has been modified such that we need to handle it explicitly in the code
+// somewhere.
+func Url(key string, args ...interface{}) string {
 	switch len(args) {
 	case 0:
 		switch key {
