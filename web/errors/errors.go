@@ -16,6 +16,17 @@ var (
 		`Expected HTTP 200`,
 	)
 
+	// ErrNot302 is returned when the API does not return a HTTP 302 when it is
+	// expected to. This usually means that there is an issue with the API
+	// server or that there is a network issue.
+	//
+	// 302 is Temporary Redirect, and the API is typically returning this whenever
+	// a new item has been created, edited, etc... as this will redirect to the
+	// newly created/edited item.
+	ErrNot302 = fmt.Errorf(
+		`Expected HTTP 302`,
+	)
+
 	// ErrAccessTokenExpected is returned when we do not have an access_token to
 	// make an authenticated request with.
 	ErrAccessTokenExpected = fmt.Errorf(

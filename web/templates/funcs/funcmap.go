@@ -23,13 +23,13 @@ var FuncMap template.FuncMap
 func buildFuncMap() template.FuncMap {
 	funcMap := common.Map
 
-	funcMap[Namespace+"api2ui"] = api2ui
-	funcMap[Namespace+"url"] = url
-	funcMap[Namespace+"avatar_url"] = avatarURL
-	funcMap[Namespace+"isImage"] = isImage
-	funcMap[Namespace+"link"] = linkFromLinks
-	funcMap[Namespace+"reverseLinks"] = reverseLinks
-	funcMap[Namespace+"stat"] = stat
+	funcMap[Namespace+"api2ui"] = Api2ui
+	funcMap[Namespace+"url"] = Url
+	funcMap[Namespace+"avatar_url"] = AvatarURL
+	funcMap[Namespace+"isImage"] = IsImage
+	funcMap[Namespace+"link"] = LinkFromLinks
+	funcMap[Namespace+"reverseLinks"] = ReverseLinks
+	funcMap[Namespace+"stat"] = Stat
 
 	return funcMap
 }

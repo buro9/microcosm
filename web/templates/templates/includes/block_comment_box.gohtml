@@ -39,16 +39,16 @@
 </ul>
 	<form action="/comments/create" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="csrfmiddlewaretoken" value="{{ .CsrfToken }}" />
-		<input id="id_id" name="id" type="hidden" value="">
-		<input id="id_inReplyTo" name="inReplyTo" type="hidden" value="">
-		<input id="id_itemId" name="itemId" type="hidden" value="{{ .ItemId }}">
-		<input id="id_itemType" name="itemType" type="hidden" value="{{ .ItemType }}">
+		<input id="id_id" name="ID" type="hidden" value="" />
+		<input id="id_inReplyTo" name="InReplyTo" type="hidden" value="" />
+		<input id="id_itemId" name="ItemID" type="hidden" value="{{ .ItemID }}" />
+		<input id="id_itemType" name="ItemType" type="hidden" value="{{ .ItemType }}" />
 
 		<textarea
 			id="reply-box-textarea"
 			class="wmd-input"
-			name="markdown"
-			maxlength="5000"
+			name="Markdown"
+			maxlength="50000"
 			placeholder="Enter your text here..."
 			tabindex="1"></textarea>
 
@@ -59,7 +59,7 @@
 						<label for="reply-box-attachments">
 							Upload a file
 						</label> (max 30 MB per file, 5 files total)
-						<input type="file" id="reply-box-attachments" name="attachments" multiple />
+						<input type="file" id="reply-box-attachments" name="Attachments" multiple />
 					</div>
 				{{ end }}
 

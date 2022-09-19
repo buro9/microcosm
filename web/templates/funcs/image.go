@@ -4,10 +4,10 @@ import (
 	"strings"
 )
 
-// isImage returns true if the path supplied has a file extension that matches
+// IsImage returns true if the path supplied has a file extension that matches
 // a known image type according to
 // https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types#common_image_file_types
-func isImage(u string) bool {
+func IsImage(u string) bool {
 	u = strings.ToLower(u)
 	switch {
 	case strings.HasSuffix(u, `.apng`):

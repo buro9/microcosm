@@ -111,11 +111,18 @@ func apiGet(params Params) (*http.Response, error) {
 		// Standard client using the cache transport for non-authenticated API
 		// requests
 		c = &http.Client{
+			// CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			// 	return http.ErrUseLastResponse
+			// },
 			Transport: httpcache.NewTransport(apiCache),
 		}
 	} else {
 		// Context cancellable transport for authenticated API requests
-		c = http.DefaultClient
+		c = &http.Client{
+			// CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			// 	return http.ErrUseLastResponse
+			// },
+		}
 	}
 
 	req, err := http.NewRequest("GET", u.String(), nil)
@@ -154,7 +161,7 @@ func apiPost(params Params, data interface{}) (*http.Response, error) {
 
 	u := params.buildAPIURL()
 
-	c := &http.Client{}
+	c := http.DefaultClient
 
 	var br *bytes.Reader
 	if data != nil {

@@ -32,3 +32,9 @@ type Comment struct {
 		Permissions *Permission `json:"permissions,omitempty"`
 	} `json:"meta"`
 }
+
+// CommentResponse describes the API response that contains a comment
+type CommentResponse struct {
+	BoilerPlate
+	Data Comment `json:"data"`
+}
