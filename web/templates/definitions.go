@@ -10,6 +10,8 @@ var error500 = []string{}
 
 var conversation = []string{
 	"block_comment_single",
+	"block_comment_box",
+	"block_reply_container",
 	"content_conversation",
 }
 

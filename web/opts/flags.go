@@ -23,6 +23,8 @@ const (
 	defaultCookieHashKey  = "70ce1fb50f865ef4f984fcb6fcabf1e870ce1fb50f865ef4f984fcb6fcabf1e8"
 	defaultCookieBlockKey = "ed6f16535958f69087ccdd1556b6335d"
 
+	defaultCsrfKey = "32-byte-long-auth-key"
+
 	defaultIsDevelopment = false
 )
 
@@ -64,6 +66,9 @@ var (
 	// SecureCookie is an instance of gorilla securecookie that will be used
 	// by the web app and underlines CSRF tokens
 	SecureCookie *securecookie.SecureCookie
+
+	// key to validate the CSRF token
+	CsrfKey *string
 
 	// Enables dev mode
 	// Whether static assets are served from bundle
@@ -151,9 +156,16 @@ func RegisterFlags() {
 	(default "`+defaultCookieBlockKey+`")`,
 			)
 
+			CsrfKey = flag.String(
+				"csrfKey",
+				defaultCsrfKey,
+				`the csrf token is validated with this key
+	(default "`+defaultCsrfKey+`")`,
+			)
+
 			IsDevelopment = flag.Bool(
 				"dev",
-				false,
+				defaultIsDevelopment,
 				`is development
 	(default "`+strconv.FormatBool(defaultIsDevelopment)+`")`,
 			)

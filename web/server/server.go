@@ -10,6 +10,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gorilla/csrf"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
@@ -22,6 +24,14 @@ import (
 func ListenAndServe(version string) chan error {
 	router := chi.NewRouter()
 
+	csrfKeyString := *opts.CsrfKey
+	csrfKeyBytes := []byte(csrfKeyString)
+
+	csrfMiddleware :=
+		csrf.Protect(csrfKeyBytes,
+			csrf.Secure(false),
+			csrf.FieldName("csrfmiddlewaretoken"))
+
 	// Pages group, handles all routes for pages and defines the appropriate
 	// middleware for web pages
 	router.Group(func(router chi.Router) {
@@ -32,6 +42,7 @@ func ListenAndServe(version string) chan error {
 		router.Use(mm.APIRoot)
 		router.Use(mm.ForceSSL)
 		router.Use(mm.Session)
+		router.Use(csrfMiddleware)
 
 		router.Get(`/`, controllers.HomeGet)
 		router.Get(`/auth0login/`, controllers.Auth0LoginGet)
@@ -52,6 +63,8 @@ func ListenAndServe(version string) chan error {
 		router.Get(`/today/`, controllers.TodayGet)
 
 		router.Get(`/updates/`, controllers.UpdatesGet)
+
+		router.Post(`/comments/create`, controllers.CommentsPost)
 
 		router.NotFound(controllers.NotFound)
 	})

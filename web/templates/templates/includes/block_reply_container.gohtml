@@ -1,0 +1,26 @@
+{{ define "block_reply_container" }}
+{{ if .conversation.Meta.Flags.Open }}
+<a id="reply"></a>
+<div class="reply-container">
+	<ul class="list-comments">
+		<li class="comment-item padded">
+			<div class="comment-item-inner">
+				<div class="comment-item-header">
+					<div class="comment-item-author">
+						{{ if .user }}
+							<img src="{{ if contains .user.AvatarURL `gravatar` }}{{ .user.AvatarURL }}{{ else }}{{ if contains .user.AvatarURL `files` }}https://{{ .site.SubdomainKey}}.microco.sm{{ .user.AvatarURL }}{{ else }}/static{{ __VERSION__ }}/img/avatar.gif{{ end }}{{ end }}" class="gravatar" alt="Avatar for {{ .user.ProfileName | safeHTML }}" />
+						{{ else}}
+							<img src="/static/img/avatar.gif" />
+						{{ end }}
+						<strong>Post a reply</strong>
+					</div>
+				</div>
+				<div class="comment-item-body">
+					{{ template "block_comment_box" (dict "ItemId" .conversation.ID "ItemType" "conversation" "user" .user "CsrfToken" .CsrfToken) }}
+				</div>
+			</div>
+		</li>
+	</ul>
+</div> <!-- /reply-container -->
+{{ end }}
+{{ end }}
