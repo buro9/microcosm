@@ -73,10 +73,10 @@ github.com/spf13/cast
 # github.com/stretchr/testify v1.8.0
 ## explicit; go 1.13
 github.com/stretchr/testify/assert
-# golang.org/x/crypto v0.0.0-20220829220503-c86fa9a7ed90
+# golang.org/x/crypto v0.0.0-20220919173607-35f4265a4bc0
 ## explicit; go 1.17
 golang.org/x/crypto/sha3
-# golang.org/x/net v0.0.0-20220909164309-bea034e7d591
+# golang.org/x/net v0.0.0-20220919232410-f2f64ebce3c1
 ## explicit; go 1.17
 golang.org/x/net/html
 golang.org/x/net/html/atom
