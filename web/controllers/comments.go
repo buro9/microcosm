@@ -71,7 +71,7 @@ func CommentCreate(w http.ResponseWriter, r *http.Request) {
 		funcs.LinkFromLinks(comment.Meta.Links, "commentPage").Href,
 	)
 
-	u, err := url.Parse(`/conversations/253639/?offset=775`)
+	u, err := url.Parse(location)
 	if err != nil {
 		errors.Render(w, r, http.StatusInternalServerError, fmt.Errorf(`Couldn't parse %s as a URL`, location))
 		return
