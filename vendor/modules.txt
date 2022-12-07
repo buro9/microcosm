@@ -21,7 +21,7 @@ github.com/davecgh/go-spew/spew
 ## explicit
 github.com/dustin/go-humanize
 github.com/dustin/go-humanize/english
-# github.com/go-chi/chi/v5 v5.0.7
+# github.com/go-chi/chi/v5 v5.0.8
 ## explicit; go 1.14
 github.com/go-chi/chi/v5
 github.com/go-chi/chi/v5/middleware
