@@ -9,7 +9,7 @@ require (
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
-	github.com/stretchr/testify v1.8.1
+	github.com/stretchr/testify v1.8.2
 )
 
 require (
