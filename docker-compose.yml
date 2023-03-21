@@ -19,7 +19,7 @@ services:
      - db
 
   db:
-    image: "postgres:15.1"
+    image: "postgres:15.2"
 
   cache:
     image: "memcached:latest"
