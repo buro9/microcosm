@@ -1,6 +1,6 @@
 module github.com/buro9/microcosm
 
-go 1.19
+go 1.21
 
 require (
 	github.com/buro9/funcs v1.0.3
