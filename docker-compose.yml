@@ -1,4 +1,4 @@
-version: '2'
+version: '3.4'
 
 services:
 
@@ -8,15 +8,15 @@ services:
       context: .
       dockerfile: ./containers/Dockerfile.microcosm
     ports:
-     - "80:80"
-     - "443:443"
+      - "80:80"
+      - "443:443"
     volumes:
-     - .:/go/src/github.com/buro9/microcosm
+      - .:/go/src/github.com/buro9/microcosm
     depends_on:
-     - db
-     - cache
+      - db
+      - cache
     links:
-     - db
+      - db
 
   db:
     image: "postgres:15.2"
