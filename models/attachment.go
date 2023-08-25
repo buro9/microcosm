@@ -18,7 +18,7 @@ type Attachment struct {
 }
 
 type Attachments struct {
-	Attachments Array `json:attachments`
+	Attachments Array `json:"attachments"`
 	Meta        struct {
 		Links       []Link     `json:"links,omitempty"`
 		Permissions Permission `json:"permissions,omitempty"`

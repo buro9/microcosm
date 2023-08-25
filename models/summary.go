@@ -43,7 +43,7 @@ type SummaryItem struct {
 	// needs to be able to consistently render something
 	Unread       bool      `json:"unread"`
 	Rank         float64   `json:"rank"`
-	LastModified time.Time `json:"lastModified`
+	LastModified time.Time `json:"lastModified"`
 	Highlight    string    `json:"highlight"`
 }
 

@@ -1,5 +1,4 @@
 FROM golang:1.20
-MAINTAINER <>
 
 RUN apt-get -y update
 RUN apt-get -y install curl iproute2 netbase vim screen openssl
@@ -12,9 +11,9 @@ ENV CODE_HOME $CODE_HOME
 
 RUN mkdir -p /etc/ssl/certs \
     && openssl req -x509 -newkey rsa:4096 -nodes -days 999 \
-       -subj "/CN=$WEB_DOMAIN" \
-       -keyout /etc/ssl/certs/$WEB_DOMAIN.key \
-       -out /etc/ssl/certs/$WEB_DOMAIN.crt
+    -subj "/CN=$WEB_DOMAIN" \
+    -keyout /etc/ssl/certs/$WEB_DOMAIN.key \
+    -out /etc/ssl/certs/$WEB_DOMAIN.crt
 
 COPY  . $CODE_HOME
 WORKDIR $CODE_HOME

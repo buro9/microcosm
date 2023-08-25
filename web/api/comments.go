@@ -23,10 +23,10 @@ import (
 // and that abstraction protects us. It also allows us to define validation here.
 type CommentForm struct {
 	ID          int64  `json:"id"`
-	ItemType    string `json:"itemType",validate:"required"`
-	ItemID      int64  `json:"itemId",validate:"required"`
+	ItemType    string `json:"itemType" validate:"required"`
+	ItemID      int64  `json:"itemId" validate:"required"`
 	InReplyTo   int64  `json:"inReplyTo"`
-	Markdown    string `json:"markdown",validate:"required,max=50000"`
+	Markdown    string `json:"markdown" validate:"required,max=50000"`
 	Attachments int64  `json:"attachments"`
 }
 

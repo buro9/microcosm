@@ -125,8 +125,7 @@ func apiGet(params Params) (*http.Response, error) {
 		}
 	}
 
-	req, err := http.NewRequest("GET", u.String(), nil)
-	req.WithContext(params.Ctx)
+	req, _ := http.NewRequestWithContext(params.Ctx, "GET", u.String(), nil)
 	req.Header.Add("User-Agent", userAgent)
 	//req.Header.Add("X-Disable-Boiler", "true")
 
@@ -172,7 +171,7 @@ func apiPost(params Params, data interface{}) (*http.Response, error) {
 
 		br = bytes.NewReader(bs)
 	}
-	req, err := http.NewRequest("POST", u.String(), br)
+	req, _ := http.NewRequest("POST", u.String(), br)
 
 	req.Header.Add("User-Agent", userAgent)
 	//req.Header.Add("X-Disable-Boiler", "true")
