@@ -5,8 +5,8 @@ go 1.21
 require (
 	github.com/buro9/funcs v1.0.3
 	github.com/go-playground/validator/v10 v10.15.4
-	github.com/gorilla/csrf v1.7.1
-	github.com/gorilla/securecookie v1.1.1
+	github.com/gorilla/csrf v1.7.2
+	github.com/gorilla/securecookie v1.1.2
 	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 	github.com/stretchr/testify v1.8.4
